@@ -1,0 +1,29 @@
+/*
+ * SHAppDelegate.h
+ * scavengerhunt
+ *
+ * Created by David G. Young on 1/17/14.
+ * Copyright (c) 2013,2014 RadiusNetworks. All rights reserved.
+ * http://www.radiusnetworks.com
+ *
+ * @author David G. Young
+ *
+ * Licensed to the Attribution Assurance License (AAL)
+ * (adapted from the original BSD license) See the LICENSE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.
+ *
+ */
+
+#import <UIKit/UIKit.h>
+#import <ProximityKit/ProximityKit.h>
+#import <CoreBluetooth/CoreBluetooth.h>
+#import "SHRemoteAssetCache.h"
+
+@interface SHAppDelegate : UIResponder <UIApplicationDelegate, PKManagerDelegate, CBPeripheralManagerDelegate, SHRemoteAssetCacheDelegate>
+
+@property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) PKManager *manager;
+@property (strong, nonatomic) SHRemoteAssetCache *remoteAssetCache;
+@property (strong, nonatomic) UIStoryboard *storyboard;
+@end
