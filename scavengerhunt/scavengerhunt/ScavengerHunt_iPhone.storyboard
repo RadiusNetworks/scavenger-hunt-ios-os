@@ -335,86 +335,130 @@
             </objects>
             <point key="canvasLocation" x="80" y="-469"/>
         </scene>
-        <!--View Controller-->
+        <!--Loading View Controller-->
         <scene sceneID="8Om-cz-Tsj">
             <objects>
-                <viewController restorationIdentifier="LoadingViewController" storyboardIdentifier="LoadingViewController" id="gin-mk-IbH" sceneMemberID="viewController">
+                <viewController restorationIdentifier="LoadingViewController" storyboardIdentifier="LoadingViewController" id="gin-mk-IbH" customClass="SHLoadingViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="LDK-Qh-xmB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" id="JAz-TK-2hq" userLabel="Downloading Images">
-                                <rect key="frame" x="0.0" y="238" width="320" height="242"/>
+                            <view contentMode="scaleToFill" id="tm3-Yg-6Kn" userLabel="Header">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Downloading images..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WI7-cA-OjH">
-                                        <rect key="frame" x="73" y="8" width="175" height="21"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sh_bolt.png" id="9iv-wt-uBZ">
+                                        <rect key="frame" x="128" y="40" width="64" height="179"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="iBeacon" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Hce-Vf-hDF">
+                                        <rect key="frame" x="111" y="193" width="97" height="52"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scavenger Hunt" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ifs-3h-iRO">
+                                        <rect key="frame" x="54" y="227" width="213" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Powered by" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5qW-8j-9ve">
+                                        <rect key="frame" x="45" y="263" width="92" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="4tR-vS-3tu">
-                                        <rect key="frame" x="142" y="37" width="37" height="37"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="UfI-dM-7qq">
+                                        <rect key="frame" x="140" y="259" width="136" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </activityIndicatorView>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="Radius Networks">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="tappedAttribution:" destination="gin-mk-IbH" eventType="touchUpInside" id="ow5-dk-1B1"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </view>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="iBeacon" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tgw-OM-tZg">
-                                <rect key="frame" x="112" y="147" width="97" height="52"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scavenger Hunt" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="F2G-5s-dd4">
-                                <rect key="frame" x="54" y="178" width="213" height="40"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <view contentMode="scaleToFill" id="ms1-5L-ydL" userLabel="Enter Code">
-                                <rect key="frame" x="0.0" y="238" width="320" height="242"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter Hunt Code:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Xok-VW-xqI">
-                                        <rect key="frame" x="93" y="7" width="134" height="21"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter 8-Digit Hunt Code:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Xok-VW-xqI">
+                                        <rect key="frame" x="66" y="312" width="189" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="vIc-15-KKJ">
-                                        <rect key="frame" x="74" y="31" width="134" height="30"/>
+                                        <rect key="frame" x="76" y="335" width="134" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <action selector="codeEditingDidBegin:" destination="gin-mk-IbH" eventType="editingDidBegin" id="2AB-BZ-Uu3"/>
+                                            <action selector="codeEditingDidEnd:" destination="gin-mk-IbH" eventType="editingDidEnd" id="tOU-p4-ORB"/>
+                                        </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3hM-Ma-fMJ">
-                                        <rect key="frame" x="216" y="31" width="30" height="30"/>
+                                        <rect key="frame" x="215" y="335" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="OK" backgroundImage="sh_button.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="okTapped:" destination="gin-mk-IbH" eventType="touchUpInside" id="tNd-um-gb2"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="EZ5-ky-8M2">
-                                        <rect key="frame" x="125" y="61" width="32" height="30"/>
+                                        <rect key="frame" x="144" y="373" width="32" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Help">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="tappedHelp:" destination="gin-mk-IbH" eventType="touchUpInside" id="Iz0-oZ-C2K"/>
+                                        </connections>
                                     </button>
-                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" id="qcF-Ir-09E">
-                                        <rect key="frame" x="248" y="27" width="37" height="37"/>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" id="hly-ZR-hf2">
+                                        <rect key="frame" x="220" y="339" width="20" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </activityIndicatorView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.2274509804" green="0.74509803919999995" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" id="JAz-TK-2hq" userLabel="Downloading Images">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Downloading images..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WI7-cA-OjH">
+                                        <rect key="frame" x="73" y="316" width="175" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" id="4tR-vS-3tu">
+                                        <rect key="frame" x="142" y="345" width="37" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </activityIndicatorView>
+                                </subviews>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.2274509804" green="0.74509803919999995" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
+                    <connections>
+                        <outlet property="codeSpinner" destination="hly-ZR-hf2" id="3xX-lV-j9y"/>
+                        <outlet property="codeTextField" destination="vIc-15-KKJ" id="Ppo-Al-EAU"/>
+                        <outlet property="downloadingImagesView" destination="JAz-TK-2hq" id="Whj-Fu-Ngx"/>
+                        <outlet property="enterCodeView" destination="ms1-5L-ydL" id="l4u-Dy-Uh0"/>
+                        <outlet property="okButton" destination="3hM-Ma-fMJ" id="uvO-fn-9WX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="71I-zV-AZh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -422,6 +466,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="sh_bolt.png" width="76" height="176"/>
         <image name="sh_button.png" width="320" height="115"/>
         <image name="sh_button.png" width="320" height="115"/>
         <image name="sh_button.png" width="320" height="115"/>

@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "37"
             endingLineNumber = "37"
-            landmarkName = "-triggerDistance"
+            landmarkName = "+sharedHunt"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -49,6 +49,20 @@
             endingLineNumber = "166"
             landmarkName = "-applicationDidEnterBackground:"
             landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "scavengerhunt/SHHunt.m"
+            timestampString = "413418730.682115"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "13"
+            endingLineNumber = "13">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
