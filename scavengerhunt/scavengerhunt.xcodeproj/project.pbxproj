@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EE14BAB418A440CD00C7CE12 /* ProximityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE14BAB318A440CD00C7CE12 /* ProximityKit.framework */; };
 		EE19EB3E1891C69B00FD941F /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = EE19EB3D1891C69B00FD941F /* LICENSE */; };
 		EE7DAC5D1890235F0012A84C /* SHRemotAssetCache.m in Sources */ = {isa = PBXBuildFile; fileRef = EE7DAC5C1890235F0012A84C /* SHRemotAssetCache.m */; };
 		EE9BE57F1889FF5B0092A743 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE9BE57E1889FF5B0092A743 /* Foundation.framework */; };
@@ -59,8 +60,6 @@
 		EE9BE607188D84A20092A743 /* sh_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE600188D84A20092A743 /* sh_bg.png */; };
 		EE9BE608188D84A20092A743 /* sh_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE601188D84A20092A743 /* sh_bg@2x.png */; };
 		EE9BE609188D84A20092A743 /* sh_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE601188D84A20092A743 /* sh_bg@2x.png */; };
-		EE9BE611188EDFD80092A743 /* ProximityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE9BE610188EDFD80092A743 /* ProximityKit.framework */; };
-		EE9BE612188EDFD80092A743 /* ProximityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE9BE610188EDFD80092A743 /* ProximityKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +73,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EE14BAB318A440CD00C7CE12 /* ProximityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ProximityKit.framework; sourceTree = "<group>"; };
 		EE19EB3D1891C69B00FD941F /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		EE7DAC5B1890235F0012A84C /* SHRemoteAssetCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHRemoteAssetCache.h; sourceTree = "<group>"; };
 		EE7DAC5C1890235F0012A84C /* SHRemotAssetCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHRemotAssetCache.m; sourceTree = "<group>"; };
@@ -117,7 +117,6 @@
 		EE9BE5FF188D84A20092A743 /* sh_bg_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sh_bg_ipad@2x.png"; path = "storyboard_images/sh_bg_ipad@2x.png"; sourceTree = "<group>"; };
 		EE9BE600188D84A20092A743 /* sh_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sh_bg.png; path = storyboard_images/sh_bg.png; sourceTree = "<group>"; };
 		EE9BE601188D84A20092A743 /* sh_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sh_bg@2x.png"; path = "storyboard_images/sh_bg@2x.png"; sourceTree = "<group>"; };
-		EE9BE610188EDFD80092A743 /* ProximityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ProximityKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,7 +127,7 @@
 				EE9BE5811889FF5B0092A743 /* CoreGraphics.framework in Frameworks */,
 				EE9BE5831889FF5B0092A743 /* UIKit.framework in Frameworks */,
 				EE9BE57F1889FF5B0092A743 /* Foundation.framework in Frameworks */,
-				EE9BE611188EDFD80092A743 /* ProximityKit.framework in Frameworks */,
+				EE14BAB418A440CD00C7CE12 /* ProximityKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,7 +138,6 @@
 				EE9BE5A11889FF5C0092A743 /* XCTest.framework in Frameworks */,
 				EE9BE5A31889FF5C0092A743 /* UIKit.framework in Frameworks */,
 				EE9BE5A21889FF5C0092A743 /* Foundation.framework in Frameworks */,
-				EE9BE612188EDFD80092A743 /* ProximityKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,7 +168,7 @@
 		EE9BE57D1889FF5B0092A743 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EE9BE610188EDFD80092A743 /* ProximityKit.framework */,
+				EE14BAB318A440CD00C7CE12 /* ProximityKit.framework */,
 				EE9BE57E1889FF5B0092A743 /* Foundation.framework */,
 				EE9BE5801889FF5B0092A743 /* CoreGraphics.framework */,
 				EE9BE5821889FF5B0092A743 /* UIKit.framework */,

@@ -43,7 +43,7 @@ typedef NS_ENUM(NSInteger, PKRegionState) {
  *  proximityKit:didEnter:
  *
  *  Discussion:
- *    Invoked when new entering new region. Regions can be Geofence or iBeacons.
+ *    Invoked when new entering new region. Regions can be Geofences or iBeacons.
  *
  */
 - (void)proximityKit:(PKManager *)manager
@@ -53,7 +53,7 @@ typedef NS_ENUM(NSInteger, PKRegionState) {
  *  proximityKit:didEnter:
  *
  *  Discussion:
- *    Invoked when new entering new region. Regions can be Geofence or iBeacons.
+ *    Invoked when new entering new region. Regions can be Geofences or iBeacons.
  *
  */
 - (void)proximityKit:(PKManager *)manager
@@ -76,7 +76,7 @@ typedef NS_ENUM(NSInteger, PKRegionState) {
  *  Discussion:
  *    Invoked when a new set of beacons are available in the specified region.
  *
- *    Beacons is an array of CLBeacon objects.
+ *    Beacons is an array of PKIBeacon objects.
  *
  *    If beacons is empty, it may be assumed no beacons that match the specified region are nearby.
  *    Similarly if a specific beacon no longer appears in beacons, it may be assumed the beacon is no longer received

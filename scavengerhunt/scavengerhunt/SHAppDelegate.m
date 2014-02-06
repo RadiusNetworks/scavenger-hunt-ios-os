@@ -21,6 +21,7 @@
 #import <ProximityKit/ProximityKit.h>
 #import <ProximityKit/PKKit.h>
 #import <ProximityKit/PKIBeacon.h>
+#import <ProximityKit/PKConfigurationChanger.h>
 #import <objc/runtime.h>
 
 /*
@@ -58,6 +59,9 @@
     // Initialize the remote asset cache, used for downloading the badge images from a web server
     self.remoteAssetCache = [[SHRemoteAssetCache alloc] init];
     self.remoteAssetCache.delegate = self;
+
+    // Initialize ProximityKit
+    self.manager = [PKManager managerWithDelegate:self];
     
     // Show loading screen
     UIViewController *loadingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoadingViewController"];
@@ -65,16 +69,25 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
 
-    // Initialize ProximityKit
-    self.manager = [PKManager managerWithDelegate:self];
-    [self.manager start];
-    NSLog(@"started Proximity Kit.  Waiting for callback from sync");
+
     
     // After startup, the loading screen will be displayed until the Proximity Kit proximityKitDidSync callback is received, which will kick off downloading badge images
     // Once everything is loaded, the dependenciesFullyLoaded method below is called, which will trigger displaying the opening screen.
     
     return YES;
 }
+
+-(void)startPK {
+    [self.manager start];
+    NSLog(@"started Proximity Kit.  Waiting for callback from sync");
+}
+
+-(void)startPKWithCode: (NSString * ) code {
+    PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
+    [configChanger syncManager:self.manager withCode: code];
+    NSLog(@"started Proximity Kit with code %@.  Waiting for callback from sync", code);
+}
+
 
 
 /*
@@ -251,7 +264,7 @@
         }
         
         if ([SHHunt sharedHunt].targetList.count != targetCount) {
-            NSLog(@"The kit says the target count has changed to %d items from %d items.  Restarting hunt from scratch.", targetCount, [SHHunt sharedHunt].targetList.count);
+            NSLog(@"The kit says the target count has changed to %d items from %lu items.  Restarting hunt from scratch.", targetCount, (unsigned long)[SHHunt sharedHunt].targetList.count);
             [[SHHunt sharedHunt]resize:targetCount];
         }
         NSLog(@"Target count is %d", targetCount);
@@ -304,8 +317,8 @@
 
 - (void)proximityKit:(PKManager *)manager didDetermineState:(PKRegionState)state forRegion:(PKRegion *)region
 {
-    NSLog(@"PK didDetermineState %d forRegion %@ (%@)", state, region.name, region.identifier);
-    NSLog(@"Did determine State for region: %@ from manager %@ with state %d, where the inside state is %d", region.identifier, manager, state, CLRegionStateInside);
+    NSLog(@"PK didDetermineState %ld forRegion %@ (%@)", state, region.name, region.identifier);
+    NSLog(@"Did determine State for region: %@ from manager %@ with state %ld, where the inside state is %ld", region.identifier, manager, state, (long)CLRegionStateInside);
     [self tellHuntAboutMonitoredBeacons: state];
 }
 
@@ -375,7 +388,7 @@
                         if (_mainViewController && _mainViewController.collectionViewController) {
                             NSLog(@"refreshing collection");
                             [_mainViewController.collectionViewController.collectionView reloadData];
-                            [_mainViewController.collectionViewController simulateNotification: [NSString stringWithFormat:@"You've received badge %d of %d", [[SHHunt sharedHunt] foundCount], [[SHHunt sharedHunt] targetList].count]];
+                            [_mainViewController.collectionViewController simulateNotification: [NSString stringWithFormat:@"You've received badge %d of %lu", [[SHHunt sharedHunt] foundCount], (unsigned long)[[SHHunt sharedHunt] targetList].count]];
                             NSLog(@"Back from notification");
                         }
                         else {

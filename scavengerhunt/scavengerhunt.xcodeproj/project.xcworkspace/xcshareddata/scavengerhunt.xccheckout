@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>2BCBB737-EDFA-4699-BFF1-0CF78D9AC973</string>
+	<key>IDESourceControlProjectName</key>
+	<string>scavengerhunt</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>23EA5D26-D71F-4858-84CB-BE1CCB5C7D1A</key>
+		<string>ssh://github.com/RadiusNetworks/scavenger-hunt-ios-os.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>scavengerhunt/scavengerhunt.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>23EA5D26-D71F-4858-84CB-BE1CCB5C7D1A</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/RadiusNetworks/scavenger-hunt-ios-os.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>23EA5D26-D71F-4858-84CB-BE1CCB5C7D1A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>23EA5D26-D71F-4858-84CB-BE1CCB5C7D1A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>scavenger-hunt-ios</string>
+		</dict>
+	</array>
+</dict>
+</plist>

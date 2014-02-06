@@ -6,7 +6,7 @@
 #import "PKManagerDelegate.h"
 #import "PKRegion.h"
 #import "PKKit.h"
-
+#import "PKConfigurationChanger.h"
 /*
  * Type PKFetchCompletionHandler
  *
@@ -167,5 +167,7 @@ typedef void(^PKFetchCompletionHandler)(UIBackgroundFetchResult);
  *
  */
 - (void)stopRangingIBeacons;
+
+- (void)reconfigureWithAPIURL:(NSString *)pkUrl andToken:(NSString *)token;
 
 @end
