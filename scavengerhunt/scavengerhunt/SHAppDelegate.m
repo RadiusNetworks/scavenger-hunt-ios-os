@@ -41,6 +41,7 @@
     NSDate * _lastExitTime;
     BOOL _validatingCode;
     NSDate *_loadingDisplayedTime;
+    BOOL _pkStarted;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -111,8 +112,15 @@
 
 
 -(void)startPK {
-    [self.manager start];
-    NSLog(@"started Proximity Kit.  Waiting for callback from sync");
+    if (_pkStarted) {
+        [self.manager sync];
+        NSLog(@"calling sync on Proximity Kit.  Waiting for callback from sync");
+    }
+    else {
+        [self.manager start];
+        _pkStarted = YES;
+        NSLog(@"started Proximity Kit.  Waiting for callback from sync");
+    }
 }
 
 -(void)startPKWithCode: (NSString * ) code {
@@ -122,9 +130,16 @@
     //[configChanger syncManager:self.manager withCode: code];
     //[[PKManager alloc] initWithDelegate:self andAPIURL: @"" andToken: @""];
     _validatingCode = YES;
-    [self.manager start];
+    if (_pkStarted) {
+        [self.manager sync];
+        NSLog(@"sync Proximity Kit with code %@.  Waiting for callback from sync", code);
+    }
+    else {
+        [self.manager start];
+        _pkStarted = YES;
+        NSLog(@"started Proximity Kit with code %@.  Waiting for callback from sync", code);
+    }
     
-    NSLog(@"started Proximity Kit with code %@.  Waiting for callback from sync", code);
 }
 
 // called when the user gestures to start over
@@ -138,14 +153,8 @@
         [self.collectionViewController.collectionView reloadData];
     }
      */
-
-    _loadingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoadingViewController"];
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController: _loadingViewController];
     
-    [self.window.rootViewController presentViewController: navController
-                                                 animated:YES completion: Nil ];
-    
-    
+    [self setupInitialView];
 }
 
 
@@ -197,7 +206,7 @@
         NSLog(@"Loading was displayed at %@, which was %ld ms ago.  will delay %ld ms", _loadingDisplayedTime,  timeSince, delay);
         _mainViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
 
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NMSEC_PER_SEC * delay),dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC * delay),dispatch_get_main_queue(), ^{
                  NSLog(@"Pushing main view controller: %@", _mainViewController);
                  [self.loadingViewController.navigationController pushViewController:_mainViewController animated:YES];
         });
@@ -307,7 +316,7 @@
         }
         int targetCount = 0;
         NSMutableDictionary *targetImageUrls = [[NSMutableDictionary alloc] init];
-        for (PKRegion *region in kit.iBeaconRegions) {
+        for (PKRegion *region in kit.iBeacons) {
             NSString* huntId = [region.attributes objectForKey:@"hunt_id"];
             NSString* imageUrlString = [region.attributes objectForKey:@"image_url"];
             
