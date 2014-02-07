@@ -21,7 +21,8 @@
 #import "SHRemoteAssetCache.h"
 
 @interface SHAppDelegate : UIResponder <UIApplicationDelegate, PKManagerDelegate, CBPeripheralManagerDelegate, SHRemoteAssetCacheDelegate>
-
+-(void)startPK;
+-(void)startPKWithCode: (NSString * ) code;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) PKManager *manager;
 @property (strong, nonatomic) SHRemoteAssetCache *remoteAssetCache;

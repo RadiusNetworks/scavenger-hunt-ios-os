@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B5DFB71918A44ED2005709AE /* ProximityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5DFB71818A44ED2005709AE /* ProximityKit.framework */; };
+		EE14BAB418A440CD00C7CE12 /* ProximityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE14BAB318A440CD00C7CE12 /* ProximityKit.framework */; };
+		EE14BAB618A4450F00C7CE12 /* sh_bolt.png in Resources */ = {isa = PBXBuildFile; fileRef = EE14BAB518A4450F00C7CE12 /* sh_bolt.png */; };
+		EE14BAB818A4453D00C7CE12 /* sh_bolt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EE14BAB718A4453D00C7CE12 /* sh_bolt@2x.png */; };
+		EE14BABB18A44B6100C7CE12 /* SHLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE14BABA18A44B6100C7CE12 /* SHLoadingViewController.m */; };
 		EE19EB3E1891C69B00FD941F /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = EE19EB3D1891C69B00FD941F /* LICENSE */; };
 		EE7DAC5D1890235F0012A84C /* SHRemotAssetCache.m in Sources */ = {isa = PBXBuildFile; fileRef = EE7DAC5C1890235F0012A84C /* SHRemotAssetCache.m */; };
 		EE9BE57F1889FF5B0092A743 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE9BE57E1889FF5B0092A743 /* Foundation.framework */; };
@@ -22,8 +25,6 @@
 		EE9BE5A21889FF5C0092A743 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE9BE57E1889FF5B0092A743 /* Foundation.framework */; };
 		EE9BE5A31889FF5C0092A743 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE9BE5821889FF5B0092A743 /* UIKit.framework */; };
 		EE9BE5AB1889FF5C0092A743 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE5A91889FF5C0092A743 /* InfoPlist.strings */; };
-		EE9BE5BA188A00440092A743 /* ProximityKit.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE5B9188A00440092A743 /* ProximityKit.plist */; };
-		EE9BE5BB188A00440092A743 /* ProximityKit.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE5B9188A00440092A743 /* ProximityKit.plist */; };
 		EE9BE5CA188CBDE00092A743 /* ScavengerHunt_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE5BC188CBDE00092A743 /* ScavengerHunt_iPad.storyboard */; };
 		EE9BE5CB188CBDE00092A743 /* ScavengerHunt_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE5BC188CBDE00092A743 /* ScavengerHunt_iPad.storyboard */; };
 		EE9BE5CC188CBDE00092A743 /* ScavengerHunt_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE5BD188CBDE00092A743 /* ScavengerHunt_iPhone.storyboard */; };
@@ -73,7 +74,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B5DFB71818A44ED2005709AE /* ProximityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ProximityKit.framework; sourceTree = "<group>"; };
+		EE14BAB318A440CD00C7CE12 /* ProximityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ProximityKit.framework; sourceTree = "<group>"; };
+		EE14BAB518A4450F00C7CE12 /* sh_bolt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sh_bolt.png; sourceTree = "<group>"; };
+		EE14BAB718A4453D00C7CE12 /* sh_bolt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sh_bolt@2x.png"; sourceTree = "<group>"; };
+		EE14BAB918A44B6100C7CE12 /* SHLoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHLoadingViewController.h; sourceTree = "<group>"; };
+		EE14BABA18A44B6100C7CE12 /* SHLoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHLoadingViewController.m; sourceTree = "<group>"; };
 		EE19EB3D1891C69B00FD941F /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		EE7DAC5B1890235F0012A84C /* SHRemoteAssetCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHRemoteAssetCache.h; sourceTree = "<group>"; };
 		EE7DAC5C1890235F0012A84C /* SHRemotAssetCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHRemotAssetCache.m; sourceTree = "<group>"; };
@@ -94,7 +99,6 @@
 		EE9BE5A01889FF5C0092A743 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		EE9BE5A81889FF5C0092A743 /* scavengerhuntTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "scavengerhuntTests-Info.plist"; sourceTree = "<group>"; };
 		EE9BE5AA1889FF5C0092A743 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		EE9BE5B9188A00440092A743 /* ProximityKit.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = ProximityKit.plist; path = ../../../Downloads/ProximityKit.plist; sourceTree = "<group>"; };
 		EE9BE5BC188CBDE00092A743 /* ScavengerHunt_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ScavengerHunt_iPad.storyboard; sourceTree = "<group>"; };
 		EE9BE5BD188CBDE00092A743 /* ScavengerHunt_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ScavengerHunt_iPhone.storyboard; sourceTree = "<group>"; };
 		EE9BE5BF188CBDE00092A743 /* SHTargetCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHTargetCollectionViewController.m; sourceTree = "<group>"; };
@@ -148,7 +152,6 @@
 			isa = PBXGroup;
 			children = (
 				EE19EB3D1891C69B00FD941F /* LICENSE */,
-				EE9BE5B9188A00440092A743 /* ProximityKit.plist */,
 				EE9BE5841889FF5C0092A743 /* scavengerhunt */,
 				EE9BE5A61889FF5C0092A743 /* scavengerhuntTests */,
 				EE9BE57D1889FF5B0092A743 /* Frameworks */,
@@ -198,6 +201,8 @@
 				EE9BE5851889FF5C0092A743 /* Supporting Files */,
 				EE7DAC5B1890235F0012A84C /* SHRemoteAssetCache.h */,
 				EE7DAC5C1890235F0012A84C /* SHRemotAssetCache.m */,
+				EE14BAB918A44B6100C7CE12 /* SHLoadingViewController.h */,
+				EE14BABA18A44B6100C7CE12 /* SHLoadingViewController.m */,
 			);
 			path = scavengerhunt;
 			sourceTree = "<group>";
@@ -205,6 +210,8 @@
 		EE9BE5851889FF5C0092A743 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				EE14BAB718A4453D00C7CE12 /* sh_bolt@2x.png */,
+				EE14BAB518A4450F00C7CE12 /* sh_bolt.png */,
 				EE9BE5FE188D84A20092A743 /* sh_bg_ipad.png */,
 				EE9BE5FF188D84A20092A743 /* sh_bg_ipad@2x.png */,
 				EE9BE600188D84A20092A743 /* sh_bg.png */,
@@ -320,7 +327,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE9BE608188D84A20092A743 /* sh_bg@2x.png in Resources */,
-				EE9BE5BA188A00440092A743 /* ProximityKit.plist in Resources */,
 				EE9BE5EA188D7D120092A743 /* sh_button.png in Resources */,
 				EE9BE606188D84A20092A743 /* sh_bg.png in Resources */,
 				EE9BE59A1889FF5C0092A743 /* Images.xcassets in Resources */,
@@ -328,8 +334,10 @@
 				EE9BE5E8188D7D120092A743 /* sh_button_ipad.png in Resources */,
 				EE9BE5CA188CBDE00092A743 /* ScavengerHunt_iPad.storyboard in Resources */,
 				EE9BE5F0188D7D120092A743 /* sh_icon_ipad@2x.png in Resources */,
+				EE14BAB818A4453D00C7CE12 /* sh_bolt@2x.png in Resources */,
 				EE9BE5EC188D7D120092A743 /* sh_button@2x.png in Resources */,
 				EE9BE5E6188D7D120092A743 /* sh_button_ipad@2x.png in Resources */,
+				EE14BAB618A4450F00C7CE12 /* sh_bolt.png in Resources */,
 				EE9BE5891889FF5C0092A743 /* InfoPlist.strings in Resources */,
 				EE19EB3E1891C69B00FD941F /* LICENSE in Resources */,
 				EE9BE604188D84A20092A743 /* sh_bg_ipad@2x.png in Resources */,
@@ -359,7 +367,6 @@
 				EE9BE609188D84A20092A743 /* sh_bg@2x.png in Resources */,
 				EE9BE5F3188D7D120092A743 /* sh_icon.png in Resources */,
 				EE9BE605188D84A20092A743 /* sh_bg_ipad@2x.png in Resources */,
-				EE9BE5BB188A00440092A743 /* ProximityKit.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,6 +378,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE7DAC5D1890235F0012A84C /* SHRemotAssetCache.m in Sources */,
+				EE14BABB18A44B6100C7CE12 /* SHLoadingViewController.m in Sources */,
 				EE9BE5D4188CBDE00092A743 /* SHTargetItemViewController.m in Sources */,
 				EE9BE5D8188CBDE00092A743 /* SHTargetItem.m in Sources */,
 				EE9BE5D0188CBDE00092A743 /* SHTargetCollectionViewController.m in Sources */,

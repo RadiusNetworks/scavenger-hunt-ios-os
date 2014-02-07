@@ -21,7 +21,7 @@
 #import <ProximityKit/ProximityKit.h>
 #import <ProximityKit/PKKit.h>
 #import <ProximityKit/PKIBeacon.h>
-#import <ProximityKit/PKConfigurationChanger.h>
+//#import <ProximityKit/PKConfigurationChanger.h>
 #import <objc/runtime.h>
 
 /*
@@ -83,8 +83,8 @@
 }
 
 -(void)startPKWithCode: (NSString * ) code {
-    PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
-    [configChanger syncManager:self.manager withCode: code];
+    //PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
+    //[configChanger syncManager:self.manager withCode: code];
     NSLog(@"started Proximity Kit with code %@.  Waiting for callback from sync", code);
 }
 
@@ -195,11 +195,11 @@
  // target1_found@2x~ipad.png
  */
 - (NSString *)variantTargetImageUrlForBaseUrlString: (NSString *) baseUrlString found:(BOOL)found tablet:(BOOL)tablet retina:(BOOL)retina {
-    int extensionIndex = [baseUrlString rangeOfString:@"." options:NSBackwardsSearch].location;
+    unsigned long extensionIndex = [baseUrlString rangeOfString:@"." options:NSBackwardsSearch].location;
     if (extensionIndex == NSNotFound) {
         return Nil;
     }
-    NSLog(@"Extension Index of %@ is %d", baseUrlString, extensionIndex);
+    NSLog(@"Extension Index of %@ is %ld", baseUrlString, extensionIndex);
     
     NSString *extension = [baseUrlString substringFromIndex:extensionIndex];
     NSString *prefix = [baseUrlString substringToIndex:extensionIndex];
@@ -280,7 +280,7 @@
  */
 - (BOOL)validateRequiredImagesPresent {
     BOOL missing = NO;
-    int targetCount = [SHHunt sharedHunt].targetList.count;
+    unsigned long targetCount = [SHHunt sharedHunt].targetList.count;
     for (int i = 0; i < targetCount; i++) {
         if ([self.remoteAssetCache getImageByName:[NSString stringWithFormat:@"target%d_found", i+1]] == Nil) {
             NSLog(@"Error: required image target%d_found has not been downloaded", i+1);
