@@ -511,9 +511,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/dyoung/Downloads,
-					"/Users/dyoung/workspace/scavenger-hunt-ios/scavengerhunt",
-					"/Users/csexton/src/scavenger-hunt-ios-os/scavengerhunt",
+					"$(SRCROOT)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "scavengerhunt/scavengerhunt-Prefix.pch";
@@ -531,9 +529,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/dyoung/Downloads,
-					"/Users/dyoung/workspace/scavenger-hunt-ios/scavengerhunt",
-					"/Users/csexton/src/scavenger-hunt-ios-os/scavengerhunt",
+					"$(SRCROOT)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "scavengerhunt/scavengerhunt-Prefix.pch";
