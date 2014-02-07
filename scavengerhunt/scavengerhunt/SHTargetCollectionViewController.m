@@ -42,6 +42,8 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     NSLog(@"View Will Appear - collection");
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (void)viewDidLoad

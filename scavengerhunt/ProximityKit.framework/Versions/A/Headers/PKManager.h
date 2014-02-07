@@ -45,6 +45,10 @@ typedef void(^PKFetchCompletionHandler)(UIBackgroundFetchResult);
  */
 + (PKManager *)managerWithDelegate:(id <PKManagerDelegate>)delegate;
 
+
+- (id)initWithDelegate:(id <PKManagerDelegate>)delegate andAPIURL: (NSString *)url andToken: (NSString *) token;
+
+
 /*
  *  start
  *

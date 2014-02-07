@@ -25,6 +25,7 @@
 @interface SHRemoteAssetCache : NSObject
 - (void)downloadAssets:(NSDictionary *) assetUrls;
 - (UIImage *)getImageByName: (NSString *) name;
+- (void)clear;
 @property (strong, nonatomic) id <SHRemoteAssetCacheDelegate> delegate;
 @property BOOL retinaFallbackEnabled;
 @end

@@ -18,6 +18,7 @@
 #import "SHHunt.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "SHStartedViewController.h"
+#import "SHLoadingViewController.h"
 #import <ProximityKit/ProximityKit.h>
 #import <ProximityKit/PKKit.h>
 #import <ProximityKit/PKIBeacon.h>
@@ -38,7 +39,8 @@
     SHViewController *_mainViewController;
     NSDate * _lastEntryTime;
     NSDate * _lastExitTime;
-
+    BOOL _validatingCode;
+    NSDate *_loadingDisplayedTime;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -62,20 +64,51 @@
 
     // Initialize ProximityKit
     self.manager = [PKManager managerWithDelegate:self];
-    
-    // Show loading screen
-    UIViewController *loadingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoadingViewController"];
-    self.window.rootViewController = loadingViewController;
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
-
-
-    
-    // After startup, the loading screen will be displayed until the Proximity Kit proximityKitDidSync callback is received, which will kick off downloading badge images
-    // Once everything is loaded, the dependenciesFullyLoaded method below is called, which will trigger displaying the opening screen.
+    [self setupInitialView];
     
     return YES;
 }
+
+- (void)setupInitialView {
+    // Check to see if ProximityKit.plist exists.  If so, we start right up.
+    // Otherwise, we ask the user for a code to start
+    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    self.loadingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoadingViewController"];
+    UINavigationController *navController;
+    
+    if (YES || [self pkPlistPath] == Nil) {
+        NSLog(@"No ProximityKit.plist present.  Asking user for code.");
+        self.codeViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"CodeViewController"];
+        NSLog(@"Here is the codeViewController: %@", self.codeViewController);
+        navController = [[UINavigationController alloc] initWithRootViewController: self.codeViewController];
+        NSLog(@"done");
+    }
+    else {
+        NSLog(@"ProximityKit.plist present.  Not asking user for code.");
+        navController = [[UINavigationController alloc] initWithRootViewController: self.loadingViewController];
+        NSLog(@"done");
+        _loadingDisplayedTime = [[NSDate alloc] init];
+        [self startPK];
+    }
+    self.window.rootViewController = navController;
+    [self.window makeKeyAndVisible];
+    
+    // After startup, the loading screen will be displayed until the Proximity Kit proximityKitDidSync callback is received, which will kick off downloading badge images
+    // Once everything is loaded, the dependenciesFullyLoaded method below is called, which will trigger displaying the opening screen.
+}
+
+- (NSString *)pkPlistPath {
+    NSString *mainPath = [[NSBundle mainBundle] pathForResource:@"ProximityKit" ofType:@"plist"];
+    if (mainPath) {
+        return mainPath;
+    } else {
+        NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+        return [bundle pathForResource:@"ProximityKit" ofType:@"plist"];
+    }
+}
+
+
+
 
 -(void)startPK {
     [self.manager start];
@@ -83,11 +116,37 @@
 }
 
 -(void)startPKWithCode: (NSString * ) code {
+    // clear out all remote assets in case the new code has conflicts with them
+    [self.remoteAssetCache clear];
     //PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
     //[configChanger syncManager:self.manager withCode: code];
+    //[[PKManager alloc] initWithDelegate:self andAPIURL: @"" andToken: @""];
+    _validatingCode = YES;
+    [self.manager start];
+    
     NSLog(@"started Proximity Kit with code %@.  Waiting for callback from sync", code);
 }
 
+// called when the user gestures to start over
+-(void)resetHunt {
+    [[SHHunt sharedHunt] reset];
+    // TODO: at some point, this has got to happen:
+    
+    /*
+    
+    if (self.collectionViewController) {
+        [self.collectionViewController.collectionView reloadData];
+    }
+     */
+
+    _loadingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoadingViewController"];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController: _loadingViewController];
+    
+    [self.window.rootViewController presentViewController: navController
+                                                 animated:YES completion: Nil ];
+    
+    
+}
 
 
 /*
@@ -124,14 +183,25 @@
         
     }
     else {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^
-         {
-             _mainViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
-             UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController: _mainViewController];
+        NSLog(@"Ready to show main view controller");
+
+        // may need a delay here because this could happen too soon if the loading
+        // view controller just got pushed
+
+        NSDate *now = [NSDate date];
+        long timeSince = [now timeIntervalSinceDate:_loadingDisplayedTime];
+        long delay = 2000-timeSince;
+        if (delay < 0) {
+            delay = 0;
+        }
+        NSLog(@"Loading was displayed at %@, which was %ld ms ago.  will delay %ld ms", _loadingDisplayedTime,  timeSince, delay);
+        _mainViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NMSEC_PER_SEC * delay),dispatch_get_main_queue(), ^{
+                 NSLog(@"Pushing main view controller: %@", _mainViewController);
+                 [self.loadingViewController.navigationController pushViewController:_mainViewController animated:YES];
+        });
              
-             [self.window.rootViewController presentViewController: navController
-                                                          animated:YES completion: Nil ];
-         }];
     }
     
 }
@@ -223,12 +293,18 @@
     NSLog(@"proximityKitDidSync");
     PKKit *kit = manager.kit;
     if (kit == Nil) {
-        //TODO: figure out if this should be nil
-        NSLog(@"Proximity Kit is nil after sync.  We may be offline.");
-        NSLog(@"Manager kit is %@", self.manager.kit);
-        [self dependencyLoadFinished];
+        [self proximityKit:manager didFailWithError:Nil];
+        return;
     }
     else {
+        if (_validatingCode) {
+            _validatingCode = NO;
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^
+             {
+                 [self.codeViewController codeValidated];
+                 _loadingDisplayedTime = [[NSDate alloc] init];
+             }];
+        }
         int targetCount = 0;
         NSMutableDictionary *targetImageUrls = [[NSMutableDictionary alloc] init];
         for (PKRegion *region in kit.iBeacons) {
@@ -264,6 +340,7 @@
         }
         
         if ([SHHunt sharedHunt].targetList.count != targetCount) {
+            // TODO:  actually compare that the ids did not change
             NSLog(@"The kit says the target count has changed to %d items from %lu items.  Restarting hunt from scratch.", targetCount, (unsigned long)[SHHunt sharedHunt].targetList.count);
             [[SHHunt sharedHunt]resize:targetCount];
         }
@@ -297,7 +374,17 @@
 
 - (void)proximityKit:(PKManager *)manager didFailWithError:(NSError *)error
 {
-    NSLog(@"PK didFailWithError: %@", error.description);
+    NSLog(@"PK didFailWithError: %@", error);
+    if (_validatingCode) {
+        NSLog(@"Code validation failed");
+        _validatingCode = NO;
+        [self.codeViewController codeValidationFailedWithError:error];
+        return;
+    }
+    else {
+        NSLog(@"Manager kit is %@", self.manager.kit);
+        [self dependencyLoadFinished];
+    }
 }
 
 
@@ -317,8 +404,8 @@
 
 - (void)proximityKit:(PKManager *)manager didDetermineState:(PKRegionState)state forRegion:(PKRegion *)region
 {
-    NSLog(@"PK didDetermineState %ld forRegion %@ (%@)", state, region.name, region.identifier);
-    NSLog(@"Did determine State for region: %@ from manager %@ with state %ld, where the inside state is %ld", region.identifier, manager, state, (long)CLRegionStateInside);
+    NSLog(@"PK didDetermineState %d forRegion %@ (%@)", state, region.name, region.identifier);
+    NSLog(@"Did determine State for region: %@ from manager %@ with state %d, where the inside state is %ld", region.identifier, manager, state, (long)CLRegionStateInside);
     [self tellHuntAboutMonitoredBeacons: state];
 }
 

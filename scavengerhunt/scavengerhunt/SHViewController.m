@@ -27,6 +27,7 @@
     NSTimer *_timer;
     UIImageView *_splashImage;
     SHTargetCollectionViewController *_collectionViewController;
+    SHAppDelegate *_appDelegate;
 }
 @end
 
@@ -36,26 +37,19 @@
 {
     [super viewDidLoad];
 
-    UIStoryboard*  sb;
-    if ([[UIDevice currentDevice] userInterfaceIdiom] ==UIUserInterfaceIdiomPad) {
-        sb = [UIStoryboard storyboardWithName:@"ScavengerHunt_iPad" bundle:nil];
-    } else {
-        sb = [UIStoryboard storyboardWithName:@"ScavengerHunt_iPhone" bundle:nil];
-    }
+    _appDelegate = (SHAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    _collectionViewController = [sb instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
+    _collectionViewController = [_appDelegate.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
     
     NSLog(@"Collection view controller is no longer null: %@", self.collectionViewController);
     
-    
     self.title = @"Scavenger Hunt";
-    
 }
 
 
 -(void)viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
-    
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     [self showViewForHuntState];
 }
 
@@ -68,13 +62,7 @@
     if (buttonIndex > 0) {
         return;
     }
-    [[SHHunt sharedHunt] reset];
-
-    if (self.collectionViewController) {
-        [self.collectionViewController.collectionView reloadData];
-    }
-    
-    [self showViewForHuntState];
+    [_appDelegate resetHunt];
 }
 
 /*

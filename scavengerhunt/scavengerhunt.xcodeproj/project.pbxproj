@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EE14BAB418A440CD00C7CE12 /* ProximityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE14BAB318A440CD00C7CE12 /* ProximityKit.framework */; };
 		EE14BAB618A4450F00C7CE12 /* sh_bolt.png in Resources */ = {isa = PBXBuildFile; fileRef = EE14BAB518A4450F00C7CE12 /* sh_bolt.png */; };
 		EE14BAB818A4453D00C7CE12 /* sh_bolt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EE14BAB718A4453D00C7CE12 /* sh_bolt@2x.png */; };
 		EE14BABB18A44B6100C7CE12 /* SHLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE14BABA18A44B6100C7CE12 /* SHLoadingViewController.m */; };
@@ -61,6 +60,9 @@
 		EE9BE607188D84A20092A743 /* sh_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE600188D84A20092A743 /* sh_bg.png */; };
 		EE9BE608188D84A20092A743 /* sh_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE601188D84A20092A743 /* sh_bg@2x.png */; };
 		EE9BE609188D84A20092A743 /* sh_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE601188D84A20092A743 /* sh_bg@2x.png */; };
+		EED3A6FE18A4645D00978107 /* ProximityKit.plist in Resources */ = {isa = PBXBuildFile; fileRef = EED3A6FD18A4645D00978107 /* ProximityKit.plist */; };
+		EED3A70018A47B7E00978107 /* ProximityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EED3A6FF18A47B7E00978107 /* ProximityKit.framework */; };
+		EED3A70318A524C300978107 /* SHCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EED3A70218A524C300978107 /* SHCodeViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,7 +76,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		EE14BAB318A440CD00C7CE12 /* ProximityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ProximityKit.framework; sourceTree = "<group>"; };
 		EE14BAB518A4450F00C7CE12 /* sh_bolt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sh_bolt.png; sourceTree = "<group>"; };
 		EE14BAB718A4453D00C7CE12 /* sh_bolt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sh_bolt@2x.png"; sourceTree = "<group>"; };
 		EE14BAB918A44B6100C7CE12 /* SHLoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHLoadingViewController.h; sourceTree = "<group>"; };
@@ -121,6 +122,10 @@
 		EE9BE5FF188D84A20092A743 /* sh_bg_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sh_bg_ipad@2x.png"; path = "storyboard_images/sh_bg_ipad@2x.png"; sourceTree = "<group>"; };
 		EE9BE600188D84A20092A743 /* sh_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sh_bg.png; path = storyboard_images/sh_bg.png; sourceTree = "<group>"; };
 		EE9BE601188D84A20092A743 /* sh_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sh_bg@2x.png"; path = "storyboard_images/sh_bg@2x.png"; sourceTree = "<group>"; };
+		EED3A6FD18A4645D00978107 /* ProximityKit.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ProximityKit.plist; sourceTree = "<group>"; };
+		EED3A6FF18A47B7E00978107 /* ProximityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ProximityKit.framework; sourceTree = "<group>"; };
+		EED3A70118A524C300978107 /* SHCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHCodeViewController.h; sourceTree = "<group>"; };
+		EED3A70218A524C300978107 /* SHCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHCodeViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,7 +136,7 @@
 				EE9BE5811889FF5B0092A743 /* CoreGraphics.framework in Frameworks */,
 				EE9BE5831889FF5B0092A743 /* UIKit.framework in Frameworks */,
 				EE9BE57F1889FF5B0092A743 /* Foundation.framework in Frameworks */,
-				EE14BAB418A440CD00C7CE12 /* ProximityKit.framework in Frameworks */,
+				EED3A70018A47B7E00978107 /* ProximityKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,7 +176,7 @@
 		EE9BE57D1889FF5B0092A743 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EE14BAB318A440CD00C7CE12 /* ProximityKit.framework */,
+				EED3A6FF18A47B7E00978107 /* ProximityKit.framework */,
 				EE9BE57E1889FF5B0092A743 /* Foundation.framework */,
 				EE9BE5801889FF5B0092A743 /* CoreGraphics.framework */,
 				EE9BE5821889FF5B0092A743 /* UIKit.framework */,
@@ -183,6 +188,7 @@
 		EE9BE5841889FF5C0092A743 /* scavengerhunt */ = {
 			isa = PBXGroup;
 			children = (
+				EED3A6FD18A4645D00978107 /* ProximityKit.plist */,
 				EE9BE5BC188CBDE00092A743 /* ScavengerHunt_iPad.storyboard */,
 				EE9BE5BD188CBDE00092A743 /* ScavengerHunt_iPhone.storyboard */,
 				EE9BE5BF188CBDE00092A743 /* SHTargetCollectionViewController.m */,
@@ -202,6 +208,8 @@
 				EE7DAC5B1890235F0012A84C /* SHRemoteAssetCache.h */,
 				EE7DAC5C1890235F0012A84C /* SHRemotAssetCache.m */,
 				EE14BAB918A44B6100C7CE12 /* SHLoadingViewController.h */,
+				EED3A70118A524C300978107 /* SHCodeViewController.h */,
+				EED3A70218A524C300978107 /* SHCodeViewController.m */,
 				EE14BABA18A44B6100C7CE12 /* SHLoadingViewController.m */,
 			);
 			path = scavengerhunt;
@@ -331,6 +339,7 @@
 				EE9BE606188D84A20092A743 /* sh_bg.png in Resources */,
 				EE9BE59A1889FF5C0092A743 /* Images.xcassets in Resources */,
 				EE9BE602188D84A20092A743 /* sh_bg_ipad.png in Resources */,
+				EED3A6FE18A4645D00978107 /* ProximityKit.plist in Resources */,
 				EE9BE5E8188D7D120092A743 /* sh_button_ipad.png in Resources */,
 				EE9BE5CA188CBDE00092A743 /* ScavengerHunt_iPad.storyboard in Resources */,
 				EE9BE5F0188D7D120092A743 /* sh_icon_ipad@2x.png in Resources */,
@@ -385,6 +394,7 @@
 				EE9BE58B1889FF5C0092A743 /* main.m in Sources */,
 				EE9BE5981889FF5C0092A743 /* SHViewController.m in Sources */,
 				EE9BE58F1889FF5C0092A743 /* SHAppDelegate.m in Sources */,
+				EED3A70318A524C300978107 /* SHCodeViewController.m in Sources */,
 				EE9BE5D2188CBDE00092A743 /* SHHunt.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -513,6 +523,7 @@
 					"$(inherited)",
 					/Users/dyoung/Downloads,
 					"/Users/dyoung/workspace/scavenger-hunt-ios/scavengerhunt",
+					"/Users/dyoung/workspace/scavenger-hunt-ios-os/scavengerhunt",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "scavengerhunt/scavengerhunt-Prefix.pch";
@@ -532,6 +543,7 @@
 					"$(inherited)",
 					/Users/dyoung/Downloads,
 					"/Users/dyoung/workspace/scavenger-hunt-ios/scavengerhunt",
+					"/Users/dyoung/workspace/scavenger-hunt-ios-os/scavengerhunt",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "scavengerhunt/scavengerhunt-Prefix.pch";

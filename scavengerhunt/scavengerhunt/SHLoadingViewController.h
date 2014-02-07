@@ -9,15 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface SHLoadingViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UIView *enterCodeView;
 @property (weak, nonatomic) IBOutlet UIView *downloadingImagesView;
-@property (weak, nonatomic) IBOutlet UITextField *codeTextField;
 - (IBAction)tappedAttribution:(id)sender;
-- (IBAction)codeEditingDidBegin:(id)sender;
-- (IBAction)codeEditingDidEnd:(id)sender;
-@property (weak, nonatomic) IBOutlet UIButton *okButton;
-- (IBAction)tappedHelp:(id)sender;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *codeSpinner;
-- (IBAction)okTapped:(id)sender;
-
 @end

@@ -53,7 +53,10 @@
         _targetCount = 0;
         _triggerDistance = 10.0;
         [self loadFromUserDefaults];
-        if (_targetList == nil) {
+        if (_deviceId == Nil) {
+            self.deviceId = [[NSUUID UUID] UUIDString];
+        }
+        if (_targetList == Nil) {
             [self resize: _targetCount];
         }
     }
@@ -67,19 +70,12 @@
     
     _timeStarted = 0;
     _timeCompleted = 0;
-    self.deviceId = [[NSUUID UUID] UUIDString];
     [self saveToUserDefaults];
 }
 
 -(void)reset {
-    [_targetList enumerateObjectsUsingBlock:^(id targetObj, NSUInteger targetIdx, BOOL *targetStop) {
-        SHTargetItem *item = (SHTargetItem *) targetObj;
-        item.found = NO;
-    }];
-    _timeStarted = 0;
-    _timeCompleted = 0;
+    [self resize: 0];
     [self saveToUserDefaults];
-    [self sendMetricsForEvent:@"reset"];
 }
 
 -(NSArray *)createTargetListOfSize: (int) numTargets {
@@ -94,7 +90,6 @@
     if (_timeStarted == 0) {
         _timeStarted = (long)[[NSDate date] timeIntervalSince1970];
         [self saveToUserDefaults];
-        [self sendMetricsForEvent:@"start"];
     }
 }
 
@@ -113,7 +108,6 @@
     if ([self foundCount] == _targetList.count && _timeCompleted == 0) {
         _timeCompleted = (long)[[NSDate date] timeIntervalSince1970];
         [self saveToUserDefaults];
-        [self sendMetricsForEvent:@"completed"];
         return true;
     }
     return false;
@@ -130,25 +124,6 @@
     return count;
 }
 
-- (void) sendMetricsForEvent: (NSString *) event {
-    // metrics wanted:
-    // 1. downloads
-    // 2. go to sh
-    // 3. how many get to each target and in what order
-    // 4. ios vs. android
-    NSString *encodedEvent = [event stringByAddingPercentEscapesUsingEncoding: NSASCIIStringEncoding];
-    //NSString *deviceId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
-    long time = [[[NSDate alloc] init] timeIntervalSince1970];
-    
-    NSURL * url = [NSURL URLWithString:[NSString stringWithFormat:@"http://app.messageradius.com/assets/beacon.svg?scavengerhunt&platform=ios&device_id=%@&event=%@&time=%ld", self.deviceId, encodedEvent, time ]];
-    // Create the request.
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-    // Create url connection and fire request
-    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    NSLog(@"Fired metrics at %@ with connection %@", url, conn);
-
-}
 
 - (void) find:(SHTargetItem *) target {
     target.found = YES;
