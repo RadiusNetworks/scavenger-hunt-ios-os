@@ -517,14 +517,8 @@
     </scenes>
     <resources>
         <image name="sh_bolt.png" width="76" height="176"/>
-        <image name="sh_bolt.png" width="76" height="176"/>
-        <image name="sh_button.png" width="320" height="115"/>
-        <image name="sh_button.png" width="320" height="115"/>
-        <image name="sh_button.png" width="320" height="115"/>
-        <image name="sh_button.png" width="320" height="115"/>
         <image name="sh_button.png" width="320" height="115"/>
         <image name="sh_button_ipad.png" width="700" height="252"/>
-        <image name="sh_icon.png" width="74" height="74"/>
         <image name="sh_icon.png" width="74" height="74"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
