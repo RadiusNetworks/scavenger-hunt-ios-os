@@ -231,7 +231,7 @@
     else {
         int targetCount = 0;
         NSMutableDictionary *targetImageUrls = [[NSMutableDictionary alloc] init];
-        for (PKRegion *region in kit.iBeacons) {
+        for (PKRegion *region in kit.iBeaconRegions) {
             NSString* huntId = [region.attributes objectForKey:@"hunt_id"];
             NSString* imageUrlString = [region.attributes objectForKey:@"image_url"];
             

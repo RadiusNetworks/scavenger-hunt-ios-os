@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EE14BAB418A440CD00C7CE12 /* ProximityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE14BAB318A440CD00C7CE12 /* ProximityKit.framework */; };
+		B5DFB71918A44ED2005709AE /* ProximityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5DFB71818A44ED2005709AE /* ProximityKit.framework */; };
 		EE19EB3E1891C69B00FD941F /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = EE19EB3D1891C69B00FD941F /* LICENSE */; };
 		EE7DAC5D1890235F0012A84C /* SHRemotAssetCache.m in Sources */ = {isa = PBXBuildFile; fileRef = EE7DAC5C1890235F0012A84C /* SHRemotAssetCache.m */; };
 		EE9BE57F1889FF5B0092A743 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE9BE57E1889FF5B0092A743 /* Foundation.framework */; };
@@ -73,7 +73,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		EE14BAB318A440CD00C7CE12 /* ProximityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ProximityKit.framework; sourceTree = "<group>"; };
+		B5DFB71818A44ED2005709AE /* ProximityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ProximityKit.framework; sourceTree = "<group>"; };
 		EE19EB3D1891C69B00FD941F /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		EE7DAC5B1890235F0012A84C /* SHRemoteAssetCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHRemoteAssetCache.h; sourceTree = "<group>"; };
 		EE7DAC5C1890235F0012A84C /* SHRemotAssetCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHRemotAssetCache.m; sourceTree = "<group>"; };
@@ -127,7 +127,7 @@
 				EE9BE5811889FF5B0092A743 /* CoreGraphics.framework in Frameworks */,
 				EE9BE5831889FF5B0092A743 /* UIKit.framework in Frameworks */,
 				EE9BE57F1889FF5B0092A743 /* Foundation.framework in Frameworks */,
-				EE14BAB418A440CD00C7CE12 /* ProximityKit.framework in Frameworks */,
+				B5DFB71918A44ED2005709AE /* ProximityKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,7 +168,7 @@
 		EE9BE57D1889FF5B0092A743 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EE14BAB318A440CD00C7CE12 /* ProximityKit.framework */,
+				B5DFB71818A44ED2005709AE /* ProximityKit.framework */,
 				EE9BE57E1889FF5B0092A743 /* Foundation.framework */,
 				EE9BE5801889FF5B0092A743 /* CoreGraphics.framework */,
 				EE9BE5821889FF5B0092A743 /* UIKit.framework */,
@@ -505,6 +505,7 @@
 					"$(inherited)",
 					/Users/dyoung/Downloads,
 					"/Users/dyoung/workspace/scavenger-hunt-ios/scavengerhunt",
+					"/Users/csexton/src/scavenger-hunt-ios-os/scavengerhunt",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "scavengerhunt/scavengerhunt-Prefix.pch";
@@ -524,6 +525,7 @@
 					"$(inherited)",
 					/Users/dyoung/Downloads,
 					"/Users/dyoung/workspace/scavenger-hunt-ios/scavengerhunt",
+					"/Users/csexton/src/scavenger-hunt-ios-os/scavengerhunt",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "scavengerhunt/scavengerhunt-Prefix.pch";
