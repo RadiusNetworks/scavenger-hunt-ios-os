@@ -28,9 +28,20 @@
 /*
  
  TODO:
+ 
+ - before submission -
+
  1. Test on iPad
  2. Test on Retina and non-Retina
- 3. Update license
+ 3. Update service location for code lookup to match pk
+ 4. Update service hostname to match pk
+ 5. Fix black bar
+ 6. take screenshots to include in package
+ 
+ - after submission - 
+ 
+ 1. decide on pk api signatures
+ 
  */
 
 
@@ -126,19 +137,19 @@
 -(void)startPKWithCode: (NSString * ) code {
     // clear out all remote assets in case the new code has conflicts with them
     [self.remoteAssetCache clear];
-    //PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
-    //[configChanger syncManager:self.manager withCode: code];
+
     //[[PKManager alloc] initWithDelegate:self andAPIURL: @"" andToken: @""];
     _validatingCode = YES;
-    if (_pkStarted) {
-        [self.manager sync];
-        NSLog(@"sync Proximity Kit with code %@.  Waiting for callback from sync", code);
+    if (!_pkStarted) {
+        _pkStarted = YES;
+        // [self.manager start];
     }
     else {
-        [self.manager start];
-        _pkStarted = YES;
-        NSLog(@"started Proximity Kit with code %@.  Waiting for callback from sync", code);
+        // [self.manager sync];
     }
+    PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
+    [configChanger syncManager:self.manager withCode: code];
+    NSLog(@"started Proximity Kit with code %@.  Waiting for callback from sync", code);
     
 }
 
@@ -314,13 +325,17 @@
                  _loadingDisplayedTime = [[NSDate alloc] init];
              }];
         }
-        int targetCount = 0;
+        __block int targetCount = 0;
         NSMutableDictionary *targetImageUrls = [[NSMutableDictionary alloc] init];
-        for (PKRegion *region in kit.iBeacons) {
-            NSString* huntId = [region.attributes objectForKey:@"hunt_id"];
-            NSString* imageUrlString = [region.attributes objectForKey:@"image_url"];
-            
+        
+        [kit enumerateIBeaconsUsingBlock:^(PKIBeacon *iBeacon, NSUInteger idx, BOOL *stop) {
+            NSString* huntId = [iBeacon.attributes objectForKey:@"hunt_id"];
+            NSString* imageUrlString = [iBeacon.attributes objectForKey:@"image_url"];
             if (huntId != Nil) {
+                NSLog(@"Hunt id is %@", huntId);
+                NSLog(@"uuid is %@", iBeacon.clBeacon.proximityUUID);
+                NSLog(@"major is %@", iBeacon.clBeacon.major);
+                NSLog(@"minor is %@", iBeacon.clBeacon.minor);
                 if (imageUrlString == nil) {
                     NSLog(@"ERROR: No image_url specified in ProximityKit for item with hunt_id=%@", huntId);
                 }
@@ -346,7 +361,11 @@
                 }
                 targetCount++;
             }
-        }
+            else {
+                NSLog(@"No hunt_id for the item in proximity kit");
+            }
+            
+        }];
         
         if ([SHHunt sharedHunt].targetList.count != targetCount) {
             // TODO:  actually compare that the ids did not change
@@ -413,8 +432,8 @@
 
 - (void)proximityKit:(PKManager *)manager didDetermineState:(PKRegionState)state forRegion:(PKRegion *)region
 {
-    NSLog(@"PK didDetermineState %d forRegion %@ (%@)", state, region.name, region.identifier);
-    NSLog(@"Did determine State for region: %@ from manager %@ with state %d, where the inside state is %ld", region.identifier, manager, state, (long)CLRegionStateInside);
+    NSLog(@"PK didDetermineState %ld forRegion %@ (%@)", state, region.name, region.identifier);
+    NSLog(@"Did determine State for region: %@ from manager %@ with state %ld, where the inside state is %ld", region.identifier, manager, state, (long)CLRegionStateInside);
     [self tellHuntAboutMonitoredBeacons: state];
 }
 
@@ -453,9 +472,12 @@
 -(void)tellHuntAboutRangedBeacons:(NSArray*) beacons inRegion: (PKRegion*) region {
     
     [beacons enumerateObjectsUsingBlock:^(id beaconObj, NSUInteger beaconIdx, BOOL *beaconStop) {
+        PKIBeacon *beacon = (PKIBeacon *) beaconObj;
         
-        NSString *huntId = [region.attributes objectForKey:@"hunt_id"]; // set in ProximityKit (e.g. 1, 2, 3, etc.)
-        NSNumber *distanceObj = [beaconObj valueForKey:@"accuracy"];
+        NSLog(@"beacon=%@, beacon.attributes=%@", beacon, beacon.attributes);
+        
+        NSString *huntId = [beacon.attributes objectForKey:@"hunt_id"]; // set in ProximityKit (e.g. 1, 2, 3, etc.)
+        NSNumber *distanceObj = [NSNumber numberWithDouble: beacon.clBeacon.accuracy];
         NSLog(@"processing beacon with targetId: %@ and distance %@", huntId, distanceObj);
         float distance = [distanceObj floatValue];
         

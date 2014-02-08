@@ -87,13 +87,18 @@
 - (void) codeValidationFailedWithError: (NSError *) error {
     // Display an error dialog based on the error code
     NSString *title = @"Network error";
-    NSString *message = [NSString stringWithFormat:@"Please check your internet connection and try again.  Code: %d", error.code ];
+    NSString *message = [NSString stringWithFormat:@"Please check your internet connection and try again.  Code: %ld", (long)error.code ];
     if (error.code >= 300 && error.code < 500) {
         title = @"Invalid Code";
         message = @"Please verify your code and try again.";
     }
+
     [[NSOperationQueue mainQueue] addOperationWithBlock:^
      {
+         self.okButton.hidden = NO;
+         self.codeSpinner.hidden = YES;
+         self.codeTextField.enabled = YES;
+
          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
                                                          message:message
                                                         delegate:nil

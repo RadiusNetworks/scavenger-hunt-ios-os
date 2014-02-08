@@ -66,7 +66,7 @@
 -(void)resize: (int) size {
     _targetCount = size;
     _targetList = [self createTargetListOfSize:_targetCount];
-    NSLog(@"initialized target list with %d items", _targetList.count);
+    NSLog(@"initialized target list with %lu items", (unsigned long)_targetList.count);
     
     _timeStarted = 0;
     _timeCompleted = 0;

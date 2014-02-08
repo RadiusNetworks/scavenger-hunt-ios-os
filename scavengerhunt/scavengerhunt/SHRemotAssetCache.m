@@ -29,10 +29,10 @@
 
 
 - (void)downloadAssets:(NSDictionary *) assetUrls {
-    __block int assetsToDownload = assetUrls.count;
+    __block long assetsToDownload = assetUrls.count;
     __block int failureCount = 0;
     
-    NSLog(@"downloadAssets called with count of %d", assetUrls.count);
+    NSLog(@"downloadAssets called with count of %lu", (unsigned long)assetUrls.count);
     
     for (NSString *standardizedFilename in [assetUrls allKeys]) {
         NSURL *assetUrl = [assetUrls objectForKey:standardizedFilename];
@@ -47,7 +47,7 @@
                 NSLog(@"Failed to load %@", assetUrl);
                 BOOL retrying = NO;
                     if (self.retinaFallbackEnabled) {
-                        int location = [[assetUrl absoluteString] rangeOfString:@"@2x."].location;
+                        long location = [[assetUrl absoluteString] rangeOfString:@"@2x."].location;
                         if (location != NSNotFound) {
                             NSLog(@"Cannot download image url with a @2x version.  Trying to get a non retina version.");
                             retrying = YES;
@@ -127,7 +127,7 @@
                                        completionBlock(YES,data);
                                    }
                                    else {
-                                       NSLog(@"got a %d status code from request", [httpResponse statusCode]);
+                                       NSLog(@"got a %ld status code from request", (long)[httpResponse statusCode]);
                                        completionBlock(NO,data);
                                    }
                                    

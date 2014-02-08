@@ -17,5 +17,8 @@
 - (id)initWith:(NSDictionary *)dict;
 - (PKRegion *)getRegionForIdentifier:(NSString *)identifier;
 - (PKIBeacon *)getIBeaconForCLBeacon: (CLBeacon *)clBeacon;
+- (void)enumerateIBeaconsUsingBlock:(void (^)(PKIBeacon *iBeacon, NSUInteger idx, BOOL *stop))block;
+
+
 
 @end

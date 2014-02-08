@@ -58,7 +58,7 @@
  the scavenger hunt
  */
 -(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    NSLog(@"alert button pressed index is %d", buttonIndex);
+    NSLog(@"alert button pressed index is %ld", (long)buttonIndex);
     if (buttonIndex > 0) {
         return;
     }
@@ -86,7 +86,7 @@
     else if ([[SHHunt sharedHunt] elapsedTime] > 0) {
         NSLog(@"Started");
         viewToDisplay = self.startedView;
-        self.huntProgressLabel.text = [NSString stringWithFormat:@"You have found %d of %d locations and have been hunting for %ld minutes.", [[SHHunt sharedHunt] foundCount], [[SHHunt sharedHunt] targetList].count, [[SHHunt sharedHunt] elapsedTime]/60];
+        self.huntProgressLabel.text = [NSString stringWithFormat:@"You have found %d of %lu locations and have been hunting for %ld minutes.", [[SHHunt sharedHunt] foundCount], (unsigned long)[[SHHunt sharedHunt] targetList].count, [[SHHunt sharedHunt] elapsedTime]/60];
     }
     else {
         NSLog(@"Unstarted");
@@ -101,10 +101,7 @@
     CGRect currentBounds=self.view.bounds;
     
     [view setHidden: NO];
-    // TODO: select right image for iPad
-    UIImageView* backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sh_bg"]];
-    view.backgroundColor = [UIColor colorWithPatternImage:backgroundImage.image];
-    
+
     if (view != self.unstartedView) {
         [self.unstartedView setHidden: YES];
     }
