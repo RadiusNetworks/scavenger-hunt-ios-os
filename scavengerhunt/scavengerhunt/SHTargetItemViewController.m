@@ -34,6 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title = @"Target Distance";
     [self displayItem];
 }
 

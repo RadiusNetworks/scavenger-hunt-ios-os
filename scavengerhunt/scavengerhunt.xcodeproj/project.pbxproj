@@ -10,6 +10,7 @@
 		EE14BAB618A4450F00C7CE12 /* sh_bolt.png in Resources */ = {isa = PBXBuildFile; fileRef = EE14BAB518A4450F00C7CE12 /* sh_bolt.png */; };
 		EE14BABB18A44B6100C7CE12 /* SHLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE14BABA18A44B6100C7CE12 /* SHLoadingViewController.m */; };
 		EE19EB3E1891C69B00FD941F /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = EE19EB3D1891C69B00FD941F /* LICENSE */; };
+		EE24BDCC18ABCAE60092B658 /* SHMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE24BDCB18ABCAE60092B658 /* SHMainViewController.m */; };
 		EE7DAC5D1890235F0012A84C /* SHRemotAssetCache.m in Sources */ = {isa = PBXBuildFile; fileRef = EE7DAC5C1890235F0012A84C /* SHRemotAssetCache.m */; };
 		EE9BE57F1889FF5B0092A743 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE9BE57E1889FF5B0092A743 /* Foundation.framework */; };
 		EE9BE5811889FF5B0092A743 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE9BE5801889FF5B0092A743 /* CoreGraphics.framework */; };
@@ -17,7 +18,7 @@
 		EE9BE5891889FF5C0092A743 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE5871889FF5C0092A743 /* InfoPlist.strings */; };
 		EE9BE58B1889FF5C0092A743 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9BE58A1889FF5C0092A743 /* main.m */; };
 		EE9BE58F1889FF5C0092A743 /* SHAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9BE58E1889FF5C0092A743 /* SHAppDelegate.m */; };
-		EE9BE5981889FF5C0092A743 /* SHViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9BE5971889FF5C0092A743 /* SHViewController.m */; };
+		EE9BE5981889FF5C0092A743 /* SHFinishViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9BE5971889FF5C0092A743 /* SHFinishViewController.m */; };
 		EE9BE59A1889FF5C0092A743 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE5991889FF5C0092A743 /* Images.xcassets */; };
 		EE9BE5A11889FF5C0092A743 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE9BE5A01889FF5C0092A743 /* XCTest.framework */; };
 		EE9BE5A21889FF5C0092A743 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE9BE57E1889FF5B0092A743 /* Foundation.framework */; };
@@ -59,6 +60,7 @@
 		EE9BE607188D84A20092A743 /* sh_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE600188D84A20092A743 /* sh_bg.png */; };
 		EE9BE608188D84A20092A743 /* sh_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE601188D84A20092A743 /* sh_bg@2x.png */; };
 		EE9BE609188D84A20092A743 /* sh_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EE9BE601188D84A20092A743 /* sh_bg@2x.png */; };
+		EEA1AC5518AC0BEC00122F3E /* SHHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEA1AC5418AC0BEC00122F3E /* SHHelpViewController.m */; };
 		EED3A6FE18A4645D00978107 /* ProximityKit.plist in Resources */ = {isa = PBXBuildFile; fileRef = EED3A6FD18A4645D00978107 /* ProximityKit.plist */; };
 		EED3A70018A47B7E00978107 /* ProximityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EED3A6FF18A47B7E00978107 /* ProximityKit.framework */; };
 		EED3A70318A524C300978107 /* SHCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EED3A70218A524C300978107 /* SHCodeViewController.m */; };
@@ -95,6 +97,8 @@
 		EE14BAB918A44B6100C7CE12 /* SHLoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHLoadingViewController.h; sourceTree = "<group>"; };
 		EE14BABA18A44B6100C7CE12 /* SHLoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHLoadingViewController.m; sourceTree = "<group>"; };
 		EE19EB3D1891C69B00FD941F /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		EE24BDCA18ABCAE60092B658 /* SHMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHMainViewController.h; sourceTree = "<group>"; };
+		EE24BDCB18ABCAE60092B658 /* SHMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHMainViewController.m; sourceTree = "<group>"; };
 		EE7DAC5B1890235F0012A84C /* SHRemoteAssetCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHRemoteAssetCache.h; sourceTree = "<group>"; };
 		EE7DAC5C1890235F0012A84C /* SHRemotAssetCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHRemotAssetCache.m; sourceTree = "<group>"; };
 		EE9BE57B1889FF5B0092A743 /* scavengerhunt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = scavengerhunt.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,8 +111,8 @@
 		EE9BE58C1889FF5C0092A743 /* scavengerhunt-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "scavengerhunt-Prefix.pch"; sourceTree = "<group>"; };
 		EE9BE58D1889FF5C0092A743 /* SHAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHAppDelegate.h; sourceTree = "<group>"; };
 		EE9BE58E1889FF5C0092A743 /* SHAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHAppDelegate.m; sourceTree = "<group>"; };
-		EE9BE5961889FF5C0092A743 /* SHViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHViewController.h; sourceTree = "<group>"; };
-		EE9BE5971889FF5C0092A743 /* SHViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHViewController.m; sourceTree = "<group>"; };
+		EE9BE5961889FF5C0092A743 /* SHFinishViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SHFinishViewController.h; sourceTree = "<group>"; };
+		EE9BE5971889FF5C0092A743 /* SHFinishViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHFinishViewController.m; sourceTree = "<group>"; };
 		EE9BE5991889FF5C0092A743 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		EE9BE59F1889FF5C0092A743 /* scavengerhuntTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = scavengerhuntTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE9BE5A01889FF5C0092A743 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -136,6 +140,8 @@
 		EE9BE5FF188D84A20092A743 /* sh_bg_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sh_bg_ipad@2x.png"; path = "storyboard_images/sh_bg_ipad@2x.png"; sourceTree = "<group>"; };
 		EE9BE600188D84A20092A743 /* sh_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sh_bg.png; path = storyboard_images/sh_bg.png; sourceTree = "<group>"; };
 		EE9BE601188D84A20092A743 /* sh_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sh_bg@2x.png"; path = "storyboard_images/sh_bg@2x.png"; sourceTree = "<group>"; };
+		EEA1AC5318AC0BEC00122F3E /* SHHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHHelpViewController.h; sourceTree = "<group>"; };
+		EEA1AC5418AC0BEC00122F3E /* SHHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHHelpViewController.m; sourceTree = "<group>"; };
 		EED3A6FD18A4645D00978107 /* ProximityKit.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ProximityKit.plist; sourceTree = "<group>"; };
 		EED3A6FF18A47B7E00978107 /* ProximityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ProximityKit.framework; sourceTree = "<group>"; };
 		EED3A70118A524C300978107 /* SHCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHCodeViewController.h; sourceTree = "<group>"; };
@@ -232,8 +238,8 @@
 				EE9BE5C9188CBDE00092A743 /* SHTargetCollectionViewController.h */,
 				EE9BE58D1889FF5C0092A743 /* SHAppDelegate.h */,
 				EE9BE58E1889FF5C0092A743 /* SHAppDelegate.m */,
-				EE9BE5961889FF5C0092A743 /* SHViewController.h */,
-				EE9BE5971889FF5C0092A743 /* SHViewController.m */,
+				EE9BE5961889FF5C0092A743 /* SHFinishViewController.h */,
+				EE9BE5971889FF5C0092A743 /* SHFinishViewController.m */,
 				EE9BE5991889FF5C0092A743 /* Images.xcassets */,
 				EE9BE5851889FF5C0092A743 /* Supporting Files */,
 				EE7DAC5B1890235F0012A84C /* SHRemoteAssetCache.h */,
@@ -242,6 +248,10 @@
 				EED3A70118A524C300978107 /* SHCodeViewController.h */,
 				EED3A70218A524C300978107 /* SHCodeViewController.m */,
 				EE14BABA18A44B6100C7CE12 /* SHLoadingViewController.m */,
+				EE24BDCA18ABCAE60092B658 /* SHMainViewController.h */,
+				EE24BDCB18ABCAE60092B658 /* SHMainViewController.m */,
+				EEA1AC5318AC0BEC00122F3E /* SHHelpViewController.h */,
+				EEA1AC5418AC0BEC00122F3E /* SHHelpViewController.m */,
 			);
 			path = scavengerhunt;
 			sourceTree = "<group>";
@@ -452,7 +462,9 @@
 				EE9BE5D8188CBDE00092A743 /* SHTargetItem.m in Sources */,
 				EE9BE5D0188CBDE00092A743 /* SHTargetCollectionViewController.m in Sources */,
 				EE9BE58B1889FF5C0092A743 /* main.m in Sources */,
-				EE9BE5981889FF5C0092A743 /* SHViewController.m in Sources */,
+				EE24BDCC18ABCAE60092B658 /* SHMainViewController.m in Sources */,
+				EE9BE5981889FF5C0092A743 /* SHFinishViewController.m in Sources */,
+				EEA1AC5518AC0BEC00122F3E /* SHHelpViewController.m in Sources */,
 				EE9BE58F1889FF5C0092A743 /* SHAppDelegate.m in Sources */,
 				EED3A70318A524C300978107 /* SHCodeViewController.m in Sources */,
 				EE9BE5D2188CBDE00092A743 /* SHHunt.m in Sources */,

@@ -17,13 +17,12 @@
 #import "SHAppDelegate.h"
 #import "SHHunt.h"
 #import <CoreBluetooth/CoreBluetooth.h>
-#import "SHStartedViewController.h"
-#import "SHLoadingViewController.h"
+#import "SHTargetCollectionViewController.h"
 #import <ProximityKit/ProximityKit.h>
 #import <ProximityKit/PKKit.h>
 #import <ProximityKit/PKIBeacon.h>
-//#import <ProximityKit/PKConfigurationChanger.h>
 #import <objc/runtime.h>
+#import "SHFinishViewController.h"
 
 /*
  
@@ -47,7 +46,6 @@
 
 @implementation SHAppDelegate {
     CBPeripheralManager *_peripheralManager;
-    SHViewController *_mainViewController;
     NSDate * _lastEntryTime;
     NSDate * _lastExitTime;
     BOOL _validatingCode;
@@ -69,58 +67,38 @@
     } else {
         self.storyboard = [UIStoryboard storyboardWithName:@"ScavengerHunt_iPhone" bundle:nil];
     }
-
+    
     // Initialize the remote asset cache, used for downloading the badge images from a web server
     self.remoteAssetCache = [[SHRemoteAssetCache alloc] init];
     self.remoteAssetCache.delegate = self;
 
     // Initialize ProximityKit
     self.manager = [PKManager managerWithDelegate:self];
+    
+    // TODO:
+    // Check if hunt is in progress
+    // if it is, and it is complete, show the finish view
+    // if it is not complete, show the collection view
+    //  - and restart proximity kit without requiring a code.  need new method
+    
+    
     [self setupInitialView];
+
+    // After startup, the loading screen will be displayed until the Proximity Kit proximityKitDidSync callback is received, which will kick off downloading badge images
+    // Once everything is loaded, the dependenciesFullyLoaded method below is called, which will trigger displaying the opening screen.
     
     return YES;
 }
 
-- (void)setupInitialView {
-    // Check to see if ProximityKit.plist exists.  If so, we start right up.
-    // Otherwise, we ask the user for a code to start
+-(void)setupInitialView {
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
-    self.loadingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"LoadingViewController"];
+    self.mainViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
     UINavigationController *navController;
-    
-    if (YES || [self pkPlistPath] == Nil) {
-        NSLog(@"No ProximityKit.plist present.  Asking user for code.");
-        self.codeViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"CodeViewController"];
-        NSLog(@"Here is the codeViewController: %@", self.codeViewController);
-        navController = [[UINavigationController alloc] initWithRootViewController: self.codeViewController];
-        NSLog(@"done");
-    }
-    else {
-        NSLog(@"ProximityKit.plist present.  Not asking user for code.");
-        navController = [[UINavigationController alloc] initWithRootViewController: self.loadingViewController];
-        NSLog(@"done");
-        _loadingDisplayedTime = [[NSDate alloc] init];
-        [self startPK];
-    }
+    navController = [[UINavigationController alloc] initWithRootViewController: self.mainViewController];
     self.window.rootViewController = navController;
     [self.window makeKeyAndVisible];
     
-    // After startup, the loading screen will be displayed until the Proximity Kit proximityKitDidSync callback is received, which will kick off downloading badge images
-    // Once everything is loaded, the dependenciesFullyLoaded method below is called, which will trigger displaying the opening screen.
 }
-
-- (NSString *)pkPlistPath {
-    NSString *mainPath = [[NSBundle mainBundle] pathForResource:@"ProximityKit" ofType:@"plist"];
-    if (mainPath) {
-        return mainPath;
-    } else {
-        NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-        return [bundle pathForResource:@"ProximityKit" ofType:@"plist"];
-    }
-}
-
-
-
 
 -(void)startPK {
     if (_pkStarted) {
@@ -137,7 +115,8 @@
 -(void)startPKWithCode: (NSString * ) code {
     // clear out all remote assets in case the new code has conflicts with them
     [self.remoteAssetCache clear];
-
+    [[SHHunt sharedHunt] reset];
+    
     //[[PKManager alloc] initWithDelegate:self andAPIURL: @"" andToken: @""];
     _validatingCode = YES;
     if (!_pkStarted) {
@@ -156,15 +135,6 @@
 // called when the user gestures to start over
 -(void)resetHunt {
     [[SHHunt sharedHunt] reset];
-    // TODO: at some point, this has got to happen:
-    
-    /*
-    
-    if (self.collectionViewController) {
-        [self.collectionViewController.collectionView reloadData];
-    }
-     */
-    
     [self setupInitialView];
 }
 
@@ -215,11 +185,14 @@
             delay = 0;
         }
         NSLog(@"Loading was displayed at %@, which was %ld ms ago.  will delay %ld ms", _loadingDisplayedTime,  timeSince, delay);
-        _mainViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ViewController"];
 
+        _collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
+        
+        [[SHHunt sharedHunt] start];
+        
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC * delay),dispatch_get_main_queue(), ^{
-                 NSLog(@"Pushing main view controller: %@", _mainViewController);
-                 [self.loadingViewController.navigationController pushViewController:_mainViewController animated:YES];
+                 NSLog(@"Pushing collection view controller: %@", _collectionViewController);
+                 [self.mainViewController.navigationController pushViewController:_collectionViewController animated:YES];
         });
              
     }
@@ -321,7 +294,7 @@
             _validatingCode = NO;
             [[NSOperationQueue mainQueue] addOperationWithBlock:^
              {
-                 [self.codeViewController codeValidated];
+                 [self.mainViewController codeValidated];
                  _loadingDisplayedTime = [[NSDate alloc] init];
              }];
         }
@@ -380,6 +353,22 @@
 
 }
 
+- (void)proximityKit:(PKManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"PK didFailWithError: %@", error);
+    if (_validatingCode) {
+        NSLog(@"Code validation failed");
+        _validatingCode = NO;
+        [self.mainViewController codeValidationFailedWithError:error];
+        return;
+    }
+    else {
+        NSLog(@"Manager kit is %@", self.manager.kit);
+        [self dependencyLoadFinished];
+    }
+}
+
+
 /*
  Validates that there is a target image downloaded for both the found and not found target state for this platform (tablet/phone, pixeel density)
  */
@@ -399,22 +388,6 @@
     
     return !missing;
 }
-
-- (void)proximityKit:(PKManager *)manager didFailWithError:(NSError *)error
-{
-    NSLog(@"PK didFailWithError: %@", error);
-    if (_validatingCode) {
-        NSLog(@"Code validation failed");
-        _validatingCode = NO;
-        [self.codeViewController codeValidationFailedWithError:error];
-        return;
-    }
-    else {
-        NSLog(@"Manager kit is %@", self.manager.kit);
-        [self dependencyLoadFinished];
-    }
-}
-
 
 - (void)proximityKit:(PKManager *)manager didEnter:(PKRegion*)region {
     NSLog(@"PK didEnter Region %@ (%@)", region.name, region.identifier);
@@ -494,8 +467,8 @@
                     
                     [target sawIt];
                     
-                    if ([_mainViewController.collectionViewController.itemViewController.item.huntId isEqualToString: target.huntId]) {
-                        [_mainViewController.collectionViewController.itemViewController showRange];
+                    if ([_collectionViewController.itemViewController.item.huntId isEqualToString: target.huntId]) {
+                        [_collectionViewController.itemViewController showRange];
                     }
                     
                     if (justFound) {
@@ -503,20 +476,22 @@
                         [[SHHunt sharedHunt] find:target];
                         NSLog(@"****************** FOUND ONE");
                         
-                        if (_mainViewController && _mainViewController.collectionViewController) {
+                        if (_mainViewController && _collectionViewController) {
                             NSLog(@"refreshing collection");
-                            [_mainViewController.collectionViewController.collectionView reloadData];
-                            [_mainViewController.collectionViewController simulateNotification: [NSString stringWithFormat:@"You've received badge %d of %lu", [[SHHunt sharedHunt] foundCount], (unsigned long)[[SHHunt sharedHunt] targetList].count]];
+                            [_collectionViewController.collectionView reloadData];
+                            [_collectionViewController showFoundForTarget: target];
                             NSLog(@"Back from notification");
                         }
                         else {
-                            NSLog(@"CAn't refresh colleciton because it is null: %@, %@", _mainViewController, _mainViewController.collectionViewController);
+                            NSLog(@"CAn't refresh colleciton because it is null: %@, %@", _mainViewController, _collectionViewController);
                         }
                         if ([[SHHunt sharedHunt] everythingFound]) {
                             // switch to the main controller to tell the player he has won
-                            if (_mainViewController && _mainViewController.collectionViewController) {
-                                [_mainViewController.collectionViewController.navigationController
-                                 popToViewController:_mainViewController animated:YES];
+                            if (_collectionViewController) {
+                                SHFinishViewController *finishViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FinishViewController"];
+                                NSLog(@"Finish view controller is %@", finishViewController);
+                                [_collectionViewController.navigationController
+                                 pushViewController:finishViewController animated:YES];
                             }
                         }
                         

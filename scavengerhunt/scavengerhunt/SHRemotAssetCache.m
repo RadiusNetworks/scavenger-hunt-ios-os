@@ -112,6 +112,7 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *getImagePath = [documentsDirectory stringByAppendingPathComponent:name];
     UIImage *img = [UIImage imageWithContentsOfFile:getImagePath];
+    NSLog(@"Image %@ has width: %f and heigh: %f", name, img.size.width, img.size.height);
     return img;
 }
 
@@ -149,6 +150,9 @@
             BOOL removeSuccess = [fileMgr removeItemAtPath:fullPath error:&error];
             if (!removeSuccess) {
                 NSLog(@"Cannot remove file %@", fullPath);
+            }
+            else {
+                NSLog(@"Removed image file %@", fullPath);
             }
         }
     } else {

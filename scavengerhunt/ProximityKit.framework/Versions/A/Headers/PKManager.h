@@ -59,6 +59,15 @@ typedef void(^PKFetchCompletionHandler)(UIBackgroundFetchResult);
 - (void)start;
 
 /*
+ *  stop
+ *
+ *  Discussion:
+ *      Unregister regions and beacons and stop syncing.
+ *
+ */
+- (void)stop;
+
+/*
  *  sync
  *
  *  Discussion:
@@ -164,13 +173,22 @@ typedef void(^PKFetchCompletionHandler)(UIBackgroundFetchResult);
 - (void)startRangingIBeacons;
 
 /*
- * stopRangingIBeacons
+ * resumeMonitoringAndRanging
  *
  *  Discussion:
- *      Stop calculating ranges for iBeacons.
+ *      Resume Region Monitoring and Beacon Ranging
  *
  */
-- (void)stopRangingIBeacons;
+- (void) resumeMonitoringAndRanging;
+
+/*
+ * suspendMonitoringAndRanging
+ *
+ *  Discussion:
+ *      Suspend Region Monitoring and Beacon Ranging
+ *
+ */
+- (void) suspendMonitoringAndRanging;
 
 - (void)reconfigureWithAPIURL:(NSString *)pkUrl andToken:(NSString *)token;
 

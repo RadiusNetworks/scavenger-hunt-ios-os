@@ -1,19 +1,20 @@
 //
-//  SHCodeViewController.m
+//  SHMainViewController.m
 //  scavengerhunt
 //
-//  Created by David G. Young on 2/7/14.
+//  Created by David G. Young on 2/12/14.
 //  Copyright (c) 2014 RadiusNetworks. All rights reserved.
 //
 
-#import "SHCodeViewController.h"
+#import "SHMainViewController.h"
 #import "SHAppDelegate.h"
+#import "SHHelpViewController.h"
 
-@interface SHCodeViewController ()
+@interface SHMainViewController ()
 
 @end
 
-@implementation SHCodeViewController {
+@implementation SHMainViewController {
     SHAppDelegate *_appDelegate;
 }
 
@@ -30,18 +31,14 @@
 {
     [super viewDidLoad];
     _appDelegate = (SHAppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSLog(@"code view is: %@", self.enterCodeView);
-    
+    self.title = @"Scavenger Hunt";
     self.codeTextField.text = [self getLastValidCode];
-    [self.codeSpinner setHidden: YES];
-    [self.okButton setHidden: NO];
-    [self.codeTextField setEnabled: YES];
+    [self showDialog: nil];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    NSLog(@"codeView will appear");
+    NSLog(@"mainView will appear");
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 
@@ -57,16 +54,29 @@
 }
 
 - (IBAction)codeEditingDidBegin:(id)sender {
-    [self animateTextField: self.codeTextField up: YES];
+    //[self animateTextField: self.codeTextField up: YES];
 }
 
 - (IBAction)codeEditingDidEnd:(id)sender {
-    [self animateTextField: self.codeTextField up: NO];
+    //[self animateTextField: self.codeTextField up: NO];
+}
+
+- (IBAction)startTapped:(id)sender {
+    NSLog(@"Start tapped");
+    if (YES || [self pkPlistPath] == Nil) {
+        NSLog(@"No proximityKit.plist present.  Asking user for code.");
+        [self showDialog: self.codeDialog];
+    }
+    else {
+        NSLog(@"ProximityKit.plist present.  Not asking user for code.");
+        [self showDialog: self.loadingDialog];
+        [_appDelegate startPK];
+    }
 }
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up
 {
-    const int movementDistance = 160;
+    const int movementDistance = 80;
     const float movementDuration = 0.3f;
     
     int movement = (up ? -movementDistance : movementDistance);
@@ -74,17 +84,20 @@
     [UIView beginAnimations: @"anim" context: nil];
     [UIView setAnimationBeginsFromCurrentState: YES];
     [UIView setAnimationDuration: movementDuration];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    self.codeDialog.frame = CGRectOffset(self.codeDialog.frame, 0, movement);
     [UIView commitAnimations];
 }
 
 - (IBAction)tappedHelp:(id)sender {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"http://developer.radiusnetworks.com/scavenger_hunt/help.html"]];
+    SHHelpViewController *helpViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"HelpViewController"];
+    NSLog(@"Pushing help view controller: %@", helpViewController);
+    [self.navigationController pushViewController:helpViewController animated:YES];
 }
 
 
 
 - (void) codeValidationFailedWithError: (NSError *) error {
+    
     // Display an error dialog based on the error code
     NSString *title = @"Network error";
     NSString *message = [NSString stringWithFormat:@"Please check your internet connection and try again.  Code: %ld", (long)error.code ];
@@ -92,13 +105,12 @@
         title = @"Invalid Code";
         message = @"Please verify your code and try again.";
     }
-
+    
     [[NSOperationQueue mainQueue] addOperationWithBlock:^
      {
-         self.okButton.hidden = NO;
-         self.codeSpinner.hidden = YES;
-         self.codeTextField.enabled = YES;
-
+         [self saveValidCode:self.codeTextField.text];
+         [self showDialog: self.codeDialog];
+         
          UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
                                                          message:message
                                                         delegate:nil
@@ -109,19 +121,21 @@
 }
 
 - (void) codeValidated {
-    // The delegate will have already started PK when it calls this
-    NSLog(@"**** codeValidated called.  showing download images");
-    [self saveValidCode:self.codeTextField.text];
-    
-    //[self.navigationController pushViewController:_appDelegate.loadingViewController animated:YES];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^
+     {
+         // The delegate will have already started PK when it calls this
+         NSLog(@"**** codeValidated called.  showing download images");
+         [self saveValidCode:self.codeTextField.text];
+         [self showDialog: self.loadingDialog];
+
+     }];
 }
 
 - (IBAction)okTapped:(id)sender {
-    
-    self.okButton.hidden = YES;
-    self.codeSpinner.hidden = NO;
-    self.codeTextField.enabled = NO;
-    NSLog(@"ok tapped code view is: %@", self.enterCodeView);
+    NSLog(@"OK tapped with code %@", self.codeTextField.text);
+
+    [self.codeTextField endEditing:YES];
+    [self showDialog: self.validatingCodeDialog];
     
     [_appDelegate startPKWithCode:self.codeTextField.text];
 }
@@ -139,5 +153,41 @@
         code = @"";
     }
     return code;
+}
+
+- (void) showDialog: (UIView *)view {
+    if (view == Nil) {
+        [self.instructionsView setAlpha: 1];
+        [self.startButton setEnabled: YES];
+    }
+    else {
+        [self.instructionsView setAlpha: 0.5];
+        [self.startButton setEnabled: NO];
+    }
+    
+    [self.validatingCodeDialog setHidden: YES];
+    [self.loadingDialog setHidden: YES];
+    [self.codeDialog setHidden: YES];
+    
+    if (view == self.codeDialog) {
+        [self.codeTextField setEnabled: YES];
+        [self.codeDialog setHidden: NO];
+    }
+    if (view == self.validatingCodeDialog) {
+        [self.validatingCodeDialog setHidden: NO];
+    }
+    if (view == self.loadingDialog) {
+        [self.loadingDialog setHidden: NO];
+    }
+}
+
+- (NSString *)pkPlistPath {
+    NSString *mainPath = [[NSBundle mainBundle] pathForResource:@"ProximityKit" ofType:@"plist"];
+    if (mainPath) {
+        return mainPath;
+    } else {
+        NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+        return [bundle pathForResource:@"ProximityKit" ofType:@"plist"];
+    }
 }
 @end

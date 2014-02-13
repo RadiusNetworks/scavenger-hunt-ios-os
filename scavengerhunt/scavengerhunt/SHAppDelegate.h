@@ -19,8 +19,8 @@
 #import <ProximityKit/ProximityKit.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "SHRemoteAssetCache.h"
-#import "SHLoadingViewController.h"
-#import "SHCodeViewController.h"
+#import "SHMainViewController.h"
+#import "SHTargetCollectionViewController.h"
 
 @interface SHAppDelegate : UIResponder <UIApplicationDelegate, PKManagerDelegate, CBPeripheralManagerDelegate, SHRemoteAssetCacheDelegate>
 -(void)startPK;
@@ -30,6 +30,6 @@
 @property (strong, nonatomic) PKManager *manager;
 @property (strong, nonatomic) SHRemoteAssetCache *remoteAssetCache;
 @property (strong, nonatomic) UIStoryboard *storyboard;
-@property (strong, nonatomic) SHCodeViewController *codeViewController;
-@property (strong, nonatomic) SHLoadingViewController *loadingViewController;
+@property (strong, nonatomic) SHMainViewController *mainViewController;
+@property (strong, nonatomic) SHTargetCollectionViewController *collectionViewController;
 @end

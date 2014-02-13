@@ -15,34 +15,23 @@
  *
  */
 
-#import "SHViewController.h"
-#import "SHTargetCollectionViewController.h"
 #import "SHHunt.h"
+#import "SHAppDelegate.h"
+#import "SHFinishViewController.h"
 
 #define kDeg2Rad (3.1415926/180.0)
 
-@interface SHViewController ()
-{
-    int _blinkCount;
-    NSTimer *_timer;
-    UIImageView *_splashImage;
-    SHTargetCollectionViewController *_collectionViewController;
+
+@implementation SHFinishViewController {
     SHAppDelegate *_appDelegate;
 }
-@end
-
-@implementation SHViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
     _appDelegate = (SHAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    _collectionViewController = [_appDelegate.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
-    
-    NSLog(@"Collection view controller is no longer null: %@", self.collectionViewController);
-    
+    [self.navigationController setToolbarHidden:YES];
     self.title = @"Scavenger Hunt";
 }
 

@@ -16,10 +16,15 @@
  */
 #import <UIKit/UIKit.h>
 #import "SHTargetItemViewController.h"
-#import "SHAppDelegate.h"
 
 @interface SHTargetCollectionViewController : UICollectionViewController
 -(void)simulateNotification:(NSString *) message;
+- (IBAction)tappedStartOver:(id)sender;
+-(void) showFoundForTarget: (SHTargetItem *) target;
+@property (weak, nonatomic) IBOutlet UIView *foundTargetDialog;
+@property (weak, nonatomic) IBOutlet UIImageView *foundTargetImage;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *startOverButton;
+@property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UIView *overlayView;
 @property SHTargetItemViewController *itemViewController;
-@property SHAppDelegate *appDelegate;
 @end

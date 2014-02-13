@@ -1,5 +1,5 @@
 /*
- * SHViewController.h
+ * SHFinishViewController.h
  * ScavengerHunt
  *
  * Created by David G. Young on 8/28/13.
@@ -19,7 +19,7 @@
 #import "SHTargetCollectionViewController.h"
 #import "SHSubApplication.h"
 
-@interface SHViewController : UIViewController <UIAlertViewDelegate>
+@interface SHFinishViewController : UIViewController <UIAlertViewDelegate>
 @property SHTargetCollectionViewController *collectionViewController;
 @property SHSubApplication *subApplication;
 @property (weak, nonatomic) IBOutlet UIView *finishedView;
