@@ -10,5 +10,7 @@
 #import "PKManager.h"
 
 @interface PKConfigurationChanger : NSObject
--(void)syncManager: (PKManager *) manager withCode: (NSString * )code;
+-(void) syncManager: (PKManager *) manager withCode: (NSString * )code;
+-(BOOL) isConfigStored;
+-(void) syncWithStoredConfigForManager: (PKManager *) manager;
 @end

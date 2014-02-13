@@ -30,16 +30,15 @@
  
  - before submission -
 
- 1. Test on iPad
- 2. Test on Retina and non-Retina
- 3. Update service location for code lookup to match pk
- 4. Update service hostname to match pk
- 5. Fix black bar
- 6. take screenshots to include in package
+ 1. Fix url scheme for images
+ 2. validate roatation
+ 2. Test on 4" and non-Retina
+ 3. take screenshots to include in package
+ 4. Test on iPad if time allows
  
  - after submission - 
+ 1. update web pages/instructions
  
- 1. decide on pk api signatures
  
  */
 
@@ -75,17 +74,38 @@
     // Initialize ProximityKit
     self.manager = [PKManager managerWithDelegate:self];
     
-    // TODO:
-    // Check if hunt is in progress
-    // if it is, and it is complete, show the finish view
-    // if it is not complete, show the collection view
-    //  - and restart proximity kit without requiring a code.  need new method
+    BOOL resumed = NO;
+    // If the user has already started the hunt, resume from where he left off
+    if ([SHHunt sharedHunt].elapsedTime > 0) {
+        UINavigationController *navController;
+        
+        if ([SHHunt sharedHunt].everythingFound) {
+            // if it is complete, show the finish view
+            SHFinishViewController *finishViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FinishViewController"];
+            navController = [[UINavigationController alloc] initWithRootViewController: finishViewController];
+            resumed = YES;
+        }
+        else {
+            // if it is not complete, show the collection view
+            PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
+            if ([configChanger isConfigStored]) {
+                [configChanger syncWithStoredConfigForManager:self.manager];
+                self.collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
+                navController = [[UINavigationController alloc] initWithRootViewController: self.collectionViewController];
+                resumed = YES;
+            }
+        }
+        if (resumed) {
+            self.window.rootViewController = navController;
+            [self.window makeKeyAndVisible];
+        }
+        
+    }
     
-    
-    [self setupInitialView];
-
-    // After startup, the loading screen will be displayed until the Proximity Kit proximityKitDidSync callback is received, which will kick off downloading badge images
-    // Once everything is loaded, the dependenciesFullyLoaded method below is called, which will trigger displaying the opening screen.
+    if (!resumed){
+        //show instructions and start button
+        [self setupInitialView];
+    }
     
     return YES;
 }
@@ -93,8 +113,7 @@
 -(void)setupInitialView {
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     self.mainViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
-    UINavigationController *navController;
-    navController = [[UINavigationController alloc] initWithRootViewController: self.mainViewController];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController: self.mainViewController];
     self.window.rootViewController = navController;
     [self.window makeKeyAndVisible];
     
@@ -119,13 +138,7 @@
     
     //[[PKManager alloc] initWithDelegate:self andAPIURL: @"" andToken: @""];
     _validatingCode = YES;
-    if (!_pkStarted) {
-        _pkStarted = YES;
-        // [self.manager start];
-    }
-    else {
-        // [self.manager sync];
-    }
+    _pkStarted = YES;
     PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
     [configChanger syncManager:self.manager withCode: code];
     NSLog(@"started Proximity Kit with code %@.  Waiting for callback from sync", code);
@@ -173,7 +186,7 @@
         
     }
     else {
-        NSLog(@"Ready to show main view controller");
+        NSLog(@"Ready to show collection view controller");
 
         // may need a delay here because this could happen too soon if the loading
         // view controller just got pushed
@@ -186,7 +199,9 @@
         }
         NSLog(@"Loading was displayed at %@, which was %ld ms ago.  will delay %ld ms", _loadingDisplayedTime,  timeSince, delay);
 
-        _collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
+        if (_collectionViewController == Nil) {
+            _collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
+        }
         
         [[SHHunt sharedHunt] start];
         
@@ -248,14 +263,6 @@
 
 /*
  Downloads all assets and saves them locally in the Documents directory by the normalized asset filename
- // target1.png
- // target1~ipad.png
- // target1@2x.png
- // target1@2x~ipad.png
- // target1_found.png
- // target1_found~ipad.png
- // target1_found@2x.png
- // target1_found@2x~ipad.png
  */
 - (NSString *)variantTargetImageUrlForBaseUrlString: (NSString *) baseUrlString found:(BOOL)found tablet:(BOOL)tablet retina:(BOOL)retina {
     unsigned long extensionIndex = [baseUrlString rangeOfString:@"." options:NSBackwardsSearch].location;
@@ -273,11 +280,20 @@
     else {
         suffix = @"";
     }
+    
     if (tablet) {
-        suffix = [NSString stringWithFormat:@"%@~ipad", suffix];
+        if (retina) {
+            suffix = [NSString stringWithFormat:@"%@_312", suffix];
+        }
+        else {
+            suffix = [NSString stringWithFormat:@"%@_624", suffix];
+            
+        }
     }
-    if (retina) {
-        suffix = [NSString stringWithFormat:@"%@@2x", suffix];
+    else {
+        if (retina) {
+            suffix = [NSString stringWithFormat:@"%@_260", suffix];
+        }
     }
     return [NSString stringWithFormat:@"%@%@%@",prefix,suffix,extension];
 }
@@ -306,9 +322,6 @@
             NSString* imageUrlString = [iBeacon.attributes objectForKey:@"image_url"];
             if (huntId != Nil) {
                 NSLog(@"Hunt id is %@", huntId);
-                NSLog(@"uuid is %@", iBeacon.clBeacon.proximityUUID);
-                NSLog(@"major is %@", iBeacon.clBeacon.major);
-                NSLog(@"minor is %@", iBeacon.clBeacon.minor);
                 if (imageUrlString == nil) {
                     NSLog(@"ERROR: No image_url specified in ProximityKit for item with hunt_id=%@", huntId);
                 }
@@ -405,8 +418,8 @@
 
 - (void)proximityKit:(PKManager *)manager didDetermineState:(PKRegionState)state forRegion:(PKRegion *)region
 {
-    NSLog(@"PK didDetermineState %ld forRegion %@ (%@)", state, region.name, region.identifier);
-    NSLog(@"Did determine State for region: %@ from manager %@ with state %ld, where the inside state is %ld", region.identifier, manager, state, (long)CLRegionStateInside);
+    NSLog(@"PK didDetermineState %d forRegion %@ (%@)", (int) state, region.name, region.identifier);
+    NSLog(@"Did determine State for region: %@ from manager %@ with state %d, where the inside state is %ld", region.identifier, manager, (int)state, (long)CLRegionStateInside);
     [self tellHuntAboutMonitoredBeacons: state];
 }
 
@@ -464,6 +477,10 @@
                 }
                 else {
                     justFound = (target.distance < [SHHunt sharedHunt].triggerDistance && target.found == NO &&[SHHunt sharedHunt].elapsedTime > 0);
+                    if (!justFound) {
+                        NSLog(@"not just found %f %f %d %ld", target.distance, [SHHunt sharedHunt].triggerDistance, target.found, [SHHunt sharedHunt].elapsedTime );
+                    }
+
                     
                     [target sawIt];
                     
@@ -471,19 +488,20 @@
                         [_collectionViewController.itemViewController showRange];
                     }
                     
+                    
                     if (justFound) {
                         
                         [[SHHunt sharedHunt] find:target];
                         NSLog(@"****************** FOUND ONE");
                         
-                        if (_mainViewController && _collectionViewController) {
+                        if ( _collectionViewController) {
                             NSLog(@"refreshing collection");
                             [_collectionViewController.collectionView reloadData];
                             [_collectionViewController showFoundForTarget: target];
                             NSLog(@"Back from notification");
                         }
                         else {
-                            NSLog(@"CAn't refresh colleciton because it is null: %@, %@", _mainViewController, _collectionViewController);
+                            NSLog(@"CAn't refresh colleciton because it is null: %@, ", _collectionViewController);
                         }
                         if ([[SHHunt sharedHunt] everythingFound]) {
                             // switch to the main controller to tell the player he has won

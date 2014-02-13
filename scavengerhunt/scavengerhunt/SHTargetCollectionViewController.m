@@ -237,92 +237,22 @@
 }
 
 -(void) showFoundForTarget: (SHTargetItem *) target {
-    return;
-    NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:0];
-
-    /*
-    if (false ) {
-        cell.backgroundColor = [UIColor blackColor];
-        [self.collectionView scrollToItemAtIndexPath:index atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
-    }
-    else {
-        NSLog(@"Can't scroll to position %@ because no cell exists there", index);
-        
-    }
-    */
+    UIAlertView *alert;
+    alert = [[UIAlertView alloc] initWithTitle:@"Congratulations!"
+                                       message:[NSString stringWithFormat:@"You have found target %d of %d", [SHHunt sharedHunt].foundCount, [SHHunt sharedHunt].targetList.count]
+                                      delegate:Nil
+                             cancelButtonTitle:@"OK"
+                             otherButtonTitles:nil];
     
-    return;
-    
-
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^
      {
-         self.foundTargetDialog.alpha = 1.0;
-         [self.foundTargetImage setImage:[_foundImageCache objectAtIndex:0]];
-         [self.foundTargetDialog setHidden:NO];
-         
-         // I have verified this is a subview of the collection view
-         //[self.collectionView bringSubviewToFront:self.overlayView];
-         //[self.overlayView bringSubviewToFront:self.collectionView];
-
-         // If I add the overlay view to self.view, something removes it within a second of adding it
-
-         // desperate try to get this view on top
-         [self.overlayView removeFromSuperview];
-         [self.collectionView addSubview:self.overlayView];
-         [self.collectionView bringSubviewToFront:self.overlayView];
-         
-
-         /*
-         logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"imageName.png"]];
-         
-         logo.contentMode = UIViewContentModeScaleAspectFit;
-         [self.collectionView addSubview:logo];
-         [self.collectionView sendSubviewToBack:logo];
-         
-         [logo sendSubviewToBack:logo];
-          */
-         
-         
-         //[self fadeDialog];
-         
-         NSLog(@"overlay view is %@", self.overlayView);
-         NSLog(@" ----- subviews of collectionView view ------");
-         for (UIView *view in [self.collectionView subviews]) {
-             if (view == self.overlayView) {
-                 NSLog(@"OVERLAY VIEW: %@", view);
-             }
-             else {
-                 NSLog(@"OTHER VIEW: %@", view);
-             }
-                 
-         }
-         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC * 1000),dispatch_get_main_queue(), ^{
-             NSLog(@" ----- subviews of collectionView (one sec later) ------");
-             for (UIView *view in [self.collectionView subviews]) {
-                 if (view == self.overlayView) {
-                     NSLog(@"OVERLAY VIEW: %@", view);
-                 }
-                 else {
-                     NSLog(@"OTHER VIEW: %@", view);
-                 }
-                 
-             }
-
-         });
-         
-         
-
+         [alert show];
      }];
-
+    
+    return;
 
 }
-
-
-
-
-
-
 
 
 - (void) fadeDialog {

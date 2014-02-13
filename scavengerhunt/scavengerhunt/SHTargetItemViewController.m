@@ -64,12 +64,12 @@
 }
 -(void) showRange {
     if (_item.distance >= 0) {
-        if (_item.distance*3 < 10) {
-            self.distanceLabel.text = [NSString stringWithFormat:@"%1.1f", _item.distance*3.0];
+        if (_item.distance < 10) {
+            self.distanceLabel.text = [NSString stringWithFormat:@"%1.1f", _item.distance];
 
         }
         else {
-            self.distanceLabel.text = [NSString stringWithFormat:@"%.0f", _item.distance*3.0];
+            self.distanceLabel.text = [NSString stringWithFormat:@"%.0f", _item.distance];
         }
         
         float progress = 0.0;

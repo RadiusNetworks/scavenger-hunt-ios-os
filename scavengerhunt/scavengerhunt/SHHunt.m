@@ -134,6 +134,7 @@
     NSLog(@"saving to user defaults");
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:self.targetList] forKey:@"sh_target_list"];
+    [userDefaults setDouble:_timeStarted forKey:@"sh_time_started"];
     [userDefaults setDouble:_timeCompleted forKey:@"sh_time_completed"];
     [userDefaults setObject:self.deviceId forKey:@"sh_device_uuid"];
     NSLog(@"begin synchronizing user defaults");

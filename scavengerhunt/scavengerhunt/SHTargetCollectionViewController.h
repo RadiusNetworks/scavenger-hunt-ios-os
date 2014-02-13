@@ -18,7 +18,6 @@
 #import "SHTargetItemViewController.h"
 
 @interface SHTargetCollectionViewController : UICollectionViewController
--(void)simulateNotification:(NSString *) message;
 - (IBAction)tappedStartOver:(id)sender;
 -(void) showFoundForTarget: (SHTargetItem *) target;
 @property (weak, nonatomic) IBOutlet UIView *foundTargetDialog;
