@@ -137,7 +137,17 @@
     [self.codeTextField endEditing:YES];
     [self showDialog: self.validatingCodeDialog];
     
-    [_appDelegate startPKWithCode:self.codeTextField.text];
+    NSString *normalizedCode = @"";
+    
+    // strip all non number characters from code so user can enter "00-00-00-00" or " 00 00 00 00"
+    for (int i = 0; i < self.codeTextField.text.length; i++) {
+        char c = [self.codeTextField.text characterAtIndex:i];
+        if (c >= '0' && c <= '9') {
+            normalizedCode = [NSString stringWithFormat:@"%@%c", normalizedCode, c];
+        }
+    }
+    
+    [_appDelegate startPKWithCode:normalizedCode];
 }
 
 - (void) saveValidCode: (NSString *) code {
