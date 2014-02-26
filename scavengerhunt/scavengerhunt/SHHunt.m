@@ -75,6 +75,7 @@
 
 -(void)reset {
     [self resize: 0];
+    _timeStarted = 0;
     [self saveToUserDefaults];
 }
 

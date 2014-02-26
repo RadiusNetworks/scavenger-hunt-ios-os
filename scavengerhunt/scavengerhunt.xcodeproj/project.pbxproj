@@ -62,7 +62,6 @@
 		EEA1AC5718AD5C0B00122F3E /* ScavengerHunt_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EEA1AC5618AD5C0B00122F3E /* ScavengerHunt_iPad.storyboard */; };
 		EEA1AC5918AD6BBB00122F3E /* sh_bolt_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = EEA1AC5818AD6BBB00122F3E /* sh_bolt_ipad.png */; };
 		EEA1AC5B18AD9D2B00122F3E /* sh_bolt_ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EEA1AC5A18AD9D2B00122F3E /* sh_bolt_ipad@2x.png */; };
-		EED3A6FE18A4645D00978107 /* ProximityKit.plist in Resources */ = {isa = PBXBuildFile; fileRef = EED3A6FD18A4645D00978107 /* ProximityKit.plist */; };
 		EED3A70018A47B7E00978107 /* ProximityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EED3A6FF18A47B7E00978107 /* ProximityKit.framework */; };
 		EED3A70318A524C300978107 /* SHCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EED3A70218A524C300978107 /* SHCodeViewController.m */; };
 		EED3A70518A5614F00978107 /* sh_bolt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EED3A70418A5614E00978107 /* sh_bolt@2x.png */; };
@@ -145,7 +144,6 @@
 		EEA1AC5618AD5C0B00122F3E /* ScavengerHunt_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ScavengerHunt_iPad.storyboard; sourceTree = "<group>"; };
 		EEA1AC5818AD6BBB00122F3E /* sh_bolt_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sh_bolt_ipad.png; sourceTree = "<group>"; };
 		EEA1AC5A18AD9D2B00122F3E /* sh_bolt_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "sh_bolt_ipad@2x.png"; path = "scavengerhunt/sh_bolt_ipad@2x.png"; sourceTree = "<group>"; };
-		EED3A6FD18A4645D00978107 /* ProximityKit.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ProximityKit.plist; sourceTree = "<group>"; };
 		EED3A6FF18A47B7E00978107 /* ProximityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ProximityKit.framework; sourceTree = "<group>"; };
 		EED3A70118A524C300978107 /* SHCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHCodeViewController.h; sourceTree = "<group>"; };
 		EED3A70218A524C300978107 /* SHCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHCodeViewController.m; sourceTree = "<group>"; };
@@ -230,7 +228,6 @@
 			isa = PBXGroup;
 			children = (
 				EEA1AC5618AD5C0B00122F3E /* ScavengerHunt_iPad.storyboard */,
-				EED3A6FD18A4645D00978107 /* ProximityKit.plist */,
 				EE9BE5BD188CBDE00092A743 /* ScavengerHunt_iPhone.storyboard */,
 				EE9BE5BF188CBDE00092A743 /* SHTargetCollectionViewController.m */,
 				EE9BE5C0188CBDE00092A743 /* SHHunt.m */,
@@ -404,7 +401,6 @@
 				EED3A71F18A5740200978107 /* AppIcon72x72@2x.png in Resources */,
 				EE9BE59A1889FF5C0092A743 /* Images.xcassets in Resources */,
 				EE9BE602188D84A20092A743 /* sh_bg_ipad.png in Resources */,
-				EED3A6FE18A4645D00978107 /* ProximityKit.plist in Resources */,
 				EE9BE5E8188D7D120092A743 /* sh_button_ipad.png in Resources */,
 				EED3A71918A5740200978107 /* AppIcon50x50@2x.png in Resources */,
 				EED3A71D18A5740200978107 /* AppIcon60x60@2x.png in Resources */,
@@ -601,6 +597,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -611,6 +608,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -622,6 +620,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -632,6 +631,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

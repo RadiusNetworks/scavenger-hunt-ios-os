@@ -24,4 +24,5 @@
 - (IBAction)okTapped:(id)sender;
 - (void)codeValidated;
 - (void) codeValidationFailedWithError: (NSError *) error;
+- (IBAction)tappedAwayFromCodeInput:(id)sender;
 @end

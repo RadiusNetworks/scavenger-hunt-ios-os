@@ -24,25 +24,6 @@
 #import <objc/runtime.h>
 #import "SHFinishViewController.h"
 
-/*
- 
- TODO:
- 
- - before submission -
-
- 1. Fix url scheme for images
- 2. validate roatation
- 2. Test on 4" and non-Retina
- 3. take screenshots to include in package
- 4. Test on iPad if time allows
- 
- - after submission - 
- 1. update web pages/instructions
- 
- 
- */
-
-
 @implementation SHAppDelegate {
     CBPeripheralManager *_peripheralManager;
     NSDate * _lastEntryTime;
@@ -132,11 +113,10 @@
 }
 
 -(void)startPKWithCode: (NSString * ) code {
-    // clear out all remote assets in case the new code has conflicts with them
+    // clear out all remote assets in case the new hunt code has conflicts with them
     [self.remoteAssetCache clear];
     [[SHHunt sharedHunt] reset];
     
-    //[[PKManager alloc] initWithDelegate:self andAPIURL: @"" andToken: @""];
     _validatingCode = YES;
     _pkStarted = YES;
     PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
@@ -152,11 +132,7 @@
 }
 
 
-/*
- 
- Called after all badge images are either downloaded from the web, or failed to download due to network problems.
-
- */
+// Called after all badge images are either downloaded from the web, or failed to download due to network problems.
 -(void)dependencyLoadFinished {
 
     NSString *fatalError = Nil;
@@ -188,26 +164,19 @@
     else {
         NSLog(@"Ready to show collection view controller");
 
-        // may need a delay here because this could happen too soon if the loading
-        // view controller just got pushed
-
         NSDate *now = [NSDate date];
         long timeSince = [now timeIntervalSinceDate:_loadingDisplayedTime];
         long delay = 2000-timeSince;
         if (delay < 0) {
             delay = 0;
         }
-        NSLog(@"Loading was displayed at %@, which was %ld ms ago.  will delay %ld ms", _loadingDisplayedTime,  timeSince, delay);
-
-        if (_collectionViewController == Nil) {
-            _collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
-        }
+        _collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
         
         [[SHHunt sharedHunt] start];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC * delay),dispatch_get_main_queue(), ^{
-                 NSLog(@"Pushing collection view controller: %@", _collectionViewController);
-                 [self.mainViewController.navigationController pushViewController:_collectionViewController animated:YES];
+            [self.mainViewController.navigationController pushViewController:_collectionViewController animated:YES];
+            //[self simulateTargetsBeingFound];
         });
              
     }
@@ -215,9 +184,7 @@
 }
 
 
-/*
- This method gets called when the user taps OK on the warning dialog about the app not being able to
- start up*/
+// This method gets called when the user taps OK on the warning dialog about the app not being able to start up
 -(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     // Tell Proximity Kit to sync data again.  This will start the loading of everything all over again.
     NSLog(@"Kicking off another sync");
@@ -233,37 +200,9 @@
 -(void)remoteAssetLoadFail {
     [self dependencyLoadFinished];
 }
-							
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-}
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-}
-
-/*
- Downloads all assets and saves them locally in the Documents directory by the normalized asset filename
- */
+// determines the variant url of the badge image based on the screen size/density and whether the
+// found/not found variant id desired
 - (NSString *)variantTargetImageUrlForBaseUrlString: (NSString *) baseUrlString found:(BOOL)found tablet:(BOOL)tablet retina:(BOOL)retina {
     unsigned long extensionIndex = [baseUrlString rangeOfString:@"." options:NSBackwardsSearch].location;
     if (extensionIndex == NSNotFound) {
@@ -315,21 +254,29 @@
              }];
         }
         __block int targetCount = 0;
+        __block BOOL targetsChanged = false;
+        __block BOOL isTablet = ([[UIDevice currentDevice] userInterfaceIdiom] ==UIUserInterfaceIdiomPad);
+        __block BOOL isRetina = ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] &&
+                         ([UIScreen mainScreen].scale == 2.0));
+
         NSMutableDictionary *targetImageUrls = [[NSMutableDictionary alloc] init];
-        
+
         [kit enumerateIBeaconsUsingBlock:^(PKIBeacon *iBeacon, NSUInteger idx, BOOL *stop) {
             NSString* huntId = [iBeacon.attributes objectForKey:@"hunt_id"];
             NSString* imageUrlString = [iBeacon.attributes objectForKey:@"image_url"];
             if (huntId != Nil) {
                 NSLog(@"Hunt id is %@", huntId);
+                NSString *existingHuntId = Nil;
+                if (idx < [SHHunt sharedHunt].targetList.count ) {
+                    existingHuntId = [SHHunt sharedHunt].targetList[idx];
+                }
+                if (![huntId isEqualToString:existingHuntId]) {
+                    targetsChanged = YES;
+                }
                 if (imageUrlString == nil) {
                     NSLog(@"ERROR: No image_url specified in ProximityKit for item with hunt_id=%@", huntId);
                 }
                 else {
-                    BOOL isTablet = ([[UIDevice currentDevice] userInterfaceIdiom] ==UIUserInterfaceIdiomPad);
-                    BOOL isRetina = ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] &&
-                                     ([UIScreen mainScreen].scale == 2.0));
-                    
                     NSURL *notFoundUrl = [[NSURL alloc] initWithString:[self variantTargetImageUrlForBaseUrlString:imageUrlString found:false tablet:isTablet retina:isRetina]];
                     NSURL *foundUrl = [[NSURL alloc] initWithString:[self variantTargetImageUrlForBaseUrlString:imageUrlString found:true tablet:isTablet retina:isRetina]];
                     if (notFoundUrl != Nil) {
@@ -353,9 +300,13 @@
             
         }];
         
+
         if ([SHHunt sharedHunt].targetList.count != targetCount) {
-            // TODO:  actually compare that the ids did not change
-            NSLog(@"The kit says the target count has changed to %d items from %lu items.  Restarting hunt from scratch.", targetCount, (unsigned long)[SHHunt sharedHunt].targetList.count);
+            targetsChanged = true;
+        }
+
+        if (targetsChanged) {
+            NSLog(@"The kit says the targets have changed.   New count is %d items from %lu items.  Restarting hunt from scratch.", targetCount, (unsigned long)[SHHunt sharedHunt].targetList.count);
             [[SHHunt sharedHunt]resize:targetCount];
         }
         NSLog(@"Target count is %d", targetCount);
@@ -455,9 +406,43 @@
     
 }
 
+// call this method to run a simulation of all targets being found, one every four seconds
+-(void)simulateTargetsBeingFound {
+    // run the following every 2 seconds;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 4.0),dispatch_get_main_queue(), ^{
+        __block BOOL anyFound = NO;
+        [[SHHunt sharedHunt].targetList enumerateObjectsUsingBlock:^(id targetObj, NSUInteger targetIdx, BOOL *targetStop) {
+            SHTargetItem *target = (SHTargetItem *) targetObj;
+            if (!target.found && !anyFound) {
+                NSLog(@"**** simulating finding target %@", target.huntId);
+                target.found = YES;
+                anyFound = YES;
+                
+                [_collectionViewController.collectionView reloadData];
+                [_collectionViewController showFoundForTarget: target];
+                if ([[SHHunt sharedHunt] everythingFound]) {
+                    // switch to the main controller to tell the player he has won
+                    if (_collectionViewController) {
+                        SHFinishViewController *finishViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FinishViewController"];
+                        NSLog(@"Finish view controller is %@", finishViewController);
+                        [_collectionViewController.navigationController
+                         pushViewController:finishViewController animated:YES];
+                    }
+                }
+            }
+        }];
+        if (!([[SHHunt sharedHunt] everythingFound]) ) {
+            // set up to call again in a bit
+            [self simulateTargetsBeingFound];
+        }
+    });
+
+}
+
 -(void)tellHuntAboutRangedBeacons:(NSArray*) beacons inRegion: (PKRegion*) region {
     
     [beacons enumerateObjectsUsingBlock:^(id beaconObj, NSUInteger beaconIdx, BOOL *beaconStop) {
+        
         PKIBeacon *beacon = (PKIBeacon *) beaconObj;
         
         NSLog(@"beacon=%@, beacon.attributes=%@", beacon, beacon.attributes);

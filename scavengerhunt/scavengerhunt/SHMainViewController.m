@@ -63,7 +63,7 @@
 
 - (IBAction)startTapped:(id)sender {
     NSLog(@"Start tapped");
-    if (YES || [self pkPlistPath] == Nil) {
+    if ([self pkPlistPath] == Nil) {
         NSLog(@"No proximityKit.plist present.  Asking user for code.");
         [self showDialog: self.codeDialog];
     }
@@ -118,6 +118,13 @@
                                                otherButtonTitles:nil];
          [alert show];
      }];
+}
+
+- (IBAction)tappedAwayFromCodeInput:(id)sender {
+    NSLog(@"Tapped outside of text field");
+    [self.codeTextField endEditing:YES];
+    [self.codeTextField resignFirstResponder];
+    
 }
 
 - (void) codeValidated {
