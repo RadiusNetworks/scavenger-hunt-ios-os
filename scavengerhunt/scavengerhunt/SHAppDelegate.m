@@ -31,6 +31,7 @@
     BOOL _validatingCode;
     NSDate *_loadingDisplayedTime;
     BOOL _pkStarted;
+    BOOL _hitFatalError;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -132,6 +133,7 @@
 }
 
 
+
 // Called after all badge images are either downloaded from the web, or failed to download due to network problems.
 -(void)dependencyLoadFinished {
 
@@ -147,7 +149,7 @@
     
     if (fatalError != Nil) {
         NSLog(@"Cannot start up because I could not download the necessary badge images.  Telling user to try again later.");
-
+        _hitFatalError = YES;
             // wait for one sec in the future to do this.  if we don't wait, then the dialog may come up
             // to quickly, and then the build-in iOS permission dialog might appear and suppress this dialog
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
@@ -184,11 +186,20 @@
 }
 
 
+
+
 // This method gets called when the user taps OK on the warning dialog about the app not being able to start up
 -(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    // Tell Proximity Kit to sync data again.  This will start the loading of everything all over again.
-    NSLog(@"Kicking off another sync");
-    [self.manager sync];
+    if (_hitFatalError == YES){
+        //close loading screen and start over
+        _hitFatalError = NO;
+        [self resetHunt];
+
+    }else {
+        // Tell Proximity Kit to sync data again.  This will start the loading of everything all over again.
+        NSLog(@"Kicking off another sync");
+        [self.manager sync];
+    }
 }
 
 // Callback from SHRemoteAssetCache if it gets everything it needs
@@ -196,7 +207,7 @@
     [self dependencyLoadFinished];
 }
 
-// Callback from SHRemoteAssetCache if it gets everything it needs
+// Callback from SHRemoteAssetCache if it doesn't get everything it needs
 -(void)remoteAssetLoadFail {
     [self dependencyLoadFinished];
 }
