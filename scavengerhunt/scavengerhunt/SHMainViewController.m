@@ -101,10 +101,12 @@
     // Display an error dialog based on the error code
     NSString *title = @"Network error";
     NSString *message = [NSString stringWithFormat:@"Please check your internet connection and try again.  Code: %ld", (long)error.code ];
-    if (error.code >= 300 && error.code < 500) {
+    if (error.code >= 300 && error.code <= 500) {
         title = @"Invalid Code";
         message = @"Please verify your code and try again.";
     }
+    NSLog(@"**** codeValidationFailedWithError called.  Code: %ld", (long)error.code);
+
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^
      {
