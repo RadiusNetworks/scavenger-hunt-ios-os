@@ -93,7 +93,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "371"
             endingLineNumber = "371"
-            landmarkName = "-proximityKit:didDetermineState:forRegion:"
+            landmarkName = "-proximityKit:didExit:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

@@ -16,6 +16,8 @@
 
 @implementation SHMainViewController {
     SHAppDelegate *_appDelegate;
+    UIImageView *_splashImage;
+    NSTimer *_timer;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -34,6 +36,27 @@
     self.title = @"Scavenger Hunt";
     self.codeTextField.text = [self getLastValidCode];
     [self showDialog: nil];
+    NSString * path = [[NSBundle mainBundle] pathForResource:@"hp-cloud" ofType:@"png"];
+    _splashImage = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:path]];
+    if (_splashImage) {
+        _splashImage.frame = CGRectMake(0,44,320,480+44); // nav bar is 44 high
+        [self.view addSubview:_splashImage];
+        NSLog(@"Splash image should be shown.");
+        _timer = [NSTimer
+                  scheduledTimerWithTimeInterval:(NSTimeInterval)(2.0)
+                  target:self
+                  selector:@selector(hideSplash)
+                  userInfo:nil
+                  repeats:NO];
+    }
+    
+}
+
+-(void)hideSplash{
+    [UIView beginAnimations:@"fade out" context:nil];
+    [UIView setAnimationDuration:1.0];
+    _splashImage.alpha = 0.0;
+    [UIView commitAnimations];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
