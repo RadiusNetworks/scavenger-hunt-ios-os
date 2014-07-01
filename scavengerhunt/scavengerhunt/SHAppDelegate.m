@@ -26,8 +26,7 @@
 
 @implementation SHAppDelegate {
     CBPeripheralManager *_peripheralManager;
-    NSDate * _lastEntryTime;
-    NSDate * _lastExitTime;
+    NSDate * _lastNotificationTime;
     BOOL _validatingCode;
     NSDate *_loadingDisplayedTime;
     BOOL _pkStarted;
@@ -38,10 +37,10 @@
 {
     // Initialize a Bluetooth Peripheral Manager so we can warn user about various states of availability or bluetooth being turned off
     _peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
-
+    
     // Set distance for detecting targets, in this case 10 meters
     [[SHHunt sharedHunt] setTriggerDistance: 10.0];
-
+    
     // Pick the right storyboard for either iPad or iPhone
     if ([[UIDevice currentDevice] userInterfaceIdiom] ==UIUserInterfaceIdiomPad) {
         self.storyboard = [UIStoryboard storyboardWithName:@"ScavengerHunt_iPad" bundle:nil];
@@ -52,7 +51,7 @@
     // Initialize the remote asset cache, used for downloading the badge images from a web server
     self.remoteAssetCache = [[SHRemoteAssetCache alloc] init];
     self.remoteAssetCache.delegate = self;
-
+    
     // Initialize ProximityKit
     self.manager = [PKManager managerWithDelegate:self];
     
@@ -136,7 +135,7 @@
 
 // Called after all badge images are either downloaded from the web, or failed to download due to network problems.
 -(void)dependencyLoadFinished {
-
+    
     NSString *fatalError = Nil;
     
     if (![self validateRequiredImagesPresent]) {
@@ -150,22 +149,22 @@
     if (fatalError != Nil) {
         NSLog(@"Cannot start up because I could not download the necessary badge images.  Telling user to try again later.");
         _hitFatalError = YES;
-            // wait for one sec in the future to do this.  if we don't wait, then the dialog may come up
-            // to quickly, and then the build-in iOS permission dialog might appear and suppress this dialog
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network error"
-                                                                message:fatalError
-                                                               delegate:self
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:Nil];
-                [alert show];
-
-            });
+        // wait for one sec in the future to do this.  if we don't wait, then the dialog may come up
+        // to quickly, and then the build-in iOS permission dialog might appear and suppress this dialog
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network error"
+                                                            message:fatalError
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:Nil];
+            [alert show];
+            
+        });
         
     }
     else {
         NSLog(@"Ready to show collection view controller");
-
+        
         NSDate *now = [NSDate date];
         long timeSince = [now timeIntervalSinceDate:_loadingDisplayedTime];
         long delay = 2000-timeSince;
@@ -180,7 +179,7 @@
             [self.mainViewController.navigationController pushViewController:_collectionViewController animated:YES];
             //[self simulateTargetsBeingFound];
         });
-             
+        
     }
     
 }
@@ -194,7 +193,7 @@
         //close loading screen and start over
         _hitFatalError = NO;
         [self resetHunt];
-
+        
     }else {
         // Tell Proximity Kit to sync data again.  This will start the loading of everything all over again.
         NSLog(@"Kicking off another sync");
@@ -247,89 +246,100 @@
     }
     return [NSString stringWithFormat:@"%@%@%@",prefix,suffix,extension];
 }
+- (void)processKit: (PKKit *) kit {
+    if (_validatingCode) {
+        _validatingCode = NO;
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^
+         {
+             [self.mainViewController codeValidated];
+             _loadingDisplayedTime = [[NSDate alloc] init];
+         }];
+    }
+    __block int targetCount = 0;
+    __block BOOL targetsChanged = false;
+    __block BOOL isTablet = ([[UIDevice currentDevice] userInterfaceIdiom] ==UIUserInterfaceIdiomPad);
+    __block BOOL isRetina = ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] &&
+                             ([UIScreen mainScreen].scale == 2.0));
+    NSMutableDictionary *targetImageUrls = [[NSMutableDictionary alloc] init];
+    
+    NSLog(@"Processing kit with %ld iBeacons", (unsigned long)kit.iBeaconRegions.count);
+    [kit enumerateIBeaconsUsingBlock:^(PKIBeacon *iBeacon, NSUInteger idx, BOOL *stop) {
+        //int idx = 0;
+        //for (PKIBeacon *iBeacon in kit.iBeaconRegions) {
+        NSString* huntId = [iBeacon.attributes objectForKey:@"hunt_id"];
+        NSString* imageUrlString = [iBeacon.attributes objectForKey:@"image_url"];
+        NSLog(@"Processing first beacon with huntId %@ and imageUrl %@", huntId, imageUrlString);
+        if (huntId != Nil) {
+            NSLog(@"Hunt id is %@", huntId);
+            NSString *existingHuntId = Nil;
+            if (idx < [SHHunt sharedHunt].targetList.count ) {
+                existingHuntId = [SHHunt sharedHunt].targetList[idx];
+            }
+            if (![huntId isEqualToString:existingHuntId]) {
+                targetsChanged = YES;
+            }
+            if (imageUrlString == nil) {
+                NSLog(@"ERROR: No image_url specified in ProximityKit for item with hunt_id=%@", huntId);
+            }
+            else {
+                NSURL *notFoundUrl = [[NSURL alloc] initWithString:[self variantTargetImageUrlForBaseUrlString:imageUrlString found:false tablet:isTablet retina:isRetina]];
+                NSURL *foundUrl = [[NSURL alloc] initWithString:[self variantTargetImageUrlForBaseUrlString:imageUrlString found:true tablet:isTablet retina:isRetina]];
+                if (notFoundUrl != Nil) {
+                    [targetImageUrls setObject:foundUrl forKey: [NSString stringWithFormat:@"target%@_found", huntId]];
+                }
+                else {
+                    NSLog(@"Error: cannot convert target image url %@ to a not found variant for this platform.  Does the file at the end of the URL contain an extension?", imageUrlString);
+                }
+                if (foundUrl != Nil) {
+                    [targetImageUrls setObject:notFoundUrl forKey: [NSString stringWithFormat:@"target%@", huntId]];
+                }
+                else {
+                    NSLog(@"Error: cannot convert target image url %@ to a found variant for this platform.  Does the file at the end of the URL contain an extension?", imageUrlString);
+                }
+            }
+            targetCount++;
+        }
+        else {
+            NSLog(@"No hunt_id for the item in proximity kit");
+        }
+        
+    }];
+    
+    
+    if ([SHHunt sharedHunt].targetList.count != targetCount) {
+        targetsChanged = true;
+    }
+    
+    if (targetsChanged) {
+        NSLog(@"The kit says the targets have changed.   New count is %d items from %lu items.  Restarting hunt from scratch.", targetCount, (unsigned long)[SHHunt sharedHunt].targetList.count);
+        [[SHHunt sharedHunt]resize:targetCount];
+    }
+    
+    NSLog(@"Target count is %d", targetCount);
+    self.remoteAssetCache.retinaFallbackEnabled = YES; // If we can't download the @2x versions, fallback to the non-@2x versions
+    [self.remoteAssetCache downloadAssets:targetImageUrls];
+    [self.manager startRangingIBeacons];
+    
+}
+
 
 - (void)proximityKitDidSync:(PKManager *)manager {
     NSLog(@"proximityKitDidSync");
     PKKit *kit = manager.kit;
+    
     if (kit == Nil) {
         [self proximityKit:manager didFailWithError:Nil];
         return;
     }
     else {
-        if (_validatingCode) {
-            _validatingCode = NO;
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^
-             {
-                 [self.mainViewController codeValidated];
-                 _loadingDisplayedTime = [[NSDate alloc] init];
-             }];
-        }
-        __block int targetCount = 0;
-        __block BOOL targetsChanged = false;
-        __block BOOL isTablet = ([[UIDevice currentDevice] userInterfaceIdiom] ==UIUserInterfaceIdiomPad);
-        __block BOOL isRetina = ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] &&
-                         ([UIScreen mainScreen].scale == 2.0));
-
-        NSMutableDictionary *targetImageUrls = [[NSMutableDictionary alloc] init];
-
-        [kit enumerateIBeaconsUsingBlock:^(PKIBeacon *iBeacon, NSUInteger idx, BOOL *stop) {
-            NSString* huntId = [iBeacon.attributes objectForKey:@"hunt_id"];
-            NSString* imageUrlString = [iBeacon.attributes objectForKey:@"image_url"];
-            if (huntId != Nil) {
-                NSLog(@"Hunt id is %@", huntId);
-                NSString *existingHuntId = Nil;
-                if (idx < [SHHunt sharedHunt].targetList.count ) {
-                    existingHuntId = [SHHunt sharedHunt].targetList[idx];
-                }
-                if (![huntId isEqualToString:existingHuntId]) {
-                    targetsChanged = YES;
-                }
-                if (imageUrlString == nil) {
-                    NSLog(@"ERROR: No image_url specified in ProximityKit for item with hunt_id=%@", huntId);
-                }
-                else {
-                    NSURL *notFoundUrl = [[NSURL alloc] initWithString:[self variantTargetImageUrlForBaseUrlString:imageUrlString found:false tablet:isTablet retina:isRetina]];
-                    NSURL *foundUrl = [[NSURL alloc] initWithString:[self variantTargetImageUrlForBaseUrlString:imageUrlString found:true tablet:isTablet retina:isRetina]];
-                    if (notFoundUrl != Nil) {
-                        [targetImageUrls setObject:foundUrl forKey: [NSString stringWithFormat:@"target%@_found", huntId]];
-                    }
-                    else {
-                        NSLog(@"Error: cannot convert target image url %@ to a not found variant for this platform.  Does the file at the end of the URL contain an extension?", imageUrlString);
-                    }
-                    if (foundUrl != Nil) {
-                        [targetImageUrls setObject:notFoundUrl forKey: [NSString stringWithFormat:@"target%@", huntId]];
-                    }
-                    else {
-                        NSLog(@"Error: cannot convert target image url %@ to a found variant for this platform.  Does the file at the end of the URL contain an extension?", imageUrlString);
-                    }
-                }
-                targetCount++;
-            }
-            else {
-                NSLog(@"No hunt_id for the item in proximity kit");
-            }
-            
-        }];
-        
-
-        if ([SHHunt sharedHunt].targetList.count != targetCount) {
-            targetsChanged = true;
-        }
-
-        if (targetsChanged) {
-            NSLog(@"The kit says the targets have changed.   New count is %d items from %lu items.  Restarting hunt from scratch.", targetCount, (unsigned long)[SHHunt sharedHunt].targetList.count);
-            [[SHHunt sharedHunt]resize:targetCount];
-        }
-        NSLog(@"Target count is %d", targetCount);
-        self.remoteAssetCache.retinaFallbackEnabled = YES; // If we can't download the @2x versions, fallback to the non-@2x versions
-        [self.remoteAssetCache downloadAssets:targetImageUrls];
-        [self.manager startRangingIBeacons];
+        [self processKit: kit];
     }
-
+    
 }
 
 - (void)proximityKit:(PKManager *)manager didFailWithError:(NSError *)error
 {
+    
     NSLog(@"PK didFailWithError: %@", error);
     if (_validatingCode) {
         NSLog(@"Code validation failed");
@@ -339,7 +349,13 @@
     }
     else {
         NSLog(@"Manager kit is %@", self.manager.kit);
-        [self dependencyLoadFinished];
+        if (self.manager.kit == Nil) {
+            [self dependencyLoadFinished];
+        }
+        else {
+            [self processKit: self.manager.kit];
+        }
+        
     }
 }
 
@@ -382,38 +398,6 @@
 {
     NSLog(@"PK didDetermineState %d forRegion %@ (%@)", (int) state, region.name, region.identifier);
     NSLog(@"Did determine State for region: %@ from manager %@ with state %d, where the inside state is %ld", region.identifier, manager, (int)state, (long)CLRegionStateInside);
-    [self tellHuntAboutMonitoredBeacons: state];
-}
-
--(void)tellHuntAboutMonitoredBeacons:(int)state {
-    
-    NSDate * now = [[NSDate alloc] init];
-    if(state == CLRegionStateInside) {
-        NSTimeInterval secondsSinceLastNotification = [now timeIntervalSinceDate: _lastEntryTime];
-        NSTimeInterval secondsSinceLastExit = [now timeIntervalSinceDate: _lastExitTime];
-        
-        if (_lastExitTime != nil && secondsSinceLastExit < 60) {
-            NSLog(@"Ignoring entry into this region because we just exited %.1f seconds ago.", secondsSinceLastExit);
-            return;
-        }
-        else if (_lastEntryTime != nil && secondsSinceLastNotification < 60 ) {
-            NSLog(@"Ignoring entry into this region because we just entered %.1f seconds ago.", secondsSinceLastNotification);
-            return;
-        }
-        else {
-            NSLog(@"We just saw a target.  The last notification time was %.1f seconds ago.", secondsSinceLastNotification);
-            
-            NSLog(@"Sending a notification that a beacon is nearby");
-            UILocalNotification *notification = [[UILocalNotification alloc] init];
-            notification.alertBody = [NSString stringWithFormat:@"A scavenger hunt location is nearby."];
-            [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-            _lastEntryTime = now;
-            
-        }
-    }
-    else if (state == CLRegionStateOutside) {
-        _lastExitTime = now;
-    }
     
 }
 
@@ -447,7 +431,7 @@
             [self simulateTargetsBeingFound];
         }
     });
-
+    
 }
 
 -(void)tellHuntAboutRangedBeacons:(NSArray*) beacons inRegion: (PKRegion*) region {
@@ -459,6 +443,10 @@
         NSLog(@"beacon=%@, beacon.attributes=%@", beacon, beacon.attributes);
         
         NSString *huntId = [beacon.attributes objectForKey:@"hunt_id"]; // set in ProximityKit (e.g. 1, 2, 3, etc.)
+        double triggerDistance = [SHHunt sharedHunt].triggerDistance;
+        if ([beacon.attributes objectForKey:@"trigger_distance"]) {
+            triggerDistance = [[beacon.attributes objectForKey:@"trigger_distance"] doubleValue];
+        }
         NSNumber *distanceObj = [NSNumber numberWithDouble: beacon.clBeacon.accuracy];
         NSLog(@"processing beacon with targetId: %@ and distance %@", huntId, distanceObj);
         float distance = [distanceObj floatValue];
@@ -472,13 +460,11 @@
                     NSLog(@"range unknown");
                 }
                 else {
-                    justFound = (target.distance < [SHHunt sharedHunt].triggerDistance && target.found == NO &&[SHHunt sharedHunt].elapsedTime > 0);
+                    justFound = (target.distance < triggerDistance && target.found == NO &&[SHHunt sharedHunt].elapsedTime > 0);
                     if (!justFound) {
                         NSLog(@"not just found %f %f %d %ld", target.distance, [SHHunt sharedHunt].triggerDistance, target.found, [SHHunt sharedHunt].elapsedTime );
                     }
-
                     
-                    [target sawIt];
                     
                     if ([_collectionViewController.itemViewController.item.huntId isEqualToString: target.huntId]) {
                         [_collectionViewController.itemViewController showRange];
@@ -508,13 +494,46 @@
                                  pushViewController:finishViewController animated:YES];
                             }
                         }
+                    }
+                    else {
                         
-                        
-                        
-                        
+                        // send notification to user that a target is nearby, if this target has not already been found and we haven't done so recently
+                        NSDate * now = [[NSDate alloc] init];
+                        NSTimeInterval secondsSinceLastNotification;
+                        NSTimeInterval secondsSinceLastSeen;
+                        secondsSinceLastSeen = now.timeIntervalSince1970 - target.lastSeenAt;
+                        if (_lastNotificationTime == nil) {
+                            secondsSinceLastNotification = 1000000;  // really big number
+                        }
+                        else {
+                            secondsSinceLastNotification = [now timeIntervalSinceDate: _lastNotificationTime];
+                        }
+                        // only send notifications if the hunt has started and this target is not found
+                        if(secondsSinceLastSeen > 300 && target.found == NO &&[SHHunt sharedHunt].elapsedTime > 0) {
+                            
+                            
+                            if (secondsSinceLastNotification < 60 ) {
+                                NSLog(@"Not sending notification because we just did %.1f seconds ago.", secondsSinceLastNotification);
+                                return;
+                            }
+                            else {
+                                NSLog(@"We just saw a target we have not found yet.  The last notification time was %.1f seconds ago.", secondsSinceLastNotification);
+                                
+                                NSLog(@"Sending a notification that a beacon is nearby");
+                                UILocalNotification *notification = [[UILocalNotification alloc] init];
+                                notification.alertBody = [NSString stringWithFormat:@"A scavenger hunt location is nearby."];
+                                [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+                                _lastNotificationTime = now;
+                                
+                            }
+                        }
+                        else {
+                            NSLog(@"Not sending notification because  target %@ found is %d and was last seen %f seconds ago, elapsed time is %ld and seconds since last notification is %f", target.huntId, target.found,  secondsSinceLastSeen, [SHHunt sharedHunt].elapsedTime, secondsSinceLastNotification);
+                        }
                     }
                 }
-                
+                NSLog(@"Calling sawit on target %@", target.huntId);
+                [target sawIt];
             }
             else {
                 NSLog(@"no match to hunt target %@",target.huntId);
