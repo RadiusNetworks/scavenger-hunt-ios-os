@@ -163,6 +163,10 @@
         
     }
     else {
+        // Uncomment the line below to simulate one target at a time being found, a few seconds apart.
+        // This is useful for testing in the simulator
+        //[self simulateTargetsBeingFound];
+        
         NSLog(@"Ready to show collection view controller");
         
         NSDate *now = [NSDate date];

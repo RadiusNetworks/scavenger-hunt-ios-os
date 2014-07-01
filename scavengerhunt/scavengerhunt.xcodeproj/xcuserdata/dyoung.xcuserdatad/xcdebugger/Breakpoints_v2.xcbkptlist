@@ -88,12 +88,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "scavengerhunt/SHAppDelegate.m"
-            timestampString = "415121187.457823"
+            timestampString = "425933778.964017"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "371"
-            endingLineNumber = "371"
-            landmarkName = "-proximityKit:didExit:"
+            startingLineNumber = "375"
+            endingLineNumber = "375"
+            landmarkName = "-validateRequiredImagesPresent"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -152,12 +152,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "scavengerhunt/SHAppDelegate.m"
-            timestampString = "415121187.457823"
+            timestampString = "425933778.964017"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "271"
-            endingLineNumber = "271"
-            landmarkName = "-proximityKitDidSync:"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
+            landmarkName = "-processKit:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -168,12 +168,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "scavengerhunt/SHAppDelegate.m"
-            timestampString = "415121187.457823"
+            timestampString = "425933778.964017"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "269"
-            endingLineNumber = "269"
-            landmarkName = "-proximityKitDidSync:"
+            startingLineNumber = "273"
+            endingLineNumber = "273"
+            landmarkName = "-processKit:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

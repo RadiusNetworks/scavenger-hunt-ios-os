@@ -32,5 +32,4 @@
 @property (weak, nonatomic) IBOutlet UILabel *redemptionLabel;
 - (IBAction)startHunt:(id)sender;
 - (IBAction)reset:(id)sender;
-- (IBAction)redeem:(id)sender;
 @end
