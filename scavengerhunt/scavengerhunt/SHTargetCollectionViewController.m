@@ -101,7 +101,7 @@
     else {
         iconView.frame  = CGRectMake(0, 0, 130, 130);
     }
-    
+    iconView.contentMode = UIViewContentModeScaleAspectFit;
     [[cell subviews]
      makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [cell addSubview: iconView];

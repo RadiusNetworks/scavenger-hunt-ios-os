@@ -47,13 +47,32 @@
                 NSLog(@"Failed to load %@", assetUrl);
                 BOOL retrying = NO;
                     if (self.retinaFallbackEnabled) {
-                        long location = [[assetUrl absoluteString] rangeOfString:@"@2x."].location;
+                        
+                        //finding which extension has been added to the file name
+                        NSString* extension;
+                        if ([[assetUrl absoluteString] rangeOfString:@"_260" options:(NSCaseInsensitiveSearch)].location != NSNotFound)
+                        {
+                            extension = @"_260";
+                        } else if ([[assetUrl absoluteString] rangeOfString:@"_312" options:(NSCaseInsensitiveSearch)].location != NSNotFound)
+                        {
+                            extension = @"_312";
+                        } else if ([[assetUrl absoluteString] rangeOfString:@"_624" options:(NSCaseInsensitiveSearch)].location != NSNotFound)
+                        {
+                            extension = @"_624";
+                        } else                         {
+                            extension = @"@2x";
+                        }
+                        
+                        long location = [[assetUrl absoluteString] rangeOfString:extension].location;
+                        
                         if (location != NSNotFound) {
-                            NSLog(@"Cannot download image url with a @2x version.  Trying to get a non retina version.");
+                            NSLog(@"Cannot download image url with a standard version.  Trying to get standard version.");
                             retrying = YES;
-                            NSString *nonRetinaAssetUrlString = [[assetUrl absoluteString] stringByReplacingOccurrencesOfString:@"@2x." withString:@"."];
+                            
+                            //attempting to download filename without extension
+                            NSString *nonRetinaAssetUrlString = [[assetUrl absoluteString] stringByReplacingOccurrencesOfString:extension withString:@""];
                             NSURL *nonRetinaAssetUrl = [NSURL URLWithString:nonRetinaAssetUrlString];
-                            NSLog(@"Attempting image download from non-retina URL of %@", nonRetinaAssetUrl);
+                            NSLog(@"Attempting image download from standard URL of %@", nonRetinaAssetUrl);
                             [self downloadAssetWithURL: nonRetinaAssetUrl completionBlock: ^(BOOL succeeded, NSData *data){
                                 if (succeeded) {
                                     NSLog(@"Successfully downloaded %@", nonRetinaAssetUrl);

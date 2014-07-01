@@ -80,6 +80,8 @@
 		EED3A72018A5740200978107 /* AppIcon76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = EED3A71218A5740200978107 /* AppIcon76x76.png */; };
 		EED3A72118A5740200978107 /* AppIcon76x76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EED3A71318A5740200978107 /* AppIcon76x76@2x.png */; };
 		EED3A72318A58B7700978107 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EED3A72218A58B7700978107 /* Default-568h@2x.png */; };
+		EED3F9AC192B8E210060F084 /* HP-Helion-Logo_Stylized-Rectangle.png in Resources */ = {isa = PBXBuildFile; fileRef = EED3F9AB192B8E200060F084 /* HP-Helion-Logo_Stylized-Rectangle.png */; };
+		EED3F9AE192B93CC0060F084 /* hp-cloud.png in Resources */ = {isa = PBXBuildFile; fileRef = EED3F9AD192B93CC0060F084 /* hp-cloud.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,6 +165,8 @@
 		EED3A71218A5740200978107 /* AppIcon76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon76x76.png; sourceTree = "<group>"; };
 		EED3A71318A5740200978107 /* AppIcon76x76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon76x76@2x.png"; sourceTree = "<group>"; };
 		EED3A72218A58B7700978107 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		EED3F9AB192B8E200060F084 /* HP-Helion-Logo_Stylized-Rectangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HP-Helion-Logo_Stylized-Rectangle.png"; sourceTree = "<group>"; };
+		EED3F9AD192B93CC0060F084 /* hp-cloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hp-cloud.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -227,6 +231,8 @@
 		EE9BE5841889FF5C0092A743 /* scavengerhunt */ = {
 			isa = PBXGroup;
 			children = (
+				EED3F9AD192B93CC0060F084 /* hp-cloud.png */,
+				EED3F9AB192B8E200060F084 /* HP-Helion-Logo_Stylized-Rectangle.png */,
 				EEA1AC5618AD5C0B00122F3E /* ScavengerHunt_iPad.storyboard */,
 				EE9BE5BD188CBDE00092A743 /* ScavengerHunt_iPhone.storyboard */,
 				EE9BE5BF188CBDE00092A743 /* SHTargetCollectionViewController.m */,
@@ -359,7 +365,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = SH;
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = RadiusNetworks;
 				TargetAttributes = {
 					EE9BE57A1889FF5B0092A743 = {
@@ -401,6 +407,7 @@
 				EED3A71F18A5740200978107 /* AppIcon72x72@2x.png in Resources */,
 				EE9BE59A1889FF5C0092A743 /* Images.xcassets in Resources */,
 				EE9BE602188D84A20092A743 /* sh_bg_ipad.png in Resources */,
+				EED3F9AE192B93CC0060F084 /* hp-cloud.png in Resources */,
 				EE9BE5E8188D7D120092A743 /* sh_button_ipad.png in Resources */,
 				EED3A71918A5740200978107 /* AppIcon50x50@2x.png in Resources */,
 				EED3A71D18A5740200978107 /* AppIcon60x60@2x.png in Resources */,
@@ -414,6 +421,7 @@
 				EED3A71418A5740200978107 /* AppIcon29x29.png in Resources */,
 				EE9BE5E6188D7D120092A743 /* sh_button_ipad@2x.png in Resources */,
 				EE14BAB618A4450F00C7CE12 /* sh_bolt.png in Resources */,
+				EED3F9AC192B8E210060F084 /* HP-Helion-Logo_Stylized-Rectangle.png in Resources */,
 				EE9BE5891889FF5C0092A743 /* InfoPlist.strings in Resources */,
 				EE19EB3E1891C69B00FD941F /* LICENSE in Resources */,
 				EED3A71A18A5740200978107 /* AppIcon57x57.png in Resources */,
@@ -521,7 +529,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -534,7 +541,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -561,7 +569,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -574,7 +581,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -640,7 +648,6 @@
 		EE9BE5B41889FF5C0092A743 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/scavengerhunt.app/scavengerhunt";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -663,7 +670,6 @@
 		EE9BE5B51889FF5C0092A743 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/scavengerhunt.app/scavengerhunt";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
