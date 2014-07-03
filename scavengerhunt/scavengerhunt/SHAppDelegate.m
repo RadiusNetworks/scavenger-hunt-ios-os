@@ -61,13 +61,7 @@
     if ([SHHunt sharedHunt].elapsedTime > 0) {
         UINavigationController *navController;
         
-        if (![SHHunt sharedHunt].instructionScreenDisplayed) {
-            NSLog(@"will display instruction screen");
-            SHInstructionViewController *instructionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"InstructionViewController"];
-            navController = [[UINavigationController alloc] initWithRootViewController: instructionViewController];
-            resumed = YES;
-        }
-        else if ([SHHunt sharedHunt].everythingFound) {
+        if ([SHHunt sharedHunt].everythingFound) {
             // if it is complete, show the finish view
             SHFinishViewController *finishViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FinishViewController"];
             navController = [[UINavigationController alloc] initWithRootViewController: finishViewController];
