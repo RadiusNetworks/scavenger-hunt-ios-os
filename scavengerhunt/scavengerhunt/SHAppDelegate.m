@@ -321,12 +321,20 @@
             if (instruction_background_color != Nil){
                 //save custom splash screen and instructions screen for later use
                 
-                NSData * instruction_image_url_Data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: instruction_image_url]];
-                UIImage* instruction_image = [UIImage imageWithData: instruction_image_url_Data];
+                //saving images
+                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                NSString *documentsPath = [paths objectAtIndex:0]; //Get the docs directory
 
-                NSData * splash_url_Data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: splash_url]];
-                UIImage* splash = [UIImage imageWithData: splash_url_Data];
+                NSData * instruction_image_url_Data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: instruction_image_url]];
+                NSString *instruction_image_filename = [documentsPath stringByAppendingPathComponent:@"instruction_image.png"]; //Add the file name
+                [instruction_image_url_Data writeToFile:instruction_image_filename atomically:YES]; //Write the file
                 
+                NSData * splash_url_Data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: splash_url]];
+                NSString *splash_filename = [documentsPath stringByAppendingPathComponent:@"splash.png"]; //Add the file name
+                [splash_url_Data writeToFile:splash_filename atomically:YES]; //Write the file
+                
+
+                //saving all data (including filenames for saved images)
                 NSDictionary* customData = [[NSDictionary alloc] initWithObjectsAndKeys:
                                             instruction_background_color, @"instruction_background_color",
                                             instruction_image_url, @"instruction_image_url",
@@ -336,8 +344,8 @@
                                             instruction_title, @"instruction_title",
                                             splash_url, @"splash_url",
                                             title, @"title",
-                                            instruction_image, @"instruction_image",
-                                            splash, @"splash",
+                                            instruction_image_filename, @"instruction_image",
+                                            splash_filename, @"splash",
                                             nil];
                 [[SHHunt sharedHunt] setCustomStartScreenData: customData];
                 

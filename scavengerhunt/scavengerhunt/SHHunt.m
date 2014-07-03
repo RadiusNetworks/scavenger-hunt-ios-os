@@ -147,6 +147,7 @@
     [userDefaults setDouble:_timeStarted forKey:@"sh_time_started"];
     [userDefaults setDouble:_timeCompleted forKey:@"sh_time_completed"];
     [userDefaults setObject:self.deviceId forKey:@"sh_device_uuid"];
+    [userDefaults setObject:self.customStartScreenData forKey:@"sh_custom_start_screen_data"];
     NSLog(@"begin synchronizing user defaults");
     [userDefaults synchronize];
     NSLog(@"end synchronizing user defaults");
@@ -160,6 +161,7 @@
     NSLog(@"loaded started time from defaults %ld", _timeStarted);
     _timeCompleted = [currentDefaults doubleForKey:@"sh_time_completed"];
     self.deviceId = [currentDefaults stringForKey:@"sh_device_uuid"];
+    self.customStartScreenData = [currentDefaults dictionaryForKey:@"sh_custom_start_screen_data"];
 }
 
 #pragma mark NSURLConnection Delegate Methods
