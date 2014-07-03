@@ -272,6 +272,9 @@
         //for (PKIBeacon *iBeacon in kit.iBeaconRegions) {
         NSString* huntId = [iBeacon.attributes objectForKey:@"hunt_id"];
         NSString* imageUrlString = [iBeacon.attributes objectForKey:@"image_url"];
+        
+
+
         NSLog(@"Processing first beacon with huntId %@ and imageUrl %@", huntId, imageUrlString);
         if (huntId != Nil) {
             NSLog(@"Hunt id is %@", huntId);
@@ -302,6 +305,45 @@
                 }
             }
             targetCount++;
+            
+            
+            
+            //custom splash screen and instructions screen metadata
+            NSString* instruction_background_color = [iBeacon.attributes objectForKey:@"instruction_background_color"];
+            NSString* instruction_image_url = [iBeacon.attributes objectForKey:@"instruction_image_url"];
+            NSString* instruction_start_button_name = [iBeacon.attributes objectForKey:@"instruction_start_button_name"];
+            NSString* instruction_text_1 = [iBeacon.attributes objectForKey:@"instruction_text_1"];
+            NSString* instruction_text_2 = [iBeacon.attributes objectForKey:@"instruction_text_2"];
+            NSString* instruction_title = [iBeacon.attributes objectForKey:@"instruction_title"];
+            NSString* splash_url = [iBeacon.attributes objectForKey:@"splash_url"];
+            NSString* title = [iBeacon.attributes objectForKey:@"title"];
+            
+            if (instruction_background_color != Nil){
+                //save custom splash screen and instructions screen for later use
+                
+                NSData * instruction_image_url_Data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: instruction_image_url]];
+                UIImage* instruction_image = [UIImage imageWithData: instruction_image_url_Data];
+
+                NSData * splash_url_Data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: splash_url]];
+                UIImage* splash = [UIImage imageWithData: splash_url_Data];
+                
+                NSDictionary* customData = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                            instruction_background_color, @"instruction_background_color",
+                                            instruction_image_url, @"instruction_image_url",
+                                            instruction_start_button_name, @"instruction_start_button_name",
+                                            instruction_text_1, @"instruction_text_1",
+                                            instruction_text_2, @"instruction_text_2",
+                                            instruction_title, @"instruction_title",
+                                            splash_url, @"splash_url",
+                                            title, @"title",
+                                            instruction_image, @"instruction_image",
+                                            splash, @"splash",
+                                            nil];
+                [[SHHunt sharedHunt] setCustomStartScreenData: customData];
+                
+                NSLog(@"customStartScreenData: %@",[[SHHunt sharedHunt] customStartScreenData]);
+            }
+            
         }
         else {
             NSLog(@"No hunt_id for the item in proximity kit");

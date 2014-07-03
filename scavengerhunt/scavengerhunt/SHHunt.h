@@ -28,6 +28,11 @@
 -(double) triggerDistance;
 -(void) find: (SHTargetItem *) target;
 -(void)resize: (int) size;
+-(void)setCustomStartScreenData:(NSDictionary*)customStartScreenData;
+-(NSDictionary*) customStartScreenData;
+
+
+
 
 @property (strong, nonatomic) NSArray *targetList;
 @property (strong, nonatomic) NSString *deviceId;

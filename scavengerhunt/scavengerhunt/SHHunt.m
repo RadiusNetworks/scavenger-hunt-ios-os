@@ -23,6 +23,7 @@
     long _timeCompleted;
     double _triggerDistance;
     int _targetCount;
+    NSDictionary* _customStartScreenData;
 }
 
 
@@ -43,6 +44,14 @@
 
 - (double) triggerDistance {
     return _triggerDistance;
+}
+
+- (void)setCustomStartScreenData:(NSDictionary*)customStartScreenData {
+    _customStartScreenData = customStartScreenData;
+}
+
+- (NSDictionary*) customStartScreenData {
+    return _customStartScreenData;
 }
 
 
