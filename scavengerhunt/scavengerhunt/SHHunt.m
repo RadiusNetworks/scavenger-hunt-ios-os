@@ -23,6 +23,7 @@
     long _timeCompleted;
     double _triggerDistance;
     int _targetCount;
+    BOOL _instructionDisplayed;
 }
 
 
@@ -52,6 +53,7 @@
     {
         _targetCount = 0;
         _triggerDistance = 10.0;
+        _instructionDisplayed = false;
         [self loadFromUserDefaults];
         if (_deviceId == Nil) {
             self.deviceId = [[NSUUID UUID] UUIDString];
@@ -70,12 +72,14 @@
     
     _timeStarted = 0;
     _timeCompleted = 0;
+    _instructionDisplayed = false;
     [self saveToUserDefaults];
 }
 
 -(void)reset {
     [self resize: 0];
     _timeStarted = 0;
+    _instructionDisplayed = false;
     [self saveToUserDefaults];
 }
 
@@ -114,6 +118,10 @@
     return false;
 }
 
+-(BOOL) instructionScreenDisplayed {
+    return _instructionDisplayed;
+}
+
 - (int)foundCount {
     __block int count = 0;
     [_targetList enumerateObjectsUsingBlock:^(id targetObj, NSUInteger targetIdx, BOOL *targetStop) {
@@ -137,6 +145,7 @@
     [userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:self.targetList] forKey:@"sh_target_list"];
     [userDefaults setDouble:_timeStarted forKey:@"sh_time_started"];
     [userDefaults setDouble:_timeCompleted forKey:@"sh_time_completed"];
+    [userDefaults setBool:_instructionDisplayed forKey:@"sh_splash_displayed"];
     [userDefaults setObject:self.deviceId forKey:@"sh_device_uuid"];
     NSLog(@"begin synchronizing user defaults");
     [userDefaults synchronize];
@@ -150,6 +159,7 @@
     _timeStarted = [currentDefaults doubleForKey:@"sh_time_started"];
     NSLog(@"loaded started time from defaults %ld", _timeStarted);
     _timeCompleted = [currentDefaults doubleForKey:@"sh_time_completed"];
+    _instructionDisplayed = [currentDefaults boolForKey:@"sh_splash_displayed"];
     self.deviceId = [currentDefaults stringForKey:@"sh_device_uuid"];
 }
 

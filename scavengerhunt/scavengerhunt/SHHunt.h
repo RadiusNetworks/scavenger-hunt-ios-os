@@ -25,6 +25,7 @@
 -(long) elapsedTime;
 -(int) foundCount;
 -(BOOL) everythingFound;
+-(BOOL) instructionScreenDisplayed;
 -(double) triggerDistance;
 -(void) find: (SHTargetItem *) target;
 -(void)resize: (int) size;

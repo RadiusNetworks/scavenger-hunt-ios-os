@@ -21,15 +21,18 @@
 #import "SHRemoteAssetCache.h"
 #import "SHMainViewController.h"
 #import "SHTargetCollectionViewController.h"
+#import "SHInstructionViewController.h"
 
 @interface SHAppDelegate : UIResponder <UIApplicationDelegate, PKManagerDelegate, CBPeripheralManagerDelegate, SHRemoteAssetCacheDelegate>
 -(void)startPK;
 -(void)startPKWithCode: (NSString * ) code;
 -(void)resetHunt;
+-(void)startTargetCollection;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) PKManager *manager;
 @property (strong, nonatomic) SHRemoteAssetCache *remoteAssetCache;
 @property (strong, nonatomic) UIStoryboard *storyboard;
 @property (strong, nonatomic) SHMainViewController *mainViewController;
 @property (strong, nonatomic) SHTargetCollectionViewController *collectionViewController;
+@property (strong, nonatomic) SHInstructionViewController *instructionViewController;
 @end
