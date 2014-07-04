@@ -88,11 +88,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "scavengerhunt/SHAppDelegate.m"
-            timestampString = "425933778.964017"
+            timestampString = "426126030.502504"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "375"
-            endingLineNumber = "375"
+            startingLineNumber = "431"
+            endingLineNumber = "431"
             landmarkName = "-validateRequiredImagesPresent"
             landmarkType = "5">
          </BreakpointContent>
@@ -152,11 +152,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "scavengerhunt/SHAppDelegate.m"
-            timestampString = "425933778.964017"
+            timestampString = "426126030.502504"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "275"
-            endingLineNumber = "275"
+            startingLineNumber = "331"
+            endingLineNumber = "331"
             landmarkName = "-processKit:"
             landmarkType = "5">
          </BreakpointContent>
@@ -168,11 +168,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "scavengerhunt/SHAppDelegate.m"
-            timestampString = "425933778.964017"
+            timestampString = "426126030.502504"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "273"
-            endingLineNumber = "273"
+            startingLineNumber = "329"
+            endingLineNumber = "329"
             landmarkName = "-processKit:"
             landmarkType = "5">
          </BreakpointContent>

@@ -56,39 +56,76 @@
     self.manager = [PKManager managerWithDelegate:self];
     
     BOOL resumed = NO;
+    BOOL readyToStart = NO;
+    BOOL finished = NO;
     // If the user has already started the hunt, resume from where he left off
+    
     if ([SHHunt sharedHunt].elapsedTime > 0) {
-        UINavigationController *navController;
         
         if ([SHHunt sharedHunt].everythingFound) {
             // if it is complete, show the finish view
-            SHFinishViewController *finishViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FinishViewController"];
-            navController = [[UINavigationController alloc] initWithRootViewController: finishViewController];
-            resumed = YES;
+            finished = YES;
         }
         else {
             // if it is not complete, show the collection view
             PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
             if ([configChanger isConfigStored]) {
                 [configChanger syncWithStoredConfigForManager:self.manager];
-                self.collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
-                navController = [[UINavigationController alloc] initWithRootViewController: self.collectionViewController];
                 resumed = YES;
             }
         }
-        if (resumed) {
-            self.window.rootViewController = navController;
-            [self.window makeKeyAndVisible];
-        }
-        
     }
     
-    if (!resumed){
+    // If we haven't started the hunt, but everything is ready to run a hunt, do so
+    if (!resumed && [self huntFullyLoaded]) {
+        // if it is not complete, show the collection view
+        PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
+        if ([configChanger isConfigStored]) {
+            [configChanger syncWithStoredConfigForManager:self.manager];
+            readyToStart = YES;
+        }
+    }
+    if (resumed) {
+        [self setupCollectionView];
+    }
+    else if (finished) {
+        [self setupFinishView];
+    }
+    else if (readyToStart) {
+        // this should show the custom instructions page if available.  if not available, it should simply start
+        // the hunt and go to the collecitons view
+        if (/*customInstructionsAvailable*/ NO) {
+            [self setupCustomInstructionsView];
+        }
+        else {
+            [[SHHunt sharedHunt] start];
+            [self setupCollectionView];
+        }
+    }
+    else {
         //show instructions and start button
         [self setupInitialView];
     }
     
     return YES;
+}
+
+-(void)setupCustomInstructionsView {
+    
+}
+-(void)setupFinishView {
+    UINavigationController *navController;
+    SHFinishViewController *finishViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FinishViewController"];
+    navController = [[UINavigationController alloc] initWithRootViewController: finishViewController];
+    self.window.rootViewController = navController;
+    [self.window makeKeyAndVisible];
+}
+-(void)setupCollectionView {
+    UINavigationController *navController;
+    self.collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
+    navController = [[UINavigationController alloc] initWithRootViewController: self.collectionViewController];
+    self.window.rootViewController = navController;
+    [self.window makeKeyAndVisible];
 }
 
 -(void)setupInitialView {
@@ -125,9 +162,28 @@
     
 }
 
+/*
+ 
+ Check to see if we have previously validated with a code and loaded all assets for a secific hunt, so we can go into that one.
+ */
+-(Boolean)huntFullyLoaded {
+    NSLog(@"------------------ checking if hunt is fully loaded %d %lu ",([self validateRequiredImagesPresent]),(unsigned long)([SHHunt sharedHunt].targetList.count));
+    if ([self validateRequiredImagesPresent] &&
+        [SHHunt sharedHunt].targetList.count > 0) {
+        return YES;
+    }
+    return NO;
+}
+
 // called when the user gestures to start over
 -(void)resetHunt {
     [[SHHunt sharedHunt] reset];
+    [self setupCollectionView];
+}
+
+// called when the user gestures to start over with a different hunt
+-(void)clearHunt {
+    [[SHHunt sharedHunt] clear];
     [self setupInitialView];
 }
 
@@ -259,6 +315,10 @@
              _loadingDisplayedTime = [[NSDate alloc] init];
          }];
     }
+    
+    
+    
+    
     __block int targetCount = 0;
     __block BOOL targetsChanged = false;
     __block BOOL isTablet = ([[UIDevice currentDevice] userInterfaceIdiom] ==UIUserInterfaceIdiomPad);

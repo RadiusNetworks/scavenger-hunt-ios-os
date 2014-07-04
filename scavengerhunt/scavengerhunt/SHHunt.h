@@ -21,6 +21,7 @@
 + (SHHunt *)sharedHunt;
 -(void)setTriggerDistance:(double)triggerDistance;
 -(void) reset;
+-(void) clear;
 -(void) start;
 -(long) elapsedTime;
 -(int) foundCount;

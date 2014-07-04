@@ -26,6 +26,7 @@
 -(void)startPK;
 -(void)startPKWithCode: (NSString * ) code;
 -(void)resetHunt;
+-(void)clearHunt;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) PKManager *manager;
 @property (strong, nonatomic) SHRemoteAssetCache *remoteAssetCache;
