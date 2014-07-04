@@ -26,5 +26,6 @@
 
 -(SHTargetItem *) initWithId: (NSString*) huntId;
 -(void) sawIt;
+-(void) reset;
 -(BOOL) hasItDisappeared;
 @end

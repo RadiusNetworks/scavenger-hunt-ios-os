@@ -135,6 +135,8 @@
 
 - (IBAction)startTapped:(id)sender {
     NSLog(@"startTapped called");
+    [[SHHunt sharedHunt] start]; // mark the scavenger hunt as started
+    [_appDelegate.manager start]; // start pk looking for beacons
     [_appDelegate startTargetCollection];
 }
 @end

@@ -31,10 +31,13 @@
     NSDate *_loadingDisplayedTime;
     BOOL _pkStarted;
     BOOL _hitFatalError;
+    BOOL _ignorePKSync;
+    UINavigationController *_navigationController;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    _ignorePKSync = YES;
 
     // Initialize a Bluetooth Peripheral Manager so we can warn user about various states of availability or bluetooth being turned off
     _peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
@@ -71,7 +74,9 @@
             // if it is not complete, show the collection view
             PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
             if ([configChanger isConfigStored]) {
+                _ignorePKSync = YES; // we already have everything downloaded.  Do not process again
                 [configChanger syncWithStoredConfigForManager:self.manager];
+                [self.manager start];
                 resumed = YES;
             }
         }
@@ -82,6 +87,7 @@
         // if it is not complete, show the collection view
         PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
         if ([configChanger isConfigStored]) {
+            _ignorePKSync = YES; // we already have everything downloaded.  Do not process again
             [configChanger syncWithStoredConfigForManager:self.manager];
             readyToStart = YES;
         }
@@ -95,11 +101,13 @@
     else if (readyToStart) {
         // this should show the custom instructions page if available.  if not available, it should simply start
         // the hunt and go to the collecitons view
-        if (/*customInstructionsAvailable*/ NO) {
+        if ([[SHHunt sharedHunt] hasCustomStartScreen]) {
+            NSLog(@"----------Custom instruction screen is available.  Showing it.");
             [self setupCustomInstructionsView];
         }
         else {
             [[SHHunt sharedHunt] start];
+            [self.manager start];
             [self setupCollectionView];
         }
     }
@@ -112,20 +120,21 @@
 }
 
 -(void)setupCustomInstructionsView {
-    
+    SHInstructionViewController *instructionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"InstructionViewController"];
+    _navigationController = [[UINavigationController alloc] initWithRootViewController: instructionViewController];
+    self.window.rootViewController = _navigationController;
+    [self.window makeKeyAndVisible];
 }
 -(void)setupFinishView {
-    UINavigationController *navController;
     SHFinishViewController *finishViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FinishViewController"];
-    navController = [[UINavigationController alloc] initWithRootViewController: finishViewController];
-    self.window.rootViewController = navController;
+    _navigationController = [[UINavigationController alloc] initWithRootViewController: finishViewController];
+    self.window.rootViewController = _navigationController;
     [self.window makeKeyAndVisible];
 }
 -(void)setupCollectionView {
-    UINavigationController *navController;
     self.collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
-    navController = [[UINavigationController alloc] initWithRootViewController: self.collectionViewController];
-    self.window.rootViewController = navController;
+    _navigationController = [[UINavigationController alloc] initWithRootViewController: self.collectionViewController];
+    self.window.rootViewController = _navigationController;
     [self.window makeKeyAndVisible];
 }
 
@@ -133,8 +142,8 @@
     NSLog(@"setupInitialView called");
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     self.mainViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController: self.mainViewController];
-    self.window.rootViewController = navController;
+    _navigationController = [[UINavigationController alloc] initWithRootViewController: self.mainViewController];
+    self.window.rootViewController = _navigationController;
     [self.window makeKeyAndVisible];
     
 }
@@ -158,6 +167,7 @@
     
     _validatingCode = YES;
     _pkStarted = YES;
+    _ignorePKSync = NO;
     PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
     [configChanger syncManager:self.manager withCode: code];
     NSLog(@"started Proximity Kit with code %@.  Waiting for callback from sync", code);
@@ -180,13 +190,20 @@
 // called when the user gestures to start over
 -(void)resetHunt {
     [[SHHunt sharedHunt] reset];
-    [self setupCollectionView];
+    if ([[SHHunt sharedHunt] hasCustomStartScreen]) {
+        [self setupCustomInstructionsView];
+    }
+    else {
+        [[SHHunt sharedHunt] start];
+        [self setupCollectionView];
+    }
 }
 
 // called when the user gestures to start over with a different hunt
 -(void)clearHunt {
-    [[SHHunt sharedHunt] clear];
-    [self setupInitialView];
+    [self.manager stop]; // stop looking for beacons
+    [[SHHunt sharedHunt] clear]; // clear out selected scavenger hunt
+    [self setupInitialView]; // go back to the overall instructions screen
 }
 
 
@@ -233,14 +250,16 @@
         if (delay < 0) {
             delay = 0;
         }
-       // ORIG _collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
-        _instructionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"InstructionViewController"];
-        
-        [[SHHunt sharedHunt] start];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC * delay),dispatch_get_main_queue(), ^{
-// ORIG           [self.mainViewController.navigationController pushViewController:_collectionViewController animated:YES];
-            [self.mainViewController.navigationController pushViewController:_instructionViewController animated:YES];
+            if ([[SHHunt sharedHunt] hasCustomStartScreen]) {
+                [self setupCustomInstructionsView];
+            }
+            else {
+                [[SHHunt sharedHunt] start];
+                [self setupCollectionView];
+            }
+
             //[self simulateTargetsBeingFound];
         });
         
@@ -251,7 +270,7 @@
 // Called after the user taps the start button on the instruction screen
 -(void)startTargetCollection {
     _collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
-    [self.mainViewController.navigationController pushViewController:_collectionViewController animated:YES];
+    [_navigationController pushViewController:_collectionViewController animated:YES];
 }
 
 
@@ -376,7 +395,6 @@
             targetCount++;
             
             
-            
             //custom splash screen and instructions screen metadata
             NSString* instruction_background_color = [iBeacon.attributes objectForKey:@"instruction_background_color"];
             NSString* instruction_image_url = [iBeacon.attributes objectForKey:@"instruction_image_url"];
@@ -387,6 +405,7 @@
             NSString* title = [iBeacon.attributes objectForKey:@"title"];
             
             if (instruction_background_color != Nil){
+                NSLog(@"------This hunt has a custom instruction screen because the instructioin_background_color is set to %@", instruction_background_color );
                 //save custom splash screen and instructions screen for later use
                 
                 //saving images
@@ -446,6 +465,12 @@
 
 - (void)proximityKitDidSync:(PKManager *)manager {
     NSLog(@"proximityKitDidSync");
+    if (_ignorePKSync) {
+        NSLog(@"Ignoring sync");
+        return;
+    }
+    _ignorePKSync = YES; // always default to yes so we don't restart hunts with scheduled background syncs
+    
     PKKit *kit = manager.kit;
     
     if (kit == Nil) {
@@ -541,7 +566,7 @@
                     if (_collectionViewController) {
                         SHFinishViewController *finishViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FinishViewController"];
                         NSLog(@"Finish view controller is %@", finishViewController);
-                        [_collectionViewController.navigationController
+                        [_navigationController
                          pushViewController:finishViewController animated:YES];
                     }
                 }
@@ -611,7 +636,7 @@
                             if (_collectionViewController) {
                                 SHFinishViewController *finishViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FinishViewController"];
                                 NSLog(@"Finish view controller is %@", finishViewController);
-                                [_collectionViewController.navigationController
+                                [_navigationController
                                  pushViewController:finishViewController animated:YES];
                             }
                         }

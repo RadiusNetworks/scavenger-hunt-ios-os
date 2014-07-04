@@ -27,11 +27,15 @@
 
 -(SHTargetItem *) init {
     self = [super init];
+    [self reset];
+    return self;
+}
+
+-(void)reset {
     self.found = false;
     self.proximity = -1;
     self.distance = -1;
     self.lastSeenAt = 0;
-    return self;
 }
 
 -(SHTargetItem *) initWithId: (NSString*) huntId  {

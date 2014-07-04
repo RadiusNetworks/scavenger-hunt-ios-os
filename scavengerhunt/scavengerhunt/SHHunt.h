@@ -32,6 +32,7 @@
 -(void)resize: (int) size;
 -(void)setCustomStartScreenData:(NSDictionary*)customStartScreenData;
 -(NSDictionary*) customStartScreenData;
+-(BOOL) hasCustomStartScreen;
 
 
 

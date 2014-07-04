@@ -88,15 +88,19 @@
 -(void)clear {
     [self resize: 0];
     _timeStarted = 0;
+    _timeCompleted = 0;
     _instructionDisplayed = false;
+    _customStartScreenData = Nil;
     [self saveToUserDefaults];
     
 }
 -(void)reset {
     _timeStarted = 0;
+    _timeCompleted = 0;
+    _instructionDisplayed = false;
     [_targetList enumerateObjectsUsingBlock:^(id targetObj, NSUInteger targetIdx, BOOL *targetStop) {
         SHTargetItem *item = (SHTargetItem *) targetObj;
-        item.found = NO;
+        [item reset];
     }];
    
     [self saveToUserDefaults];
@@ -182,6 +186,14 @@
     _instructionDisplayed = [currentDefaults boolForKey:@"sh_splash_displayed"];
     self.deviceId = [currentDefaults stringForKey:@"sh_device_uuid"];
     self.customStartScreenData = [currentDefaults dictionaryForKey:@"sh_custom_start_screen_data"];
+}
+
+-(BOOL) hasCustomStartScreen {
+    if (_customStartScreenData != Nil && (_customStartScreenData.count > 0)) {
+        NSLog(@"--- This hunt has a custom start screen because customStartScreenData.count = %ld", _customStartScreenData.count);
+        return YES;
+    }
+    return NO;
 }
 
 #pragma mark NSURLConnection Delegate Methods
