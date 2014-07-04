@@ -35,6 +35,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+
     // Initialize a Bluetooth Peripheral Manager so we can warn user about various states of availability or bluetooth being turned off
     _peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     
@@ -47,14 +48,14 @@
     } else {
         self.storyboard = [UIStoryboard storyboardWithName:@"ScavengerHunt_iPhone" bundle:nil];
     }
-    
+
     // Initialize the remote asset cache, used for downloading the badge images from a web server
     self.remoteAssetCache = [[SHRemoteAssetCache alloc] init];
     self.remoteAssetCache.delegate = self;
     
     // Initialize ProximityKit
     self.manager = [PKManager managerWithDelegate:self];
-    
+
     BOOL resumed = NO;
     // If the user has already started the hunt, resume from where he left off
     if ([SHHunt sharedHunt].elapsedTime > 0) {
@@ -92,6 +93,7 @@
 }
 
 -(void)setupInitialView {
+    NSLog(@"setupInitialView called");
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     self.mainViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController: self.mainViewController];
@@ -175,12 +177,14 @@
         if (delay < 0) {
             delay = 0;
         }
-        _collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
+       // ORIG _collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
+        _instructionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"InstructionViewController"];
         
         [[SHHunt sharedHunt] start];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC * delay),dispatch_get_main_queue(), ^{
-            [self.mainViewController.navigationController pushViewController:_collectionViewController animated:YES];
+// ORIG           [self.mainViewController.navigationController pushViewController:_collectionViewController animated:YES];
+            [self.mainViewController.navigationController pushViewController:_instructionViewController animated:YES];
             //[self simulateTargetsBeingFound];
         });
         
@@ -188,6 +192,11 @@
     
 }
 
+// Called after the user taps the start button on the instruction screen
+-(void)startTargetCollection {
+    _collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
+    [self.mainViewController.navigationController pushViewController:_collectionViewController animated:YES];
+}
 
 
 

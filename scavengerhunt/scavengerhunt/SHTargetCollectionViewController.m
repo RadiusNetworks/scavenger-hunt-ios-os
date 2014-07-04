@@ -61,7 +61,7 @@
     _appDelegate = (SHAppDelegate *) [[UIApplication sharedApplication] delegate];
     self.navigationItem.hidesBackButton = YES;
     [self loadImageCaches];
-    self.title = @"Scavenger Hunt List";
+    self.title = @"Scavenger Hunt List - Tap for Hints";
     _itemViewController = [_appDelegate.storyboard instantiateViewControllerWithIdentifier:@"TargetItemViewController"];
     [self.foundTargetDialog setHidden:YES];
 }
