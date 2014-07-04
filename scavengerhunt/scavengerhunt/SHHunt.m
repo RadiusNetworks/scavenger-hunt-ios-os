@@ -85,10 +85,20 @@
     [self saveToUserDefaults];
 }
 
--(void)reset {
+-(void)clear {
     [self resize: 0];
     _timeStarted = 0;
     _instructionDisplayed = false;
+    [self saveToUserDefaults];
+    
+}
+-(void)reset {
+    _timeStarted = 0;
+    [_targetList enumerateObjectsUsingBlock:^(id targetObj, NSUInteger targetIdx, BOOL *targetStop) {
+        SHTargetItem *item = (SHTargetItem *) targetObj;
+        item.found = NO;
+    }];
+   
     [self saveToUserDefaults];
 }
 
