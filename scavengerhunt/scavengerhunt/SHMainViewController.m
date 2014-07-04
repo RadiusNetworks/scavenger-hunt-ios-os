@@ -38,7 +38,7 @@
     self.codeTextField.text = [self getLastValidCode];
     [self showDialog: nil];
     
-    //only to be used if custom start screen data has been pulled in from the proximity kit already
+    /*only to be used if custom start screen data has been pulled in from the proximity kit already
     if([[SHHunt sharedHunt] customStartScreenData] != Nil ){
         if ([[UIDevice currentDevice] userInterfaceIdiom] ==UIUserInterfaceIdiomPad) {
 
@@ -67,9 +67,11 @@
                       userInfo:nil
                       repeats:NO];
         }
+ 
     } else {
         NSLog(@"customStartScreenData == Nil");
     }
+         */
 }
 
 

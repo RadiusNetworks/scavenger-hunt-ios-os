@@ -322,7 +322,6 @@
             NSString* instruction_image_url = [iBeacon.attributes objectForKey:@"instruction_image_url"];
             NSString* instruction_start_button_name = [iBeacon.attributes objectForKey:@"instruction_start_button_name"];
             NSString* instruction_text_1 = [iBeacon.attributes objectForKey:@"instruction_text_1"];
-            NSString* instruction_text_2 = [iBeacon.attributes objectForKey:@"instruction_text_2"];
             NSString* instruction_title = [iBeacon.attributes objectForKey:@"instruction_title"];
             NSString* splash_url = [iBeacon.attributes objectForKey:@"splash_url"];
             NSString* title = [iBeacon.attributes objectForKey:@"title"];
@@ -349,7 +348,6 @@
                                             instruction_image_url, @"instruction_image_url",
                                             instruction_start_button_name, @"instruction_start_button_name",
                                             instruction_text_1, @"instruction_text_1",
-                                            instruction_text_2, @"instruction_text_2",
                                             instruction_title, @"instruction_title",
                                             splash_url, @"splash_url",
                                             title, @"title",

@@ -13,6 +13,10 @@
 @property (strong, nonatomic) SHTargetCollectionViewController *collectionViewController;
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *instructionsLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *_instructionsImage;
+
+@property (weak, nonatomic) IBOutlet UIView *background;
 @property (weak, nonatomic) IBOutlet UIButton *startButton;
 - (IBAction)startTapped:(id)sender;
 
