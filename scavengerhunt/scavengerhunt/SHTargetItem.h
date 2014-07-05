@@ -23,6 +23,8 @@
 @property int proximity;
 @property BOOL found;
 @property long lastSeenAt;
+@property NSString *title;
+@property NSString *description;
 
 -(SHTargetItem *) initWithId: (NSString*) huntId;
 -(void) sawIt;

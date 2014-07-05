@@ -30,6 +30,9 @@
 @property (weak, nonatomic) IBOutlet UIView *unstartedViewLandscape;
 @property (weak, nonatomic) IBOutlet UILabel *huntProgressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *redemptionLabel;
+@property (weak, nonatomic) IBOutlet UILabel *finishLabel;
+@property (weak, nonatomic) IBOutlet UIButton *finishButton;
+@property (weak, nonatomic) IBOutlet UIImageView *finishImage;
 - (IBAction)startHunt:(id)sender;
 - (IBAction)reset:(id)sender;
 @end
