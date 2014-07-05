@@ -606,11 +606,13 @@
                     NSLog(@"range unknown");
                 }
                 else {
-                    justFound = (target.distance < triggerDistance && target.found == NO &&[SHHunt sharedHunt].elapsedTime > 0);
-                    if (!justFound) {
-                        NSLog(@"not just found %f %f %d %ld", target.distance, [SHHunt sharedHunt].triggerDistance, target.found, [SHHunt sharedHunt].elapsedTime );
-                    }
                     
+                    justFound = (target.distance < triggerDistance && target.found == NO &&[SHHunt sharedHunt].elapsedTime > 0);
+                    
+                    if  ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+                        NSLog(@"Not allowing this target to be found because the application is in the background");
+                        justFound = NO;
+                    }
                     
                     if ([_collectionViewController.itemViewController.item.huntId isEqualToString: target.huntId]) {
                         [_collectionViewController.itemViewController showRange];
@@ -642,6 +644,7 @@
                         }
                     }
                     else {
+                        NSLog(@"This is not a newly found target %f %f %d %ld", target.distance, [SHHunt sharedHunt].triggerDistance, target.found, [SHHunt sharedHunt].elapsedTime );
                         
                         // send notification to user that a target is nearby, if this target has not already been found and we haven't done so recently
                         NSDate * now = [[NSDate alloc] init];
