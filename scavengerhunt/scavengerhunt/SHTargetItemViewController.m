@@ -54,8 +54,19 @@
 }
 -(void) displayItem {
     if (_item) {
-        self.titleLabel.text = _item.title;
-        self.descriptionLabel.text = _item.description;
+        if (_item.title == Nil) {
+            self.titleLabel.text = [NSString stringWithFormat:@"Target %@", _item.huntId];
+        }
+        else {
+            self.titleLabel.text = _item.title;
+        }
+        if (_item.description == Nil) {
+            self.descriptionLabel.text = [NSString stringWithFormat:@"You must within %0.0f meters to find this item.", _item.triggerDistance];
+        }
+        else {
+            self.descriptionLabel.text = _item.description;
+        }
+
         NSLog(@"title is %@ and description is %@", _item.title, _item.description);
             
         [self showRange];

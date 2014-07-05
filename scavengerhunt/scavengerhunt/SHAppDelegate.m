@@ -42,8 +42,8 @@
     // Initialize a Bluetooth Peripheral Manager so we can warn user about various states of availability or bluetooth being turned off
     _peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     
-    // Set distance for detecting targets, in this case 10 meters
-    [[SHHunt sharedHunt] setTriggerDistance: 10.0];
+    // Set default distance for detecting targets, in this case 10 meters.  This can be overridden on a per target basis by setting the appropriate key/value pair in ProximityKit
+    [[SHHunt sharedHunt] setDefaultTriggerDistance: 10.0];
     
     // Pick the right storyboard for either iPad or iPhone
     if ([[UIDevice currentDevice] userInterfaceIdiom] ==UIUserInterfaceIdiomPad) {
@@ -476,6 +476,10 @@
             if ([item.huntId isEqualToString:huntId]) {
                 item.title = [iBeacon.attributes objectForKey:@"title"];
                 item.description = [iBeacon.attributes objectForKey:@"description"];
+                item.triggerDistance = [[iBeacon.attributes objectForKey:@"trigger_distance"] integerValue];
+                if (item.triggerDistance <= 0) {
+                    item.triggerDistance = [SHHunt sharedHunt].defaultTriggerDistance;
+                }
                 NSLog(@"Done setting fields for hunt_id %@", huntId);
             }
         }
@@ -615,10 +619,8 @@
         NSLog(@"beacon=%@, beacon.attributes=%@", beacon, beacon.attributes);
         
         NSString *huntId = [beacon.attributes objectForKey:@"hunt_id"]; // set in ProximityKit (e.g. 1, 2, 3, etc.)
-        double triggerDistance = [SHHunt sharedHunt].triggerDistance;
-        if ([beacon.attributes objectForKey:@"trigger_distance"]) {
-            triggerDistance = [[beacon.attributes objectForKey:@"trigger_distance"] doubleValue];
-        }
+        __block double triggerDistance = [SHHunt sharedHunt].defaultTriggerDistance;
+        
         NSNumber *distanceObj = [NSNumber numberWithDouble: beacon.clBeacon.accuracy];
         NSLog(@"processing beacon with targetId: %@ and distance %@", huntId, distanceObj);
         float distance = [distanceObj floatValue];
@@ -626,6 +628,9 @@
         [[SHHunt sharedHunt].targetList enumerateObjectsUsingBlock:^(id targetObj, NSUInteger targetIdx, BOOL *targetStop) {
             SHTargetItem *target = (SHTargetItem *)targetObj;
             if ([huntId isEqualToString:target.huntId]) {
+                if (target.triggerDistance > 0) {
+                    triggerDistance = target.triggerDistance; // use the target-specific trigger distance if available
+                }
                 BOOL justFound = NO;
                 target.distance = distance;
                 if (target.distance < 0) {
@@ -670,7 +675,7 @@
                         }
                     }
                     else {
-                        NSLog(@"This is not a newly found target %f %f %d %ld", target.distance, [SHHunt sharedHunt].triggerDistance, target.found, [SHHunt sharedHunt].elapsedTime );
+                        NSLog(@"This is not a newly found target %f %f %d %ld", target.distance, triggerDistance, target.found, [SHHunt sharedHunt].elapsedTime );
                         
                         // send notification to user that a target is nearby, if this target has not already been found and we haven't done so recently
                         NSDate * now = [[NSDate alloc] init];

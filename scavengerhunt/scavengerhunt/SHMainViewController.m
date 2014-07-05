@@ -37,41 +37,6 @@
     self.title = @"Scavenger Hunt";
     self.codeTextField.text = [self getLastValidCode];
     [self showDialog: nil];
-    
-    /*only to be used if custom start screen data has been pulled in from the proximity kit already
-    if([[SHHunt sharedHunt] customStartScreenData] != Nil ){
-        if ([[UIDevice currentDevice] userInterfaceIdiom] ==UIUserInterfaceIdiomPad) {
-
-            NSLog(@"splashing %@",[[[SHHunt sharedHunt] customStartScreenData] objectForKey:@"splash"]);
-            NSData *pngData = [NSData dataWithContentsOfFile:[[[SHHunt sharedHunt] customStartScreenData] objectForKey:@"splash"]];
-            _splashImage = [[UIImageView alloc] initWithImage:[UIImage imageWithData:pngData]];
-            _splashImage.contentMode = UIViewContentModeScaleAspectFill;
-            _splashImage.frame = CGRectMake(0,44,768,1024+44); // nav bar is 44 high
-        }
-        else {
-            NSLog(@"splashing %@",[[[SHHunt sharedHunt] customStartScreenData] objectForKey:@"splash"]);
-
-            NSData *pngData = [NSData dataWithContentsOfFile:[[[SHHunt sharedHunt] customStartScreenData] objectForKey:@"splash"]];
-            _splashImage = [[UIImageView alloc] initWithImage:[UIImage imageWithData:pngData]];
-            _splashImage.contentMode = UIViewContentModeScaleAspectFill;
-            _splashImage.frame = CGRectMake(0,44,320,568+44); // nav bar is 44 high
-        }
-        
-        if (_splashImage) {
-            [self.view addSubview:_splashImage];
-            NSLog(@"Splash image should be shown.");
-            _timer = [NSTimer
-                      scheduledTimerWithTimeInterval:(NSTimeInterval)(2.0)
-                      target:self
-                      selector:@selector(hideSplash)
-                      userInfo:nil
-                      repeats:NO];
-        }
- 
-    } else {
-        NSLog(@"customStartScreenData == Nil");
-    }
-         */
 }
 
 

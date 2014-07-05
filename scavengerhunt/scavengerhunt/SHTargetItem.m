@@ -75,6 +75,7 @@
     self.found = [decoder decodeBoolForKey:@"found"];
     self.title = [decoder decodeObjectForKey:@"title"];
     self.description = [decoder decodeObjectForKey:@"description"];
+    self.triggerDistance = [decoder decodeDoubleForKey:@"trigger_distance"];
     self.proximity = -1;
     self.distance = -1;
     return self;
@@ -85,6 +86,7 @@
     [encoder encodeBool:self.found forKey:@"found"];
     [encoder encodeObject:self.title forKey:@"title"];
     [encoder encodeObject:self.description forKey:@"description"];
+    [encoder encodeDouble:self.triggerDistance forKey:@"trigger_distance"];
 }
 
 

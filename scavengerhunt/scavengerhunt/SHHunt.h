@@ -19,7 +19,7 @@
 
 @interface SHHunt : NSObject <NSURLConnectionDelegate>
 + (SHHunt *)sharedHunt;
--(void)setTriggerDistance:(double)triggerDistance;
+-(void)setDefaultTriggerDistance:(double)triggerDistance;
 -(void) reset;
 -(void) clear;
 -(void) start;
@@ -27,7 +27,7 @@
 -(int) foundCount;
 -(BOOL) everythingFound;
 -(BOOL) instructionScreenDisplayed;
--(double) triggerDistance;
+-(double) defaultTriggerDistance;
 -(void) find: (SHTargetItem *) target;
 -(void)resize: (int) size;
 -(void)setCustomStartScreenData:(NSDictionary*)customStartScreenData;

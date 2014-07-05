@@ -21,7 +21,7 @@
 {
     long _timeStarted;
     long _timeCompleted;
-    double _triggerDistance;
+    double _defaultTriggerDistance;
     int _targetCount;
     NSDictionary* _customStartScreenData;
     BOOL _instructionDisplayed;
@@ -39,12 +39,12 @@
 }
 
 
-- (void)setTriggerDistance:(double)triggerDistance {
-    _triggerDistance = triggerDistance;
+- (void)setDefaultTriggerDistance:(double)triggerDistance {
+    _defaultTriggerDistance = triggerDistance;
 }
 
-- (double) triggerDistance {
-    return _triggerDistance;
+- (double) defaultTriggerDistance {
+    return _defaultTriggerDistance;
 }
 
 - (void)setCustomStartScreenData:(NSDictionary*)customStartScreenData {
@@ -61,7 +61,7 @@
     if(self)
     {
         _targetCount = 0;
-        _triggerDistance = 10.0;
+        _defaultTriggerDistance = 10.0;
         _instructionDisplayed = false;
         [self loadFromUserDefaults];
         if (_deviceId == Nil) {
