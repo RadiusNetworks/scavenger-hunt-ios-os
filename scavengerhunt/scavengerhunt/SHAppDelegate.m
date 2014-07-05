@@ -360,8 +360,6 @@
         //for (PKIBeacon *iBeacon in kit.iBeaconRegions) {
         NSString* huntId = [iBeacon.attributes objectForKey:@"hunt_id"];
         NSString* imageUrlString = [iBeacon.attributes objectForKey:@"image_url"];
-        
-
 
         NSLog(@"Processing first beacon with huntId %@ and imageUrl %@", huntId, imageUrlString);
         if (huntId != Nil) {
@@ -402,7 +400,12 @@
             NSString* instruction_text_1 = [iBeacon.attributes objectForKey:@"instruction_text_1"];
             NSString* instruction_title = [iBeacon.attributes objectForKey:@"instruction_title"];
             NSString* splash_url = [iBeacon.attributes objectForKey:@"splash_url"];
-            NSString* title = [iBeacon.attributes objectForKey:@"title"];
+            NSString* finish_background_color = [iBeacon.attributes objectForKey:@"finish_background_color"];
+            NSString* finish_image_url = [iBeacon.attributes objectForKey:@"finish_image_url"];
+            NSString* finish_button_name = [iBeacon.attributes objectForKey:@"finish_button_name"];
+            NSString* finish_text_1 = [iBeacon.attributes objectForKey:@"finish_text_1"];
+
+
             
             if (instruction_background_color != Nil){
                 NSLog(@"------This hunt has a custom instruction screen because the instructioin_background_color is set to %@", instruction_background_color );
@@ -420,6 +423,10 @@
                 NSString *splash_filename = [documentsPath stringByAppendingPathComponent:@"splash.png"]; //Add the file name
                 [splash_url_Data writeToFile:splash_filename atomically:YES]; //Write the file
                 
+                NSData * finish_image_url_Data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: finish_image_url]];
+                NSString *finish_image_filename = [documentsPath stringByAppendingPathComponent:@"finish_image.png"]; //Add the file name
+                [finish_image_url_Data writeToFile:finish_image_filename atomically:YES]; //Write the file
+  
 
                 //saving all data (including filenames for saved images)
                 NSDictionary* customData = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -428,10 +435,14 @@
                                             instruction_start_button_name, @"instruction_start_button_name",
                                             instruction_text_1, @"instruction_text_1",
                                             instruction_title, @"instruction_title",
-                                            splash_url, @"splash_url",
-                                            title, @"title",
+                                            splash_url, @"splash_url",\
+                                            finish_background_color, @"finish_background_color",
+                                            finish_image_url, @"finish_image_url",
+                                            finish_button_name, @"finish_button_name",
+                                            finish_text_1, @"finish_text_1",
                                             instruction_image_filename, @"instruction_image",
                                             splash_filename, @"splash",
+                                            finish_image_filename, @"finish_image",
                                             nil];
                 [[SHHunt sharedHunt] setCustomStartScreenData: customData];
                 
@@ -454,6 +465,21 @@
         NSLog(@"The kit says the targets have changed.   New count is %d items from %lu items.  Restarting hunt from scratch.", targetCount, (unsigned long)[SHHunt sharedHunt].targetList.count);
         [[SHHunt sharedHunt]resize:targetCount];
     }
+    
+    // Now we go through the items in the kit and attach extra fields to the SHTargetItem array
+    [kit enumerateIBeaconsUsingBlock:^(PKIBeacon *iBeacon, NSUInteger idx, BOOL *stop) {
+        
+        NSString* huntId = [iBeacon.attributes objectForKey:@"hunt_id"];
+        NSLog(@"Setting fields for hunt_id %@", huntId);
+        
+        for (SHTargetItem *item in [SHHunt sharedHunt].targetList) {
+            if ([item.huntId isEqualToString:huntId]) {
+                item.title = [iBeacon.attributes objectForKey:@"title"];
+                item.description = [iBeacon.attributes objectForKey:@"description"];
+                NSLog(@"Done setting fields for hunt_id %@", huntId);
+            }
+        }
+    }];
     
     NSLog(@"Target count is %d", targetCount);
     self.remoteAssetCache.retinaFallbackEnabled = YES; // If we can't download the @2x versions, fallback to the non-@2x versions

@@ -5,36 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>9B0F9701-9312-4656-8FBF-21B708A3DBBF</string>
+	<string>EE5B89B1-1F39-463B-A166-2ADDFB88C3BA</string>
 	<key>IDESourceControlProjectName</key>
 	<string>scavengerhunt</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>23EA5D26-D71F-4858-84CB-BE1CCB5C7D1A</key>
-		<string>ssh://github.com/RadiusNetworks/scavenger-hunt-ios-os.git</string>
+		<key>BC2335E4-651E-423F-BC5C-4E7C14AC2980</key>
+		<string>https://github.com/RadiusNetworks/scavenger-hunt-ios-os</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>scavengerhunt/scavengerhunt.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>23EA5D26-D71F-4858-84CB-BE1CCB5C7D1A</key>
+		<key>BC2335E4-651E-423F-BC5C-4E7C14AC2980</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/RadiusNetworks/scavenger-hunt-ios-os.git</string>
+	<string>https://github.com/RadiusNetworks/scavenger-hunt-ios-os</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>23EA5D26-D71F-4858-84CB-BE1CCB5C7D1A</string>
+	<string>BC2335E4-651E-423F-BC5C-4E7C14AC2980</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>23EA5D26-D71F-4858-84CB-BE1CCB5C7D1A</string>
+			<string>BC2335E4-651E-423F-BC5C-4E7C14AC2980</string>
 			<key>IDESourceControlWCCName</key>
-			<string>scavenger-hunt-ios</string>
+			<string>scavenger-hunt-ios-os</string>
 		</dict>
 	</array>
 </dict>

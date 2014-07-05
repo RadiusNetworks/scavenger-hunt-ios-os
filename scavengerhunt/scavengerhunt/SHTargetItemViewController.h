@@ -20,6 +20,8 @@
 
 @interface SHTargetItemViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIProgressView *distanceProgress;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 
 @property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
 @property (readonly) SHTargetItem *item;

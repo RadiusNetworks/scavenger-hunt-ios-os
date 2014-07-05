@@ -70,11 +70,14 @@
     NSData* logoData = [NSData dataWithContentsOfFile:[[[SHHunt sharedHunt] customStartScreenData] objectForKey:@"instruction_image"]];
     __instructionsImage.image = [UIImage imageWithData:logoData];
     __instructionsImage.contentMode = UIViewContentModeScaleAspectFit;
-    
 
     //setting text
     [self.titleLabel setText:[[[SHHunt sharedHunt] customStartScreenData] objectForKey:@"instruction_title"]];
     [self.instructionsLabel setText:[[[SHHunt sharedHunt] customStartScreenData] objectForKey:@"instruction_text_1"]];
+    
+    // Set button title
+    [_startButton setTitle:[[[SHHunt sharedHunt] customStartScreenData] objectForKey:@"instruction_start_button_name"] forState:UIControlStateNormal];
+
     
     //adjusting background color
     NSString *cString = [[[[[SHHunt sharedHunt] customStartScreenData] objectForKey:@"instruction_background_color"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];

@@ -54,8 +54,10 @@
 }
 -(void) displayItem {
     if (_item) {
-        //self.title = _item.name;
-        
+        self.titleLabel.text = _item.title;
+        self.descriptionLabel.text = _item.description;
+        NSLog(@"title is %@ and description is %@", _item.title, _item.description);
+            
         [self showRange];
     }
     else {
