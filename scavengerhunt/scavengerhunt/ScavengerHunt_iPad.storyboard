@@ -108,8 +108,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="60A-1F-ElH"/>
                     <connections>
+                        <outlet property="descriptionLabel" destination="j9z-iC-Ndf" id="jYb-Xt-uLa"/>
                         <outlet property="distanceLabel" destination="ggk-mj-rOT" id="xBg-Wi-9KS"/>
                         <outlet property="distanceProgress" destination="uQn-1M-u4f" id="D3z-IX-X3E"/>
+                        <outlet property="titleLabel" destination="ewa-YQ-ttT" id="Svl-hC-1q5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yxA-sh-VeV" userLabel="First Responder" sceneMemberID="firstResponder"/>
