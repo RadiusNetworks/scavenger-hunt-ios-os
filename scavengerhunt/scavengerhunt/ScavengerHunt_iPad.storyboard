@@ -119,7 +119,7 @@
         <!--Instruction View Controller-->
         <scene sceneID="Gsk-wc-Dcv">
             <objects>
-                <viewController id="M7B-e7-tAz" customClass="SHInstructionViewController" sceneMemberID="viewController">
+                <viewController restorationIdentifier="InstructionViewController" storyboardIdentifier="InstructionViewController" id="M7B-e7-tAz" customClass="SHInstructionViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RHC-Nf-5xH">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
