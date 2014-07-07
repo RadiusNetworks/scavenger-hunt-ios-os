@@ -32,6 +32,8 @@
 
 @implementation SHTargetCollectionViewController
 
+Boolean _promptingForClear = NO;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -61,7 +63,7 @@
     _appDelegate = (SHAppDelegate *) [[UIApplication sharedApplication] delegate];
     self.navigationItem.hidesBackButton = YES;
     [self loadImageCaches];
-    self.title = @"Scavenger Hunt List";
+    self.title = @"Scavenger Hunt List - Tap for Hints";
     _itemViewController = [_appDelegate.storyboard instantiateViewControllerWithIdentifier:@"TargetItemViewController"];
     [self.foundTargetDialog setHidden:YES];
 }
@@ -198,7 +200,7 @@
     
     UIAlertView *alert;
     NSLog(@"making sure the user realy wants to reset");
-    
+    _promptingForClear = NO;
     alert = [[UIAlertView alloc] initWithTitle:@"Are you sure?"
                                            message:@"All found locations will be cleared."
                                           delegate:self
@@ -218,10 +220,38 @@
  */
 -(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     NSLog(@"alert button pressed index is %ld", (long)buttonIndex);
-    if (buttonIndex > 0) {
-        return;
+    if (_promptingForClear) {
+        _promptingForClear = NO;
+        if (buttonIndex > 0) {
+            [_appDelegate clearHunt];
+        }
+        else {
+            [_appDelegate resetHunt];
+        }
     }
-    [_appDelegate resetHunt];
+    else {
+        if (buttonIndex > 0) {
+            return;
+        }
+        else {
+            UIAlertView *alert;
+            NSLog(@"asking if user wants to start over this ur a new hunt");
+            _promptingForClear = NO;
+            alert = [[UIAlertView alloc] initWithTitle:@"Restart the same scavenger hunt?"
+                                               message:@"Selecting different will require entering a new code."
+                                              delegate:self
+                                     cancelButtonTitle:@"Same"
+                                     otherButtonTitles:@"Different", nil];
+            
+            
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^
+             {
+                 [alert show];
+             }];
+            
+        }
+        _promptingForClear = YES;
+    }
 }
 
 

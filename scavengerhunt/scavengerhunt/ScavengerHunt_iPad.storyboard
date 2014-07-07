@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="mM0-4H-MsX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13D65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="mM0-4H-MsX">
     <dependencies>
         <deployment version="1536" defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -72,20 +72,34 @@
                                 <rect key="frame" x="124" y="86" width="520" height="5"/>
                             </progressView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ggk-mj-rOT">
-                                <rect key="frame" x="106" y="383" width="557" height="258"/>
+                                <rect key="frame" x="106" y="581" width="557" height="258"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="266"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qys-iI-gZG">
-                                <rect key="frame" x="141" y="189" width="487" height="142"/>
+                                <rect key="frame" x="141" y="441" width="487" height="142"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="85"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Meters" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nOE-JI-gta">
-                                <rect key="frame" x="174" y="758" width="420" height="87"/>
+                                <rect key="frame" x="174" y="860" width="420" height="87"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="85"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is the Title that spans two long" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ewa-YQ-ttT">
+                                <rect key="frame" x="5" y="142" width="757" height="170"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="49"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="secure and cost effective cloud managed for you" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="j9z-iC-Ndf">
+                                <rect key="frame" x="5" y="297" width="757" height="99"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -94,13 +108,77 @@
                     </view>
                     <navigationItem key="navigationItem" id="60A-1F-ElH"/>
                     <connections>
+                        <outlet property="descriptionLabel" destination="j9z-iC-Ndf" id="jYb-Xt-uLa"/>
                         <outlet property="distanceLabel" destination="ggk-mj-rOT" id="xBg-Wi-9KS"/>
                         <outlet property="distanceProgress" destination="uQn-1M-u4f" id="D3z-IX-X3E"/>
+                        <outlet property="titleLabel" destination="ewa-YQ-ttT" id="Svl-hC-1q5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yxA-sh-VeV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1020" y="-461"/>
+            <point key="canvasLocation" x="1020" y="-441"/>
+        </scene>
+        <!--Instruction View Controller-->
+        <scene sceneID="Gsk-wc-Dcv">
+            <objects>
+                <viewController restorationIdentifier="InstructionViewController" storyboardIdentifier="InstructionViewController" id="M7B-e7-tAz" customClass="SHInstructionViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="RHC-Nf-5xH">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="dU9-EG-lhd" userLabel="Instructions">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="l2O-ep-pgM">
+                                        <rect key="frame" x="14" y="643" width="743" height="237"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <string key="text">HOW IT WORKS: Find the location for each of the scavenger hunt’s badges.  When you reach a location, you will see a notification and receive a colored badge.
+</string>
+                                        <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scavenger Hunt" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4vC-F4-LUF">
+                                        <rect key="frame" x="5" y="517" width="758" height="66"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="46"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sh_bolt_ipad.png" id="hAh-wo-sOv">
+                                        <rect key="frame" x="111" y="64" width="546" height="445"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ORk-nt-nEa">
+                                        <rect key="frame" x="332" y="888" width="104" height="52"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <state key="normal" title="Start">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="startTapped:" destination="M7B-e7-tAz" eventType="touchUpInside" id="0tz-zb-uxv"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.2274509804" green="0.74509803919999995" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="_instructionsImage" destination="hAh-wo-sOv" id="I7s-AQ-15g"/>
+                        <outlet property="background" destination="dU9-EG-lhd" id="snS-7z-F01"/>
+                        <outlet property="instructionsLabel" destination="l2O-ep-pgM" id="G1c-N3-ke9"/>
+                        <outlet property="startButton" destination="ORk-nt-nEa" id="SZN-7e-27g"/>
+                        <outlet property="titleLabel" destination="4vC-F4-LUF" id="EAZ-p1-klY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kkg-8N-9uM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1843" y="-461"/>
         </scene>
         <!--Finish View Controller-->
         <scene sceneID="R7G-nw-vs6">
@@ -115,14 +193,14 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Your completion code is XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Bd8-l6-IaY">
-                                        <rect key="frame" x="108" y="645" width="553" height="123"/>
+                                        <rect key="frame" x="12" y="667" width="751" height="142"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VSz-AG-v68">
-                                        <rect key="frame" x="323" y="812" width="123" height="65"/>
+                                        <rect key="frame" x="269" y="812" width="231" height="65"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="31"/>
@@ -139,7 +217,7 @@
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Congratulations!  You have successfully completed the scaenger hunt." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Dyj-Ed-zSB">
-                                        <rect key="frame" x="108" y="484" width="553" height="135"/>
+                                        <rect key="frame" x="7" y="484" width="756" height="175"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -152,6 +230,8 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="finishButton" destination="VSz-AG-v68" id="ODi-b4-X3D"/>
+                        <outlet property="finishLabel" destination="Dyj-Ed-zSB" id="l2i-X0-Az0"/>
                         <outlet property="redeemView" destination="Oav-yT-rLt" id="LLR-Hr-W67"/>
                         <outlet property="redemptionLabel" destination="Bd8-l6-IaY" id="XmZ-EC-9hp"/>
                     </connections>
@@ -194,7 +274,7 @@
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mOz-JP-CxM">
                                         <rect key="frame" x="111" y="643" width="546" height="237"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <string key="text">HOW IT WORKS: Find the location for each of the scavenger hunt’s badges.  When you are within 10 meters of a location, you will see a notification and receive a colored badge.
+                                        <string key="text">HOW IT WORKS: Find the location for each of the scavenger hunt’s badges.  When you reach a location, you will see a notification and receive a colored badge.
 </string>
                                         <fontDescription key="fontDescription" type="system" pointSize="27"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>

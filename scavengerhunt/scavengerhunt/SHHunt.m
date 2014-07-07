@@ -21,8 +21,10 @@
 {
     long _timeStarted;
     long _timeCompleted;
-    double _triggerDistance;
+    double _defaultTriggerDistance;
     int _targetCount;
+    NSDictionary* _customStartScreenData;
+    BOOL _instructionDisplayed;
 }
 
 
@@ -37,12 +39,20 @@
 }
 
 
-- (void)setTriggerDistance:(double)triggerDistance {
-    _triggerDistance = triggerDistance;
+- (void)setDefaultTriggerDistance:(double)triggerDistance {
+    _defaultTriggerDistance = triggerDistance;
 }
 
-- (double) triggerDistance {
-    return _triggerDistance;
+- (double) defaultTriggerDistance {
+    return _defaultTriggerDistance;
+}
+
+- (void)setCustomStartScreenData:(NSDictionary*)customStartScreenData {
+    _customStartScreenData = customStartScreenData;
+}
+
+- (NSDictionary*) customStartScreenData {
+    return _customStartScreenData;
 }
 
 
@@ -51,7 +61,8 @@
     if(self)
     {
         _targetCount = 0;
-        _triggerDistance = 10.0;
+        _defaultTriggerDistance = 10.0;
+        _instructionDisplayed = false;
         [self loadFromUserDefaults];
         if (_deviceId == Nil) {
             self.deviceId = [[NSUUID UUID] UUIDString];
@@ -70,12 +81,28 @@
     
     _timeStarted = 0;
     _timeCompleted = 0;
+    _instructionDisplayed = false;
     [self saveToUserDefaults];
 }
 
--(void)reset {
+-(void)clear {
     [self resize: 0];
     _timeStarted = 0;
+    _timeCompleted = 0;
+    _instructionDisplayed = false;
+    _customStartScreenData = Nil;
+    [self saveToUserDefaults];
+    
+}
+-(void)reset {
+    _timeStarted = 0;
+    _timeCompleted = 0;
+    _instructionDisplayed = false;
+    [_targetList enumerateObjectsUsingBlock:^(id targetObj, NSUInteger targetIdx, BOOL *targetStop) {
+        SHTargetItem *item = (SHTargetItem *) targetObj;
+        [item reset];
+    }];
+   
     [self saveToUserDefaults];
 }
 
@@ -114,6 +141,10 @@
     return false;
 }
 
+-(BOOL) instructionScreenDisplayed {
+    return _instructionDisplayed;
+}
+
 - (int)foundCount {
     __block int count = 0;
     [_targetList enumerateObjectsUsingBlock:^(id targetObj, NSUInteger targetIdx, BOOL *targetStop) {
@@ -137,7 +168,9 @@
     [userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:self.targetList] forKey:@"sh_target_list"];
     [userDefaults setDouble:_timeStarted forKey:@"sh_time_started"];
     [userDefaults setDouble:_timeCompleted forKey:@"sh_time_completed"];
+    [userDefaults setBool:_instructionDisplayed forKey:@"sh_splash_displayed"];
     [userDefaults setObject:self.deviceId forKey:@"sh_device_uuid"];
+    [userDefaults setObject:self.customStartScreenData forKey:@"sh_custom_start_screen_data"];
     NSLog(@"begin synchronizing user defaults");
     [userDefaults synchronize];
     NSLog(@"end synchronizing user defaults");
@@ -150,7 +183,17 @@
     _timeStarted = [currentDefaults doubleForKey:@"sh_time_started"];
     NSLog(@"loaded started time from defaults %ld", _timeStarted);
     _timeCompleted = [currentDefaults doubleForKey:@"sh_time_completed"];
+    _instructionDisplayed = [currentDefaults boolForKey:@"sh_splash_displayed"];
     self.deviceId = [currentDefaults stringForKey:@"sh_device_uuid"];
+    self.customStartScreenData = [currentDefaults dictionaryForKey:@"sh_custom_start_screen_data"];
+}
+
+-(BOOL) hasCustomStartScreen {
+    if (_customStartScreenData != Nil && (_customStartScreenData.count > 0)) {
+        NSLog(@"--- This hunt has a custom start screen because customStartScreenData.count = %ld", _customStartScreenData.count);
+        return YES;
+    }
+    return NO;
 }
 
 #pragma mark NSURLConnection Delegate Methods

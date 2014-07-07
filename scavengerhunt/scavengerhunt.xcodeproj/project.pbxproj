@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B25905419659D0600F8D77E /* SHInstructionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B25905319659D0600F8D77E /* SHInstructionViewController.m */; };
+		4B2590561966022500F8D77E /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B2590551966022500F8D77E /* splash.png */; };
 		EE14BAB618A4450F00C7CE12 /* sh_bolt.png in Resources */ = {isa = PBXBuildFile; fileRef = EE14BAB518A4450F00C7CE12 /* sh_bolt.png */; };
 		EE14BABB18A44B6100C7CE12 /* SHLoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE14BABA18A44B6100C7CE12 /* SHLoadingViewController.m */; };
 		EE19EB3E1891C69B00FD941F /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = EE19EB3D1891C69B00FD941F /* LICENSE */; };
@@ -93,6 +95,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4B25905219659D0600F8D77E /* SHInstructionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHInstructionViewController.h; sourceTree = "<group>"; };
+		4B25905319659D0600F8D77E /* SHInstructionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHInstructionViewController.m; sourceTree = "<group>"; };
+		4B2590551966022500F8D77E /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
 		EE14BAB518A4450F00C7CE12 /* sh_bolt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sh_bolt.png; sourceTree = "<group>"; };
 		EE14BAB918A44B6100C7CE12 /* SHLoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHLoadingViewController.h; sourceTree = "<group>"; };
 		EE14BABA18A44B6100C7CE12 /* SHLoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHLoadingViewController.m; sourceTree = "<group>"; };
@@ -193,6 +198,7 @@
 		EE9BE5721889FF5B0092A743 = {
 			isa = PBXGroup;
 			children = (
+				4B2590551966022500F8D77E /* splash.png */,
 				EEA1AC5A18AD9D2B00122F3E /* sh_bolt_ipad@2x.png */,
 				EED3A72218A58B7700978107 /* Default-568h@2x.png */,
 				EE19EB3D1891C69B00FD941F /* LICENSE */,
@@ -229,30 +235,32 @@
 			children = (
 				EEA1AC5618AD5C0B00122F3E /* ScavengerHunt_iPad.storyboard */,
 				EE9BE5BD188CBDE00092A743 /* ScavengerHunt_iPhone.storyboard */,
-				EE9BE5BF188CBDE00092A743 /* SHTargetCollectionViewController.m */,
-				EE9BE5C0188CBDE00092A743 /* SHHunt.m */,
-				EE9BE5C1188CBDE00092A743 /* SHTargetItemViewController.m */,
-				EE9BE5C3188CBDE00092A743 /* SHHunt.h */,
-				EE9BE5C6188CBDE00092A743 /* SHTargetItem.h */,
-				EE9BE5C7188CBDE00092A743 /* SHTargetItem.m */,
-				EE9BE5C8188CBDE00092A743 /* SHTargetItemViewController.h */,
-				EE9BE5C9188CBDE00092A743 /* SHTargetCollectionViewController.h */,
 				EE9BE58D1889FF5C0092A743 /* SHAppDelegate.h */,
 				EE9BE58E1889FF5C0092A743 /* SHAppDelegate.m */,
+				EE24BDCB18ABCAE60092B658 /* SHMainViewController.m */,
+				EEA1AC5318AC0BEC00122F3E /* SHHelpViewController.h */,
+				EE14BAB918A44B6100C7CE12 /* SHLoadingViewController.h */,
+				EE14BABA18A44B6100C7CE12 /* SHLoadingViewController.m */,
+				EE9BE5C9188CBDE00092A743 /* SHTargetCollectionViewController.h */,
+				EE9BE5BF188CBDE00092A743 /* SHTargetCollectionViewController.m */,
+				EE9BE5C8188CBDE00092A743 /* SHTargetItemViewController.h */,
+				EE9BE5C1188CBDE00092A743 /* SHTargetItemViewController.m */,
 				EE9BE5961889FF5C0092A743 /* SHFinishViewController.h */,
 				EE9BE5971889FF5C0092A743 /* SHFinishViewController.m */,
 				EE9BE5991889FF5C0092A743 /* Images.xcassets */,
 				EE9BE5851889FF5C0092A743 /* Supporting Files */,
-				EE7DAC5B1890235F0012A84C /* SHRemoteAssetCache.h */,
-				EE7DAC5C1890235F0012A84C /* SHRemotAssetCache.m */,
-				EE14BAB918A44B6100C7CE12 /* SHLoadingViewController.h */,
 				EED3A70118A524C300978107 /* SHCodeViewController.h */,
 				EED3A70218A524C300978107 /* SHCodeViewController.m */,
-				EE14BABA18A44B6100C7CE12 /* SHLoadingViewController.m */,
 				EE24BDCA18ABCAE60092B658 /* SHMainViewController.h */,
-				EE24BDCB18ABCAE60092B658 /* SHMainViewController.m */,
-				EEA1AC5318AC0BEC00122F3E /* SHHelpViewController.h */,
 				EEA1AC5418AC0BEC00122F3E /* SHHelpViewController.m */,
+				4B25905219659D0600F8D77E /* SHInstructionViewController.h */,
+				4B25905319659D0600F8D77E /* SHInstructionViewController.m */,
+				EE9BE5C0188CBDE00092A743 /* SHHunt.m */,
+				EE9BE5C3188CBDE00092A743 /* SHHunt.h */,
+				EE9BE5C6188CBDE00092A743 /* SHTargetItem.h */,
+				EE9BE5C7188CBDE00092A743 /* SHTargetItem.m */,
+				EE7DAC5B1890235F0012A84C /* SHRemoteAssetCache.h */,
+				EE7DAC5C1890235F0012A84C /* SHRemotAssetCache.m */,
 			);
 			path = scavengerhunt;
 			sourceTree = "<group>";
@@ -420,6 +428,7 @@
 				EE9BE604188D84A20092A743 /* sh_bg_ipad@2x.png in Resources */,
 				EED3A71718A5740200978107 /* AppIcon40x40@2x.png in Resources */,
 				EEA1AC5B18AD9D2B00122F3E /* sh_bolt_ipad@2x.png in Resources */,
+				4B2590561966022500F8D77E /* splash.png in Resources */,
 				EED3A71C18A5740200978107 /* AppIcon60x60.png in Resources */,
 				EEA1AC5918AD6BBB00122F3E /* sh_bolt_ipad.png in Resources */,
 				EED3A72018A5740200978107 /* AppIcon76x76.png in Resources */,
@@ -466,6 +475,7 @@
 				EE9BE5D4188CBDE00092A743 /* SHTargetItemViewController.m in Sources */,
 				EE9BE5D8188CBDE00092A743 /* SHTargetItem.m in Sources */,
 				EE9BE5D0188CBDE00092A743 /* SHTargetCollectionViewController.m in Sources */,
+				4B25905419659D0600F8D77E /* SHInstructionViewController.m in Sources */,
 				EE9BE58B1889FF5C0092A743 /* main.m in Sources */,
 				EE24BDCC18ABCAE60092B658 /* SHMainViewController.m in Sources */,
 				EE9BE5981889FF5C0092A743 /* SHFinishViewController.m in Sources */,

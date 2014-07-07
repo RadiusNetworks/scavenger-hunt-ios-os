@@ -27,11 +27,17 @@
 
 -(SHTargetItem *) init {
     self = [super init];
+    [self reset];
+    self.title = @"";
+    self.description = @"";
+    return self;
+}
+
+-(void)reset {
     self.found = false;
     self.proximity = -1;
     self.distance = -1;
     self.lastSeenAt = 0;
-    return self;
 }
 
 -(SHTargetItem *) initWithId: (NSString*) huntId  {
@@ -67,6 +73,9 @@
     }
     self.huntId = [decoder decodeObjectForKey:@"hunt_id"];
     self.found = [decoder decodeBoolForKey:@"found"];
+    self.title = [decoder decodeObjectForKey:@"title"];
+    self.description = [decoder decodeObjectForKey:@"description"];
+    self.triggerDistance = [decoder decodeDoubleForKey:@"trigger_distance"];
     self.proximity = -1;
     self.distance = -1;
     return self;
@@ -75,6 +84,9 @@
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:self.huntId forKey:@"hunt_id"];
     [encoder encodeBool:self.found forKey:@"found"];
+    [encoder encodeObject:self.title forKey:@"title"];
+    [encoder encodeObject:self.description forKey:@"description"];
+    [encoder encodeDouble:self.triggerDistance forKey:@"trigger_distance"];
 }
 
 

@@ -33,14 +33,67 @@
     _appDelegate = (SHAppDelegate *)[[UIApplication sharedApplication] delegate];
     [self.navigationController setToolbarHidden:YES];
     self.title = @"Scavenger Hunt";
+    
+    // If there are custom screen values then apply to finish screen
+    if ([[SHHunt sharedHunt] hasCustomStartScreen]) {
+        //setting logo image
+        NSData* logoData = [NSData dataWithContentsOfFile:[[[SHHunt sharedHunt] customStartScreenData] objectForKey:@"finish_image"]];
+        _finishImage.image = [UIImage imageWithData:logoData];
+        _finishImage.contentMode = UIViewContentModeScaleAspectFit;
+    
+        // Setting text
+        [self.finishLabel setText:[[[SHHunt sharedHunt] customStartScreenData] objectForKey:@"finish_text_1"]];
+    
+        // Set button title
+        [_finishButton setTitle:[[[SHHunt sharedHunt] customStartScreenData] objectForKey:@"finish_button_name"] forState:UIControlStateNormal];
+    
+        //adjusting background color
+        [self.redeemView setBackgroundColor: [self colorWithHexString:[[[SHHunt sharedHunt] customStartScreenData] objectForKey:@"finish_background_color"]]];
+    }
 }
 
+-(UIColor*)colorWithHexString:(NSString*)hex
+{
+    NSString *cString = [[hex stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];
+    
+    // String should be 6 or 8 characters
+    if ([cString length] < 6) return [UIColor blueColor];
+    
+    // strip 0X if it appears
+    if ([cString hasPrefix:@"0X"]) cString = [cString substringFromIndex:2];
+
+    if ([cString length] != 6) return  [UIColor blueColor];
+    
+    NSLog(@"colorWithHexString: %@",cString);
+    
+    // Separate into r, g, b substrings
+    NSRange range;
+    range.location = 0;
+    range.length = 2;
+    NSString *rString = [cString substringWithRange:range];
+    
+    range.location = 2;
+    NSString *gString = [cString substringWithRange:range];
+    
+    range.location = 4;
+    NSString *bString = [cString substringWithRange:range];
+    
+    // Scan values
+    unsigned int r, g, b;
+    [[NSScanner scannerWithString:rString] scanHexInt:&r];
+    [[NSScanner scannerWithString:gString] scanHexInt:&g];
+    [[NSScanner scannerWithString:bString] scanHexInt:&b];
+    
+    return [UIColor colorWithRed:((float) r / 255.0f)
+                           green:((float) g / 255.0f)
+                            blue:((float) b / 255.0f)
+                           alpha:1.0f];
+}
 
 -(void)viewWillAppear:(BOOL) animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     self.redemptionLabel.text = [NSString stringWithFormat:@"Your completion code is:\n%@", [SHHunt sharedHunt].deviceId];
-
 }
 
 /*

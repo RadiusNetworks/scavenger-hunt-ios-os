@@ -9,6 +9,7 @@
 #import "SHMainViewController.h"
 #import "SHAppDelegate.h"
 #import "SHHelpViewController.h"
+#import "SHHunt.h"
 
 @interface SHMainViewController ()
 
@@ -16,6 +17,7 @@
 
 @implementation SHMainViewController {
     SHAppDelegate *_appDelegate;
+    UIImageView *_splashImage;
     NSTimer *_timer;
 }
 
@@ -35,7 +37,14 @@
     self.title = @"Scavenger Hunt";
     self.codeTextField.text = [self getLastValidCode];
     [self showDialog: nil];
-    
+}
+
+
+-(void)hideSplash{
+    [UIView beginAnimations:@"fade out" context:nil];
+    [UIView setAnimationDuration:1.0];
+    _splashImage.alpha = 0.0;
+    [UIView commitAnimations];
 }
 
 - (void) viewWillAppear:(BOOL)animated {

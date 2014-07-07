@@ -31,15 +31,19 @@
     NSDate *_loadingDisplayedTime;
     BOOL _pkStarted;
     BOOL _hitFatalError;
+    BOOL _ignorePKSync;
+    UINavigationController *_navigationController;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    _ignorePKSync = YES;
+
     // Initialize a Bluetooth Peripheral Manager so we can warn user about various states of availability or bluetooth being turned off
     _peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
     
-    // Set distance for detecting targets, in this case 10 meters
-    [[SHHunt sharedHunt] setTriggerDistance: 10.0];
+    // Set default distance for detecting targets, in this case 10 meters.  This can be overridden on a per target basis by setting the appropriate key/value pair in ProximityKit
+    [[SHHunt sharedHunt] setDefaultTriggerDistance: 10.0];
     
     // Pick the right storyboard for either iPad or iPhone
     if ([[UIDevice currentDevice] userInterfaceIdiom] ==UIUserInterfaceIdiomPad) {
@@ -47,43 +51,67 @@
     } else {
         self.storyboard = [UIStoryboard storyboardWithName:@"ScavengerHunt_iPhone" bundle:nil];
     }
-    
+
     // Initialize the remote asset cache, used for downloading the badge images from a web server
     self.remoteAssetCache = [[SHRemoteAssetCache alloc] init];
     self.remoteAssetCache.delegate = self;
     
     // Initialize ProximityKit
     self.manager = [PKManager managerWithDelegate:self];
-    
+
     BOOL resumed = NO;
+    BOOL readyToStart = NO;
+    BOOL finished = NO;
     // If the user has already started the hunt, resume from where he left off
+    
     if ([SHHunt sharedHunt].elapsedTime > 0) {
-        UINavigationController *navController;
         
         if ([SHHunt sharedHunt].everythingFound) {
             // if it is complete, show the finish view
-            SHFinishViewController *finishViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FinishViewController"];
-            navController = [[UINavigationController alloc] initWithRootViewController: finishViewController];
-            resumed = YES;
+            finished = YES;
         }
         else {
             // if it is not complete, show the collection view
             PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
             if ([configChanger isConfigStored]) {
+                _ignorePKSync = YES; // we already have everything downloaded.  Do not process again
                 [configChanger syncWithStoredConfigForManager:self.manager];
-                self.collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
-                navController = [[UINavigationController alloc] initWithRootViewController: self.collectionViewController];
+                [self.manager start];
                 resumed = YES;
             }
         }
-        if (resumed) {
-            self.window.rootViewController = navController;
-            [self.window makeKeyAndVisible];
-        }
-        
     }
     
-    if (!resumed){
+    // If we haven't started the hunt, but everything is ready to run a hunt, do so
+    if (!resumed && [self huntFullyLoaded]) {
+        // if it is not complete, show the collection view
+        PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
+        if ([configChanger isConfigStored]) {
+            _ignorePKSync = YES; // we already have everything downloaded.  Do not process again
+            [configChanger syncWithStoredConfigForManager:self.manager];
+            readyToStart = YES;
+        }
+    }
+    if (resumed) {
+        [self setupCollectionView];
+    }
+    else if (finished) {
+        [self setupFinishView];
+    }
+    else if (readyToStart) {
+        // this should show the custom instructions page if available.  if not available, it should simply start
+        // the hunt and go to the collecitons view
+        if ([[SHHunt sharedHunt] hasCustomStartScreen]) {
+            NSLog(@"----------Custom instruction screen is available.  Showing it.");
+            [self setupCustomInstructionsView];
+        }
+        else {
+            [[SHHunt sharedHunt] start];
+            [self.manager start];
+            [self setupCollectionView];
+        }
+    }
+    else {
         //show instructions and start button
         [self setupInitialView];
     }
@@ -91,11 +119,31 @@
     return YES;
 }
 
+-(void)setupCustomInstructionsView {
+    SHInstructionViewController *instructionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"InstructionViewController"];
+    _navigationController = [[UINavigationController alloc] initWithRootViewController: instructionViewController];
+    self.window.rootViewController = _navigationController;
+    [self.window makeKeyAndVisible];
+}
+-(void)setupFinishView {
+    SHFinishViewController *finishViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FinishViewController"];
+    _navigationController = [[UINavigationController alloc] initWithRootViewController: finishViewController];
+    self.window.rootViewController = _navigationController;
+    [self.window makeKeyAndVisible];
+}
+-(void)setupCollectionView {
+    self.collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
+    _navigationController = [[UINavigationController alloc] initWithRootViewController: self.collectionViewController];
+    self.window.rootViewController = _navigationController;
+    [self.window makeKeyAndVisible];
+}
+
 -(void)setupInitialView {
+    NSLog(@"setupInitialView called");
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     self.mainViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController: self.mainViewController];
-    self.window.rootViewController = navController;
+    _navigationController = [[UINavigationController alloc] initWithRootViewController: self.mainViewController];
+    self.window.rootViewController = _navigationController;
     [self.window makeKeyAndVisible];
     
 }
@@ -119,16 +167,43 @@
     
     _validatingCode = YES;
     _pkStarted = YES;
+    _ignorePKSync = NO;
     PKConfigurationChanger *configChanger = [[PKConfigurationChanger alloc] init];
     [configChanger syncManager:self.manager withCode: code];
     NSLog(@"started Proximity Kit with code %@.  Waiting for callback from sync", code);
     
 }
 
+/*
+ 
+ Check to see if we have previously validated with a code and loaded all assets for a secific hunt, so we can go into that one.
+ */
+-(Boolean)huntFullyLoaded {
+    NSLog(@"------------------ checking if hunt is fully loaded %d %lu ",([self validateRequiredImagesPresent]),(unsigned long)([SHHunt sharedHunt].targetList.count));
+    if ([self validateRequiredImagesPresent] &&
+        [SHHunt sharedHunt].targetList.count > 0) {
+        return YES;
+    }
+    return NO;
+}
+
 // called when the user gestures to start over
 -(void)resetHunt {
     [[SHHunt sharedHunt] reset];
-    [self setupInitialView];
+    if ([[SHHunt sharedHunt] hasCustomStartScreen]) {
+        [self setupCustomInstructionsView];
+    }
+    else {
+        [[SHHunt sharedHunt] start];
+        [self setupCollectionView];
+    }
+}
+
+// called when the user gestures to start over with a different hunt
+-(void)clearHunt {
+    [self.manager stop]; // stop looking for beacons
+    [[SHHunt sharedHunt] clear]; // clear out selected scavenger hunt
+    [self setupInitialView]; // go back to the overall instructions screen
 }
 
 
@@ -165,7 +240,7 @@
     else {
         // Uncomment the line below to simulate one target at a time being found, a few seconds apart.
         // This is useful for testing in the simulator
-        //[self simulateTargetsBeingFound];
+        [self simulateTargetsBeingFound];
         
         NSLog(@"Ready to show collection view controller");
         
@@ -175,19 +250,28 @@
         if (delay < 0) {
             delay = 0;
         }
-        _collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
-        
-        [[SHHunt sharedHunt] start];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC * delay),dispatch_get_main_queue(), ^{
-            [self.mainViewController.navigationController pushViewController:_collectionViewController animated:YES];
-            //[self simulateTargetsBeingFound];
+            if ([[SHHunt sharedHunt] hasCustomStartScreen]) {
+                [self setupCustomInstructionsView];
+            }
+            else {
+                [[SHHunt sharedHunt] start];
+                [self setupCollectionView];
+            }
+
+            [self simulateTargetsBeingFound];
         });
         
     }
     
 }
 
+// Called after the user taps the start button on the instruction screen
+-(void)startTargetCollection {
+    _collectionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"TargetCollectionViewController"];
+    [_navigationController pushViewController:_collectionViewController animated:YES];
+}
 
 
 
@@ -259,6 +343,10 @@
              _loadingDisplayedTime = [[NSDate alloc] init];
          }];
     }
+    
+    
+    
+    
     __block int targetCount = 0;
     __block BOOL targetsChanged = false;
     __block BOOL isTablet = ([[UIDevice currentDevice] userInterfaceIdiom] ==UIUserInterfaceIdiomPad);
@@ -272,6 +360,7 @@
         //for (PKIBeacon *iBeacon in kit.iBeaconRegions) {
         NSString* huntId = [iBeacon.attributes objectForKey:@"hunt_id"];
         NSString* imageUrlString = [iBeacon.attributes objectForKey:@"image_url"];
+
         NSLog(@"Processing first beacon with huntId %@ and imageUrl %@", huntId, imageUrlString);
         if (huntId != Nil) {
             NSLog(@"Hunt id is %@", huntId);
@@ -302,6 +391,64 @@
                 }
             }
             targetCount++;
+            
+            
+            //custom splash screen and instructions screen metadata
+            NSString* instruction_background_color = [iBeacon.attributes objectForKey:@"instruction_background_color"];
+            NSString* instruction_image_url = [iBeacon.attributes objectForKey:@"instruction_image_url"];
+            NSString* instruction_start_button_name = [iBeacon.attributes objectForKey:@"instruction_start_button_name"];
+            NSString* instruction_text_1 = [iBeacon.attributes objectForKey:@"instruction_text_1"];
+            NSString* instruction_title = [iBeacon.attributes objectForKey:@"instruction_title"];
+            NSString* splash_url = [iBeacon.attributes objectForKey:@"splash_url"];
+            NSString* finish_background_color = [iBeacon.attributes objectForKey:@"finish_background_color"];
+            NSString* finish_image_url = [iBeacon.attributes objectForKey:@"finish_image_url"];
+            NSString* finish_button_name = [iBeacon.attributes objectForKey:@"finish_button_name"];
+            NSString* finish_text_1 = [iBeacon.attributes objectForKey:@"finish_text_1"];
+
+
+            
+            if (instruction_background_color != Nil){
+                NSLog(@"------This hunt has a custom instruction screen because the instructioin_background_color is set to %@", instruction_background_color );
+                //save custom splash screen and instructions screen for later use
+                
+                //saving images
+                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                NSString *documentsPath = [paths objectAtIndex:0]; //Get the docs directory
+
+                NSData * instruction_image_url_Data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: instruction_image_url]];
+                NSString *instruction_image_filename = [documentsPath stringByAppendingPathComponent:@"instruction_image.png"]; //Add the file name
+                [instruction_image_url_Data writeToFile:instruction_image_filename atomically:YES]; //Write the file
+                
+                NSData * splash_url_Data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: splash_url]];
+                NSString *splash_filename = [documentsPath stringByAppendingPathComponent:@"splash.png"]; //Add the file name
+                [splash_url_Data writeToFile:splash_filename atomically:YES]; //Write the file
+                
+                NSData * finish_image_url_Data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: finish_image_url]];
+                NSString *finish_image_filename = [documentsPath stringByAppendingPathComponent:@"finish_image.png"]; //Add the file name
+                [finish_image_url_Data writeToFile:finish_image_filename atomically:YES]; //Write the file
+  
+
+                //saving all data (including filenames for saved images)
+                NSDictionary* customData = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                            instruction_background_color, @"instruction_background_color",
+                                            instruction_image_url, @"instruction_image_url",
+                                            instruction_start_button_name, @"instruction_start_button_name",
+                                            instruction_text_1, @"instruction_text_1",
+                                            instruction_title, @"instruction_title",
+                                            splash_url, @"splash_url",\
+                                            finish_background_color, @"finish_background_color",
+                                            finish_image_url, @"finish_image_url",
+                                            finish_button_name, @"finish_button_name",
+                                            finish_text_1, @"finish_text_1",
+                                            instruction_image_filename, @"instruction_image",
+                                            splash_filename, @"splash",
+                                            finish_image_filename, @"finish_image",
+                                            nil];
+                [[SHHunt sharedHunt] setCustomStartScreenData: customData];
+                
+                NSLog(@"customStartScreenData: %@",[[SHHunt sharedHunt] customStartScreenData]);
+            }
+            
         }
         else {
             NSLog(@"No hunt_id for the item in proximity kit");
@@ -319,6 +466,25 @@
         [[SHHunt sharedHunt]resize:targetCount];
     }
     
+    // Now we go through the items in the kit and attach extra fields to the SHTargetItem array
+    [kit enumerateIBeaconsUsingBlock:^(PKIBeacon *iBeacon, NSUInteger idx, BOOL *stop) {
+        
+        NSString* huntId = [iBeacon.attributes objectForKey:@"hunt_id"];
+        NSLog(@"Setting fields for hunt_id %@", huntId);
+        
+        for (SHTargetItem *item in [SHHunt sharedHunt].targetList) {
+            if ([item.huntId isEqualToString:huntId]) {
+                item.title = [iBeacon.attributes objectForKey:@"title"];
+                item.description = [iBeacon.attributes objectForKey:@"description"];
+                item.triggerDistance = [[iBeacon.attributes objectForKey:@"trigger_distance"] integerValue];
+                if (item.triggerDistance <= 0) {
+                    item.triggerDistance = [SHHunt sharedHunt].defaultTriggerDistance;
+                }
+                NSLog(@"Done setting fields for hunt_id %@", huntId);
+            }
+        }
+    }];
+    
     NSLog(@"Target count is %d", targetCount);
     self.remoteAssetCache.retinaFallbackEnabled = YES; // If we can't download the @2x versions, fallback to the non-@2x versions
     [self.remoteAssetCache downloadAssets:targetImageUrls];
@@ -329,6 +495,12 @@
 
 - (void)proximityKitDidSync:(PKManager *)manager {
     NSLog(@"proximityKitDidSync");
+    if (_ignorePKSync) {
+        NSLog(@"Ignoring sync");
+        return;
+    }
+    _ignorePKSync = YES; // always default to yes so we don't restart hunts with scheduled background syncs
+    
     PKKit *kit = manager.kit;
     
     if (kit == Nil) {
@@ -424,7 +596,7 @@
                     if (_collectionViewController) {
                         SHFinishViewController *finishViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FinishViewController"];
                         NSLog(@"Finish view controller is %@", finishViewController);
-                        [_collectionViewController.navigationController
+                        [_navigationController
                          pushViewController:finishViewController animated:YES];
                     }
                 }
@@ -447,10 +619,8 @@
         NSLog(@"beacon=%@, beacon.attributes=%@", beacon, beacon.attributes);
         
         NSString *huntId = [beacon.attributes objectForKey:@"hunt_id"]; // set in ProximityKit (e.g. 1, 2, 3, etc.)
-        double triggerDistance = [SHHunt sharedHunt].triggerDistance;
-        if ([beacon.attributes objectForKey:@"trigger_distance"]) {
-            triggerDistance = [[beacon.attributes objectForKey:@"trigger_distance"] doubleValue];
-        }
+        __block double triggerDistance = [SHHunt sharedHunt].defaultTriggerDistance;
+        
         NSNumber *distanceObj = [NSNumber numberWithDouble: beacon.clBeacon.accuracy];
         NSLog(@"processing beacon with targetId: %@ and distance %@", huntId, distanceObj);
         float distance = [distanceObj floatValue];
@@ -458,17 +628,22 @@
         [[SHHunt sharedHunt].targetList enumerateObjectsUsingBlock:^(id targetObj, NSUInteger targetIdx, BOOL *targetStop) {
             SHTargetItem *target = (SHTargetItem *)targetObj;
             if ([huntId isEqualToString:target.huntId]) {
+                if (target.triggerDistance > 0) {
+                    triggerDistance = target.triggerDistance; // use the target-specific trigger distance if available
+                }
                 BOOL justFound = NO;
                 target.distance = distance;
                 if (target.distance < 0) {
                     NSLog(@"range unknown");
                 }
                 else {
-                    justFound = (target.distance < triggerDistance && target.found == NO &&[SHHunt sharedHunt].elapsedTime > 0);
-                    if (!justFound) {
-                        NSLog(@"not just found %f %f %d %ld", target.distance, [SHHunt sharedHunt].triggerDistance, target.found, [SHHunt sharedHunt].elapsedTime );
-                    }
                     
+                    justFound = (target.distance < triggerDistance && target.found == NO &&[SHHunt sharedHunt].elapsedTime > 0);
+                    
+                    if  ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+                        NSLog(@"Not allowing this target to be found because the application is in the background");
+                        justFound = NO;
+                    }
                     
                     if ([_collectionViewController.itemViewController.item.huntId isEqualToString: target.huntId]) {
                         [_collectionViewController.itemViewController showRange];
@@ -494,12 +669,13 @@
                             if (_collectionViewController) {
                                 SHFinishViewController *finishViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FinishViewController"];
                                 NSLog(@"Finish view controller is %@", finishViewController);
-                                [_collectionViewController.navigationController
+                                [_navigationController
                                  pushViewController:finishViewController animated:YES];
                             }
                         }
                     }
                     else {
+                        NSLog(@"This is not a newly found target %f %f %d %ld", target.distance, triggerDistance, target.found, [SHHunt sharedHunt].elapsedTime );
                         
                         // send notification to user that a target is nearby, if this target has not already been found and we haven't done so recently
                         NSDate * now = [[NSDate alloc] init];
