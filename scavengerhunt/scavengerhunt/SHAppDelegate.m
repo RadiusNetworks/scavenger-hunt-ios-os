@@ -149,6 +149,7 @@
 }
 
 -(void)startPK {
+    _ignorePKSync = NO;
     if (_pkStarted) {
         [self.manager sync];
         NSLog(@"calling sync on Proximity Kit.  Waiting for callback from sync");
