@@ -241,7 +241,7 @@
     else {
         // Uncomment the line below to simulate one target at a time being found, a few seconds apart.
         // This is useful for testing in the simulator
-        [self simulateTargetsBeingFound];
+    //    [self simulateTargetsBeingFound];
         
         NSLog(@"Ready to show collection view controller");
         
@@ -261,7 +261,7 @@
                 [self setupCollectionView];
             }
 
-            [self simulateTargetsBeingFound];
+        //    [self simulateTargetsBeingFound];
         });
         
     }
