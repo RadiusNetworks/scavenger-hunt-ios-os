@@ -24,7 +24,7 @@
 @property BOOL found;
 @property long lastSeenAt;
 @property NSString *title;
-@property NSString *description;
+@property NSString *titleDescription;
 @property double triggerDistance;
 
 -(SHTargetItem *) initWithId: (NSString*) huntId;

@@ -29,7 +29,7 @@
     self = [super init];
     [self reset];
     self.title = @"";
-    self.description = @"";
+    self.titleDescription = @"";
     return self;
 }
 
@@ -74,7 +74,7 @@
     self.huntId = [decoder decodeObjectForKey:@"hunt_id"];
     self.found = [decoder decodeBoolForKey:@"found"];
     self.title = [decoder decodeObjectForKey:@"title"];
-    self.description = [decoder decodeObjectForKey:@"description"];
+    self.titleDescription = [decoder decodeObjectForKey:@"description"];
     self.triggerDistance = [decoder decodeDoubleForKey:@"trigger_distance"];
     self.proximity = -1;
     self.distance = -1;
@@ -85,7 +85,7 @@
     [encoder encodeObject:self.huntId forKey:@"hunt_id"];
     [encoder encodeBool:self.found forKey:@"found"];
     [encoder encodeObject:self.title forKey:@"title"];
-    [encoder encodeObject:self.description forKey:@"description"];
+    [encoder encodeObject:self.titleDescription forKey:@"description"];
     [encoder encodeDouble:self.triggerDistance forKey:@"trigger_distance"];
 }
 
