@@ -28,6 +28,8 @@
 	<string>1.3</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location services required to find scavenger hunt targets</string>
 	<key>UIMainStoryboardFile</key>
 	<string>ScavengerHunt_iPhone</string>
 	<key>UIMainStoryboardFile~ipad</key>
