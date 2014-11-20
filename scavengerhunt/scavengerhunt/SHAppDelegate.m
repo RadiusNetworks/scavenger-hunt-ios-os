@@ -37,6 +37,21 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+#ifdef __IPHONE_8_0
+    if ([UIUserNotificationSettings class]) {
+        // register to be allowed to notify user (for iOS 8)
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert) categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    }
+#endif
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    
+    if([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+        [self.locationManager requestAlwaysAuthorization];
+    }
+
     _ignorePKSync = YES;
 
     // Initialize a Bluetooth Peripheral Manager so we can warn user about various states of availability or bluetooth being turned off
@@ -476,7 +491,7 @@
         for (SHTargetItem *item in [SHHunt sharedHunt].targetList) {
             if ([item.huntId isEqualToString:huntId]) {
                 item.title = [iBeacon.attributes objectForKey:@"title"];
-                item.description = [iBeacon.attributes objectForKey:@"description"];
+                item.titleDescription = [iBeacon.attributes objectForKey:@"description"];
                 item.triggerDistance = [[iBeacon.attributes objectForKey:@"trigger_distance"] integerValue];
                 if (item.triggerDistance <= 0) {
                     item.triggerDistance = [SHHunt sharedHunt].defaultTriggerDistance;

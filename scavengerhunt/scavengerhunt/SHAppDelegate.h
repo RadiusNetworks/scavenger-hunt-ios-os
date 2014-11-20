@@ -31,6 +31,7 @@
 -(void)clearHunt;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) PKManager *manager;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) SHRemoteAssetCache *remoteAssetCache;
 @property (strong, nonatomic) UIStoryboard *storyboard;
 @property (strong, nonatomic) SHMainViewController *mainViewController;
